@@ -2,3 +2,4 @@ cmake-build-debug
 Shaders/*.spv
 glm/
 glfw-3.3.2/
+.idea/
