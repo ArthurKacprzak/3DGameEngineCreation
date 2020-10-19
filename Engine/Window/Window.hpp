@@ -12,6 +12,12 @@
 #include <stdexcept>
 #include <cstdlib>
 
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <chrono>
+
 #include "../Surface/Surface.hpp"
 #include "../Device/Device.hpp"
 #include "../SwapChain/SwapChain.hpp"
@@ -21,6 +27,16 @@
 #include "../CommandPool/CommandPool.hpp"
 #include "../CommandBuffers/CommandBuffers.hpp"
 #include "../Semaphore/Semaphore.hpp"
+#include "../Vertex/Vertex.hpp"
+#include "../VertexBuffer/VertexBuffer.hpp"
+#include "../DescriptorSetLayout/DescriptorSetLayout.hpp"
+#include "../UniformBuffers/UniformBuffers.hpp"
+#include "../DescriptorPool/DescriptorPool.hpp"
+#include "../DescriptorSets/DescriptorSets.hpp"
+#include "../DebugMessenger/DebugMessenger.hpp"
+#include "../TextureImage/TextureImage.hpp"
+#include "../TextureImageView/TextureImageView.hpp"
+#include "../TextureSampler/TextureSampler.hpp"
 
 class Window
 {
@@ -38,20 +54,44 @@ public:
 private:
     GLFWwindow *window;
 
+private:
+
     Instance *instance;
+    DebugMessenger *debugMessenger;
     Surface *surface;
     Device *device;
     SwapChain *swapChain;
     ImageViews *imageViews;
+    DescriptorSetLayout *descriptorSetLayout;
     GraphicsPipeline *graphicsPipeline;
+
+    std::vector<Vertex> vertices;
+    VertexBuffer *vertexBuffer;
+    UniformBuffers *uniformBuffers;
+    DescriptorPool *descriptorPool;
+    DescriptorSets *descriptorSets;
+    TextureImage *textureImage;
+    TextureImageView *textureImageView;
+    TextureSampler *textureSampler;
+public:
+    GLFWwindow *getWindow();
+
+private:
     Framebuffers *framebuffers;
     CommandPool *commandPool;
     CommandBuffers *commandBuffers;
     Semaphore *semaphore;
     size_t currentFrame = 0;
 
+    bool framebufferResized = false;
+
 private:
     void drawFrame();
+    static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+    void cleanupSwapChain();
+    void recreateSwapChain();
+    void updateUniformBuffer(uint32_t currentImage);
+    void cleanup();
 };
 
 

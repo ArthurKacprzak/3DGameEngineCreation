@@ -11,11 +11,13 @@
 #include "../ImageViews/ImageViews.hpp"
 
 class Surface;
+class Window;
+class Framebuffers;
 
 class SwapChain
 {
 public:
-    SwapChain(Device &device, Surface &surface, ImageViews &imageViews);
+    SwapChain(Window &window, Device &device, Surface &surface, ImageViews &imageViews);
 public:
     struct SwapChainSupportDetails {
         VkSurfaceCapabilitiesKHR capabilities;
@@ -31,7 +33,7 @@ public:
 private:
     VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
     VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
-    VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+    VkExtent2D chooseSwapExtent(Window &window, const VkSurfaceCapabilitiesKHR& capabilities);
 
 private:
     VkSwapchainKHR swapChain;

@@ -57,15 +57,15 @@ void ImageViews::init(Device &device)
 
 VkExtent2D &ImageViews::getSwapChainExtent()
 {
-    return swapChainExtent;
+    return this->swapChainExtent;
 }
 
 VkFormat &ImageViews::getSwapChainImageFormat()
 {
-    return swapChainImageFormat;
+    return this->swapChainImageFormat;
 }
 
 std::vector<VkImageView> &ImageViews::getSwapChainImageViews()
 {
-    return swapChainImageViews;
+    return this->swapChainImageViews;
 }

@@ -7,17 +7,21 @@
 
 #include "../Device/Device.hpp"
 #include "../ImageViews/ImageViews.hpp"
+#include "../DescriptorSetLayout/DescriptorSetLayout.hpp"
 
 class GraphicsPipeline
 {
 public:
-    GraphicsPipeline(Device &device, ImageViews &imageViews);
+    GraphicsPipeline(Device &device, ImageViews &imageViews, DescriptorSetLayout &descriptorSetLayout);
 
 private:
     VkPipelineLayout pipelineLayout;
     VkRenderPass renderPass;
     VkPipeline graphicsPipeline;
+
 public:
+    VkPipelineLayout &getPipelineLayout();
+
     VkPipeline &getGraphicsPipeline();
 
     VkRenderPass &getRenderPass();

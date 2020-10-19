@@ -12,11 +12,17 @@
 #include "../CommandPool/CommandPool.hpp"
 #include "../Framebuffers/Framebuffers.hpp"
 #include "../GraphicsPipeline/GraphicsPipeline.hpp"
+#include "../Vertex/Vertex.hpp"
+#include "../VertexBuffer/VertexBuffer.hpp"
+#include "../DescriptorSets/DescriptorSets.hpp"
+#include "../DescriptorSetLayout/DescriptorSetLayout.hpp"
 
 class CommandBuffers
 {
 public:
-    CommandBuffers(ImageViews &imageViews, Device &device, CommandPool &commandPool, Framebuffers &framebuffers, GraphicsPipeline &graphicsPipeline);
+    CommandBuffers(ImageViews &imageViews, Device &device, CommandPool &commandPool, Framebuffers &framebuffers,
+                   GraphicsPipeline &graphicsPipeline, std::vector<Vertex> &vertices, VertexBuffer &vertexBuffer,
+                   DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout);
 
 public:
     std::vector<VkCommandBuffer> &getCommandBuffers();

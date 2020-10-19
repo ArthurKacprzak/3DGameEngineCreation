@@ -5,6 +5,7 @@
 #include "Device.hpp"
 #include "../QueueFamily/QueueFamily.hpp"
 #include "../SwapChain/SwapChain.hpp"
+#include "../DebugMessenger/DebugMessenger.hpp"
 
 Device::Device(Instance &instance, Surface &surface)
 {
@@ -44,7 +45,10 @@ bool Device::isDeviceSuitable(VkPhysicalDevice vkPhysicalDevice, Surface &surfac
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
-    return indices.isComplete() && extensionsSupported && swapChainAdequate;
+    VkPhysicalDeviceFeatures supportedFeatures;
+    vkGetPhysicalDeviceFeatures(vkPhysicalDevice, &supportedFeatures);
+
+    return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
 bool Device::checkDeviceExtensionSupport(VkPhysicalDevice &vkPhysicalDevice) {
@@ -80,6 +84,7 @@ void Device::createLogicalDevice(Surface &surface) {
     }
 
     VkPhysicalDeviceFeatures deviceFeatures{};
+    deviceFeatures.samplerAnisotropy = VK_TRUE;
 
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -92,7 +97,12 @@ void Device::createLogicalDevice(Surface &surface) {
     createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
     createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-    createInfo.enabledLayerCount = 0;
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
+        createInfo.enabledLayerCount = static_cast<uint32_t>(DebugMessenger::getValidationLayers().size());
+        createInfo.ppEnabledLayerNames = DebugMessenger::getValidationLayers().data();
+    } else {
+        createInfo.enabledLayerCount = 0;
+    }
 
     if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &this->device) != VK_SUCCESS) {
         throw std::runtime_error("failed to create logical device!");

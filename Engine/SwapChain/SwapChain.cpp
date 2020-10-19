@@ -7,13 +7,13 @@
 #include "../Window/Window.hpp"
 #include "../QueueFamily/QueueFamily.hpp"
 
-SwapChain::SwapChain(Device &device, Surface &surface, ImageViews &imageViews)
+SwapChain::SwapChain(Window &window, Device &device, Surface &surface, ImageViews &imageViews)
 {
     SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device.getPhysicalDevice(), surface);
 
     VkSurfaceFormatKHR surfaceFormat = this->chooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = this->chooseSwapPresentMode(swapChainSupport.presentModes);
-    VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
+    VkExtent2D extent = chooseSwapExtent(window, swapChainSupport.capabilities);
 
     uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
     if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
@@ -82,11 +82,17 @@ VkPresentModeKHR SwapChain::chooseSwapPresentMode(const std::vector<VkPresentMod
     return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-VkExtent2D SwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
+VkExtent2D SwapChain::chooseSwapExtent(Window &window, const VkSurfaceCapabilitiesKHR& capabilities) {
     if (capabilities.currentExtent.width != UINT32_MAX) {
         return capabilities.currentExtent;
     } else {
-        VkExtent2D actualExtent = {Window::WIDTH, Window::HEIGHT};
+        int width, height;
+        glfwGetFramebufferSize(window.getWindow(), &width, &height);
+
+        VkExtent2D actualExtent = {
+                static_cast<uint32_t>(width),
+                static_cast<uint32_t>(height)
+        };
 
         actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
         actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));

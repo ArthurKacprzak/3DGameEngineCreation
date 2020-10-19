@@ -3,9 +3,15 @@
 //
 
 #include "Instance.hpp"
+#include "../DebugMessenger/DebugMessenger.hpp"
 
 Instance::Instance()
 {
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS && !DebugMessenger::checkValidationLayerSupport()) {
+        throw std::runtime_error("validation layers requested, but not available!");
+    }
+
+
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pApplicationName = "Hello Triangle";
@@ -22,9 +28,18 @@ Instance::Instance()
     createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
     createInfo.ppEnabledExtensionNames = extensions.data();
 
-    createInfo.enabledLayerCount = 0;
+    VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
+        createInfo.enabledLayerCount = static_cast<uint32_t>(DebugMessenger::getValidationLayers().size());
+        createInfo.ppEnabledLayerNames = DebugMessenger::getValidationLayers().data();
 
-    createInfo.pNext = nullptr;
+        DebugMessenger::populateDebugMessengerCreateInfo(debugCreateInfo);
+        createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*) &debugCreateInfo;
+    } else {
+        createInfo.enabledLayerCount = 0;
+
+        createInfo.pNext = nullptr;
+    }
 
     if (vkCreateInstance(&createInfo, nullptr, &this->instance) != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
@@ -38,6 +53,10 @@ std::vector<const char *> Instance::getRequiredExtensions()
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
+        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    }
 
     return extensions;
 }
