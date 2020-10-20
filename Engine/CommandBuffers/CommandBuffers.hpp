@@ -17,10 +17,12 @@
 #include "../DescriptorSets/DescriptorSets.hpp"
 #include "../DescriptorSetLayout/DescriptorSetLayout.hpp"
 
+class Window;
+
 class CommandBuffers
 {
 public:
-    CommandBuffers(ImageViews &imageViews, Device &device, CommandPool &commandPool, Framebuffers &framebuffers,
+    CommandBuffers(Window *window, ImageViews &imageViews, Device &device, CommandPool &commandPool, Framebuffers &framebuffers,
                    GraphicsPipeline &graphicsPipeline, std::vector<Vertex> &vertices, VertexBuffer &vertexBuffer,
                    DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout);
 

@@ -4,13 +4,6 @@
 
 #include "Vertex.hpp"
 
-Vertex::Vertex(glm::vec3 pos, glm::vec3 color, glm::vec2 texCoord)
-{
-    this->pos = pos;
-    this->color = color;
-    this->texCoord = texCoord;
-}
-
 VkVertexInputBindingDescription Vertex::getBindingDescription() {
     VkVertexInputBindingDescription bindingDescription{};
     bindingDescription.binding = 0;

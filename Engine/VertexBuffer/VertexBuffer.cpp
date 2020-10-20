@@ -3,8 +3,9 @@
 //
 
 #include "VertexBuffer.hpp"
+#include "../Window/Window.hpp"
 
-VertexBuffer::VertexBuffer(Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices)
+VertexBuffer::VertexBuffer(Window *window, Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices)
 {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
@@ -27,7 +28,7 @@ VertexBuffer::VertexBuffer(Device &device, CommandPool &commandPool, std::vector
     vkDestroyBuffer(device.getDevice(), stagingBuffer, nullptr);
     vkFreeMemory(device.getDevice(), stagingBufferMemory, nullptr);
 
-    this->createIndexBuffer(device, commandPool);
+    this->createIndexBuffer(window, device, commandPool);
 }
 
 void VertexBuffer::createBuffer(Device &device, VkDeviceSize size, VkBufferUsageFlags usage,
@@ -93,9 +94,9 @@ void VertexBuffer::copyBuffer(Device &device, CommandPool &commandPool, VkBuffer
     vkFreeCommandBuffers(device.getDevice(), commandPool.getCommandPool(), 1, &commandBuffer);
 }
 
-void VertexBuffer::createIndexBuffer(Device &device, CommandPool &commandPool)
+void VertexBuffer::createIndexBuffer(Window *window, Device &device, CommandPool &commandPool)
 {
-    VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+    VkDeviceSize bufferSize = sizeof(window->getIndices()[0]) * window->getIndices().size();
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
@@ -105,7 +106,7 @@ void VertexBuffer::createIndexBuffer(Device &device, CommandPool &commandPool)
 
     void *data;
     vkMapMemory(device.getDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
-    memcpy(data, indices.data(), (size_t) bufferSize);
+    memcpy(data, window->getIndices().data(), (size_t) bufferSize);
     vkUnmapMemory(device.getDevice(), stagingBufferMemory);
 
     this->createBuffer(device, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,
@@ -144,9 +145,4 @@ VkDeviceMemory &VertexBuffer::getVertexBufferMemory()
 VkBuffer &VertexBuffer::getIndexBuffer()
 {
     return indexBuffer;
-}
-
-std::vector<uint16_t> &VertexBuffer::getIndices()
-{
-    return this->indices;
 }
