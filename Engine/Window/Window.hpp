@@ -38,6 +38,7 @@
 #include "../TextureImageView/TextureImageView.hpp"
 #include "../TextureSampler/TextureSampler.hpp"
 #include "../DepthResources/DepthResources.hpp"
+#include "../Model/Model.hpp"
 
 class Window
 {
@@ -67,6 +68,7 @@ private:
     GraphicsPipeline *graphicsPipeline;
 
     std::vector<Vertex> vertices;
+
     VertexBuffer *vertexBuffer;
     UniformBuffers *uniformBuffers;
     DescriptorPool *descriptorPool;
@@ -76,8 +78,14 @@ private:
     TextureSampler *textureSampler;
 
     DepthResources *depthResources;
+
+    Model *model;
 public:
     GLFWwindow *getWindow();
+    void addVertice(Vertex &data);
+    std::vector<Vertex> &getVertices();
+    void addIndex(uint32_t indice);
+    std::vector<uint32_t> &getIndices();
 
 private:
     Framebuffers *framebuffers;
@@ -87,6 +95,13 @@ private:
     size_t currentFrame = 0;
 
     bool framebufferResized = false;
+
+    // todo 16
+    std::vector<uint32_t> indices = {
+            /*    0, 1, 2, 2, 3, 0,
+                4, 5, 6, 6, 7, 4,
+                8, 9, 10, 10, 11, 8*/
+    };
 
 private:
     void drawFrame();

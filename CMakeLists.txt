@@ -24,7 +24,13 @@ set(SRC main.cpp
         Engine/ImageViews/ImageViews.hpp
         Engine/GraphicsPipeline/GraphicsPipeline.cpp
         Engine/GraphicsPipeline/GraphicsPipeline.hpp
-        Engine/FileReader/FileReader.cpp Engine/FileReader/FileReader.hpp Engine/Shader/Shader.cpp Engine/Shader/Shader.hpp Engine/Framebuffers/Framebuffers.cpp Engine/Framebuffers/Framebuffers.hpp Engine/CommandPool/CommandPool.cpp Engine/CommandPool/CommandPool.hpp Engine/CommandBuffers/CommandBuffers.cpp Engine/CommandBuffers/CommandBuffers.hpp Engine/Semaphore/Semaphore.cpp Engine/Semaphore/Semaphore.hpp Engine/Vertex/Vertex.cpp Engine/Vertex/Vertex.hpp Engine/VertexBuffer/VertexBuffer.cpp Engine/VertexBuffer/VertexBuffer.hpp Engine/DescriptorSetLayout/DescriptorSetLayout.cpp Engine/DescriptorSetLayout/DescriptorSetLayout.hpp Engine/UniformBuffers/UniformBuffers.cpp Engine/UniformBuffers/UniformBuffers.hpp Engine/DescriptorPool/DescriptorPool.cpp Engine/DescriptorPool/DescriptorPool.hpp Engine/DescriptorSets/DescriptorSets.cpp Engine/DescriptorSets/DescriptorSets.hpp Engine/DebugMessenger/DebugMessenger.cpp Engine/DebugMessenger/DebugMessenger.hpp Engine/TextureImage/TextureImage.cpp Engine/TextureImage/TextureImage.hpp Engine/TextureImageView/TextureImageView.cpp Engine/TextureImageView/TextureImageView.hpp Engine/TextureSampler/TextureSampler.cpp Engine/TextureSampler/TextureSampler.hpp Engine/DepthResources/DepthResources.cpp Engine/DepthResources/DepthResources.hpp)
+        Engine/FileReader/FileReader.cpp
+        Engine/FileReader/FileReader.hpp
+        Engine/Shader/Shader.cpp
+        Engine/Shader/Shader.hpp
+        Engine/Framebuffers/Framebuffers.cpp
+        Engine/Framebuffers/Framebuffers.hpp
+        Engine/CommandPool/CommandPool.cpp Engine/CommandPool/CommandPool.hpp Engine/CommandBuffers/CommandBuffers.cpp Engine/CommandBuffers/CommandBuffers.hpp Engine/Semaphore/Semaphore.cpp Engine/Semaphore/Semaphore.hpp Engine/Vertex/Vertex.cpp Engine/Vertex/Vertex.hpp Engine/VertexBuffer/VertexBuffer.cpp Engine/VertexBuffer/VertexBuffer.hpp Engine/DescriptorSetLayout/DescriptorSetLayout.cpp Engine/DescriptorSetLayout/DescriptorSetLayout.hpp Engine/UniformBuffers/UniformBuffers.cpp Engine/UniformBuffers/UniformBuffers.hpp Engine/DescriptorPool/DescriptorPool.cpp Engine/DescriptorPool/DescriptorPool.hpp Engine/DescriptorSets/DescriptorSets.cpp Engine/DescriptorSets/DescriptorSets.hpp Engine/DebugMessenger/DebugMessenger.cpp Engine/DebugMessenger/DebugMessenger.hpp Engine/TextureImage/TextureImage.cpp Engine/TextureImage/TextureImage.hpp Engine/TextureImageView/TextureImageView.cpp Engine/TextureImageView/TextureImageView.hpp Engine/TextureSampler/TextureSampler.cpp Engine/TextureSampler/TextureSampler.hpp Engine/DepthResources/DepthResources.cpp Engine/DepthResources/DepthResources.hpp Engine/Model/Model.cpp Engine/Model/Model.hpp)
 
 add_executable(3DGameEngineCreation ${SRC})
 
@@ -33,7 +39,8 @@ include_directories(./stb-master/stb-master)
 find_package(Vulkan REQUIRED)
 add_subdirectory(./glfw-3.3.2)
 add_subdirectory(./glm)
+add_subdirectory(./tinyobjloader)
 
 
-set(LIBS Vulkan::Vulkan glfw glm)
+set(LIBS Vulkan::Vulkan glfw glm tinyobjloader)
 target_link_libraries(3DGameEngineCreation ${LIBS})

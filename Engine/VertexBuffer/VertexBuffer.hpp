@@ -11,10 +11,12 @@
 #include "../Vertex/Vertex.hpp"
 #include "../CommandPool/CommandPool.hpp"
 
+class Window;
+
 class VertexBuffer
 {
 public:
-    VertexBuffer(Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices);
+    VertexBuffer(Window *window, Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices);
 
 public:
     static void createBuffer(Device &device, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer, VkDeviceMemory &bufferMemory);
@@ -26,22 +28,15 @@ private:
 public:
     VkBuffer &getIndexBuffer();
 
-    std::vector<uint16_t> &getIndices();
 
 private:
-    void createIndexBuffer(Device &device, CommandPool &commandPool);
+    void createIndexBuffer(Window *window, Device &device, CommandPool &commandPool);
 
 private:
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
     VkBuffer indexBuffer;
     VkDeviceMemory indexBufferMemory;
-
-    std::vector<uint16_t> indices = {
-            0, 1, 2, 2, 3, 0,
-            4, 5, 6, 6, 7, 4,
-            8, 9, 10, 10, 11, 8
-    };
 
 public:
     VkDeviceMemory &getVertexBufferMemory();

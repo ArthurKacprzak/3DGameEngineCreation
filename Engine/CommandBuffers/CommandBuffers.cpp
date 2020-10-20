@@ -3,8 +3,9 @@
 //
 
 #include "CommandBuffers.hpp"
+#include "../Window/Window.hpp"
 
-CommandBuffers::CommandBuffers(ImageViews &imageViews, Device &device, CommandPool &commandPool,
+CommandBuffers::CommandBuffers(Window *window, ImageViews &imageViews, Device &device, CommandPool &commandPool,
                                Framebuffers &framebuffers, GraphicsPipeline &graphicsPipeline,
                                std::vector<Vertex> &vertices, VertexBuffer &vertexBuffer,
                                DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout)
@@ -55,13 +56,14 @@ CommandBuffers::CommandBuffers(ImageViews &imageViews, Device &device, CommandPo
 
         vkCmdBindVertexBuffers(commandBuffers[i], 0, 1, vertexBuffers, offsets);
 
-        vkCmdBindIndexBuffer(commandBuffers[i], vertexBuffer.getIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
+//        vkCmdBindIndexBuffer(commandBuffers[i], vertexBuffer.getIndexBuffer(), 0, VK_INDEX_TYPE_UINT16);
+        vkCmdBindIndexBuffer(commandBuffers[i], vertexBuffer.getIndexBuffer(), 0, VK_INDEX_TYPE_UINT32);
 
         vkCmdBindDescriptorSets(commandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS,
                                 graphicsPipeline.getPipelineLayout(), 0, 1,
                                 &descriptorSets.getDescriptorSets()[i], 0, nullptr);
 
-        vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(vertexBuffer.getIndices().size()), 1, 0, 0, 0);
+        vkCmdDrawIndexed(commandBuffers[i], static_cast<uint32_t>(window->getIndices().size()), 1, 0, 0, 0);
 
         vkCmdEndRenderPass(commandBuffers[i]);
 

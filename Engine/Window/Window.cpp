@@ -8,7 +8,7 @@ Window::Window()
 {
 
     this->vertices = {
-
+/*
             {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
             {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
             {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
@@ -22,7 +22,7 @@ Window::Window()
             {{-0.5f, -0.5f, -1.f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
             {{0.5f, -0.5f, -1.f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
             {{0.5f, 0.5f, -1.f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f, -1.f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+            {{-0.5f, 0.5f, -1.f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}*/
     };
 
     glfwInit();
@@ -53,7 +53,8 @@ Window::Window()
     this->textureImageView = new TextureImageView(*this->device, *this->textureImage);
     this->textureSampler = new TextureSampler(*this->device);
 
-    this->vertexBuffer = new VertexBuffer(*this->device, *this->commandPool, this->vertices);
+    this->model = new Model(this);
+    this->vertexBuffer = new VertexBuffer(this, *this->device, *this->commandPool, this->vertices);
 
     this->uniformBuffers = new UniformBuffers(*this->device, *this->imageViews);
 
@@ -61,7 +62,7 @@ Window::Window()
     this->descriptorSets = new DescriptorSets(*this->device, *this->imageViews, *this->descriptorSetLayout,
                                               *this->uniformBuffers, *this->descriptorPool, *this->textureImageView, *this->textureSampler);
 
-    this->commandBuffers = new CommandBuffers(*this->imageViews, *this->device, *this->commandPool, *this->framebuffers,
+    this->commandBuffers = new CommandBuffers(this, *this->imageViews, *this->device, *this->commandPool, *this->framebuffers,
                                               *this->graphicsPipeline, this->vertices, *this->vertexBuffer,
                                               *this->descriptorSets, *this->descriptorSetLayout);
 
@@ -243,7 +244,7 @@ void Window::recreateSwapChain()
     this->uniformBuffers = new UniformBuffers(*this->device, *this->imageViews);
     this->descriptorPool = new DescriptorPool(*this->device, *this->imageViews);
     this->descriptorSets = new DescriptorSets(*this->device, *this->imageViews, *this->descriptorSetLayout, *this->uniformBuffers, *this->descriptorPool, *this->textureImageView, *this->textureSampler);
-    this->commandBuffers = new CommandBuffers(*this->imageViews, *this->device, *this->commandPool, *this->framebuffers,
+    this->commandBuffers = new CommandBuffers(this, *this->imageViews, *this->device, *this->commandPool, *this->framebuffers,
                                               *this->graphicsPipeline, this->vertices, *this->vertexBuffer, *this->descriptorSets,
                                               *this->descriptorSetLayout);
 }
@@ -261,4 +262,24 @@ Window::~Window()
 GLFWwindow *Window::getWindow()
 {
     return window;
+}
+
+void Window::addVertice(Vertex &data)
+{
+    this->vertices.push_back(data);
+}
+
+std::vector<Vertex> &Window::getVertices()
+{
+    return this->vertices;
+}
+
+std::vector<uint32_t> &Window::getIndices()
+{
+    return this->indices;
+}
+
+void Window::addIndex(uint32_t data)
+{
+    this->indices.push_back(data);
 }
