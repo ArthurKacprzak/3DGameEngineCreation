@@ -38,7 +38,9 @@ private:
     VkDeviceMemory indexBufferMemory;
 
     std::vector<uint16_t> indices = {
-            0, 1, 2, 2, 3, 0
+            0, 1, 2, 2, 3, 0,
+            4, 5, 6, 6, 7, 4,
+            8, 9, 10, 10, 11, 8
     };
 
 public:

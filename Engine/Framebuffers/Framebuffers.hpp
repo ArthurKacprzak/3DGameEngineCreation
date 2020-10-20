@@ -8,11 +8,12 @@
 #include "../ImageViews/ImageViews.hpp"
 #include "../Device/Device.hpp"
 #include "../GraphicsPipeline/GraphicsPipeline.hpp"
+#include "../DepthResources/DepthResources.hpp"
 
 class Framebuffers
 {
 public:
-    Framebuffers(ImageViews &imageViews, Device &device, GraphicsPipeline &graphicsPipeline);
+    Framebuffers(ImageViews &imageViews, Device &device, GraphicsPipeline &graphicsPipeline, DepthResources &depthResources);
 
     std::vector<VkFramebuffer> &getSwapChainFramebuffers();
 

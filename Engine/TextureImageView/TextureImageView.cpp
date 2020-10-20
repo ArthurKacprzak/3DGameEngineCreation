@@ -6,16 +6,16 @@
 
 TextureImageView::TextureImageView(Device &device, TextureImage &textureImage)
 {
-    textureImageView = createImageView(device, textureImage, VK_FORMAT_R8G8B8A8_SRGB);
+    textureImageView = createImageView(device, textureImage.getTextureImage(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
-VkImageView TextureImageView::createImageView(Device &device, TextureImage &textureImage, VkFormat format) {
+VkImageView TextureImageView::createImageView(Device &device, VkImage &image, VkFormat format, VkImageAspectFlags aspectFlags) {
     VkImageViewCreateInfo viewInfo{};
     viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-    viewInfo.image = textureImage.getTextureImage();
+    viewInfo.image = image;
     viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
     viewInfo.format = format;
-    viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    viewInfo.subresourceRange.aspectMask = aspectFlags;
     viewInfo.subresourceRange.baseMipLevel = 0;
     viewInfo.subresourceRange.levelCount = 1;
     viewInfo.subresourceRange.baseArrayLayer = 0;

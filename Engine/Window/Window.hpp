@@ -37,6 +37,7 @@
 #include "../TextureImage/TextureImage.hpp"
 #include "../TextureImageView/TextureImageView.hpp"
 #include "../TextureSampler/TextureSampler.hpp"
+#include "../DepthResources/DepthResources.hpp"
 
 class Window
 {
@@ -73,6 +74,8 @@ private:
     TextureImage *textureImage;
     TextureImageView *textureImageView;
     TextureSampler *textureSampler;
+
+    DepthResources *depthResources;
 public:
     GLFWwindow *getWindow();
 

@@ -9,10 +9,20 @@ Window::Window()
 
     this->vertices = {
 
-            {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-            {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-            {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+            {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+            {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+            {{-0.5f, -0.5f, -1.f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, -1.f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, -1.f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, -1.f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
     };
 
     glfwInit();
@@ -36,8 +46,9 @@ Window::Window()
     this->graphicsPipeline = new GraphicsPipeline(*this->device, *this->imageViews, *this->descriptorSetLayout);
 
 
-    this->framebuffers = new Framebuffers(*this->imageViews, *this->device, *this->graphicsPipeline);
     this->commandPool = new CommandPool(*this->device, *this->surface);
+    this->depthResources = new DepthResources(*this->device, *this->imageViews);
+    this->framebuffers = new Framebuffers(*this->imageViews, *this->device, *this->graphicsPipeline, *this->depthResources);
     this->textureImage = new TextureImage(*this->device, *this->commandPool);
     this->textureImageView = new TextureImageView(*this->device, *this->textureImage);
     this->textureSampler = new TextureSampler(*this->device);
@@ -227,7 +238,8 @@ void Window::recreateSwapChain()
     this->swapChain = new SwapChain(*this, *this->device, *this->surface, *this->imageViews);
     this->imageViews->init(*this->device);
     this->graphicsPipeline = new GraphicsPipeline(*this->device, *this->imageViews, *this->descriptorSetLayout);
-    this->framebuffers = new Framebuffers(*this->imageViews, *this->device, *this->graphicsPipeline);
+    this->depthResources = new DepthResources(*this->device, *this->imageViews);
+    this->framebuffers = new Framebuffers(*this->imageViews, *this->device, *this->graphicsPipeline, *this->depthResources);
     this->uniformBuffers = new UniformBuffers(*this->device, *this->imageViews);
     this->descriptorPool = new DescriptorPool(*this->device, *this->imageViews);
     this->descriptorSets = new DescriptorSets(*this->device, *this->imageViews, *this->descriptorSetLayout, *this->uniformBuffers, *this->descriptorPool, *this->textureImageView, *this->textureSampler);

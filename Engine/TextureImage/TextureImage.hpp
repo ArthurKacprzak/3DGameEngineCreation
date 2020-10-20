@@ -17,10 +17,13 @@ public:
 public:
     VkImage &getTextureImage();
 
+public:
+
+    static void createImage(Device &device, uint32_t width, uint32_t height, VkFormat format,
+                            VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties,
+                            VkImage& image, VkDeviceMemory& imageMemory);
+
 private:
-    void createImage(Device &device, uint32_t width, uint32_t height, VkFormat format,
-                     VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties,
-                     VkImage& image, VkDeviceMemory& imageMemory);
     void transitionImageLayout(Device &device, CommandPool &commandPool, VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
     void copyBufferToImage(Device &device, CommandPool &commandPool, VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
     VkCommandBuffer beginSingleTimeCommands(Device &device, CommandPool &commandPool);
