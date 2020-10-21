@@ -8,29 +8,29 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 set(SRC main.cpp
-        Engine/Window/Window.cpp
-        Engine/Window/Window.hpp
-        Engine/Instance/Instance.cpp
-        Engine/Instance/Instance.hpp
-        Engine/Surface/Surface.cpp
-        Engine/Surface/Surface.hpp
-        Engine/Device/Device.cpp
-        Engine/Device/Device.hpp
-        Engine/QueueFamily/QueueFamily.cpp
-        Engine/QueueFamily/QueueFamily.hpp
-        Engine/SwapChain/SwapChain.cpp
-        Engine/SwapChain/SwapChain.hpp
-        Engine/ImageViews/ImageViews.cpp
-        Engine/ImageViews/ImageViews.hpp
-        Engine/GraphicsPipeline/GraphicsPipeline.cpp
-        Engine/GraphicsPipeline/GraphicsPipeline.hpp
-        Engine/FileReader/FileReader.cpp
-        Engine/FileReader/FileReader.hpp
-        Engine/Shader/Shader.cpp
-        Engine/Shader/Shader.hpp
-        Engine/Framebuffers/Framebuffers.cpp
-        Engine/Framebuffers/Framebuffers.hpp
-        Engine/CommandPool/CommandPool.cpp Engine/CommandPool/CommandPool.hpp Engine/CommandBuffers/CommandBuffers.cpp Engine/CommandBuffers/CommandBuffers.hpp Engine/Semaphore/Semaphore.cpp Engine/Semaphore/Semaphore.hpp Engine/Vertex/Vertex.cpp Engine/Vertex/Vertex.hpp Engine/VertexBuffer/VertexBuffer.cpp Engine/VertexBuffer/VertexBuffer.hpp Engine/DescriptorSetLayout/DescriptorSetLayout.cpp Engine/DescriptorSetLayout/DescriptorSetLayout.hpp Engine/UniformBuffers/UniformBuffers.cpp Engine/UniformBuffers/UniformBuffers.hpp Engine/DescriptorPool/DescriptorPool.cpp Engine/DescriptorPool/DescriptorPool.hpp Engine/DescriptorSets/DescriptorSets.cpp Engine/DescriptorSets/DescriptorSets.hpp Engine/DebugMessenger/DebugMessenger.cpp Engine/DebugMessenger/DebugMessenger.hpp Engine/TextureImage/TextureImage.cpp Engine/TextureImage/TextureImage.hpp Engine/TextureImageView/TextureImageView.cpp Engine/TextureImageView/TextureImageView.hpp Engine/TextureSampler/TextureSampler.cpp Engine/TextureSampler/TextureSampler.hpp Engine/DepthResources/DepthResources.cpp Engine/DepthResources/DepthResources.hpp Engine/Model/Model.cpp Engine/Model/Model.hpp)
+        Engine/Private/Window/Window.cpp
+        Engine/Private/Window/Window.hpp
+        Engine/Private/Instance/Instance.cpp
+        Engine/Private/Instance/Instance.hpp
+        Engine/Private/Surface/Surface.cpp
+        Engine/Private/Surface/Surface.hpp
+        Engine/Private/Device/Device.cpp
+        Engine/Private/Device/Device.hpp
+        Engine/Private/QueueFamily/QueueFamily.cpp
+        Engine/Private/QueueFamily/QueueFamily.hpp
+        Engine/Private/SwapChain/SwapChain.cpp
+        Engine/Private/SwapChain/SwapChain.hpp
+        Engine/Private/ImageViews/ImageViews.cpp
+        Engine/Private/ImageViews/ImageViews.hpp
+        Engine/Private/GraphicsPipeline/GraphicsPipeline.cpp
+        Engine/Private/GraphicsPipeline/GraphicsPipeline.hpp
+        Engine/Private/FileReader/FileReader.cpp
+        Engine/Private/FileReader/FileReader.hpp
+        Engine/Private/Shader/Shader.cpp
+        Engine/Private/Shader/Shader.hpp
+        Engine/Private/Framebuffers/Framebuffers.cpp
+        Engine/Private/Framebuffers/Framebuffers.hpp
+        Engine/Private/CommandPool/CommandPool.cpp Engine/Private/CommandPool/CommandPool.hpp Engine/Private/CommandBuffers/CommandBuffers.cpp Engine/Private/CommandBuffers/CommandBuffers.hpp Engine/Private/Semaphore/Semaphore.cpp Engine/Private/Semaphore/Semaphore.hpp Engine/Private/Vertex/Vertex.cpp Engine/Private/Vertex/Vertex.hpp Engine/Private/VertexBuffer/VertexBuffer.cpp Engine/Private/VertexBuffer/VertexBuffer.hpp Engine/Private/DescriptorSetLayout/DescriptorSetLayout.cpp Engine/Private/DescriptorSetLayout/DescriptorSetLayout.hpp Engine/Private/UniformBuffers/UniformBuffers.cpp Engine/Private/UniformBuffers/UniformBuffers.hpp Engine/Private/DescriptorPool/DescriptorPool.cpp Engine/Private/DescriptorPool/DescriptorPool.hpp Engine/Private/DescriptorSets/DescriptorSets.cpp Engine/Private/DescriptorSets/DescriptorSets.hpp Engine/Private/DebugMessenger/DebugMessenger.cpp Engine/Private/DebugMessenger/DebugMessenger.hpp Engine/Private/TextureImage/TextureImage.cpp Engine/Private/TextureImage/TextureImage.hpp Engine/Private/TextureImageView/TextureImageView.cpp Engine/Private/TextureImageView/TextureImageView.hpp Engine/Private/TextureSampler/TextureSampler.cpp Engine/Private/TextureSampler/TextureSampler.hpp Engine/Private/DepthResources/DepthResources.cpp Engine/Private/DepthResources/DepthResources.hpp Engine/Private/Model/Model.cpp Engine/Private/Model/Model.hpp)
 
 add_executable(3DGameEngineCreation ${SRC})
 

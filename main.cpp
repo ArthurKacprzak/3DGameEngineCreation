@@ -2,7 +2,7 @@
 // Created by arthur on 09/10/2020.
 //
 
-#include "Engine/Window/Window.hpp"
+#include "Engine/Private/Window/Window.hpp"
 
 int main()
 {
