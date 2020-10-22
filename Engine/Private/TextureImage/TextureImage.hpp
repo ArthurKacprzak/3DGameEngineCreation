@@ -17,6 +17,8 @@ public:
 public:
     VkImage &getTextureImage();
 
+    VkDeviceMemory &getTextureImageMemory();
+
 public:
 
     static void createImage(Device &device, uint32_t width, uint32_t height, VkFormat format,

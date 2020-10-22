@@ -146,3 +146,8 @@ VkBuffer &VertexBuffer::getIndexBuffer()
 {
     return indexBuffer;
 }
+
+VkDeviceMemory &VertexBuffer::getIndexBufferMemory()
+{
+    return indexBufferMemory;
+}

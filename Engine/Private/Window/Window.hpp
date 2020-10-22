@@ -5,10 +5,9 @@
 #ifndef INC_3DGAMEENGINECREATION_WINDOW_HPP
 #define INC_3DGAMEENGINECREATION_WINDOW_HPP
 
-#include <iostream>
 #include <vulkan/vulkan.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
+//#include <GLFW/glfw3.h>
+#include <windows.h>
 #include <stdexcept>
 #include <cstdlib>
 
@@ -53,10 +52,12 @@ public:
 
 public:
     void start();
-private:
-    GLFWwindow *window;
+    void init(HINSTANCE hInstance);
 
 private:
+    vk::Extent2D windowSize = { 1280, 720 };
+    HINSTANCE windowInstance;
+    HWND hwnd;
 
     Instance *instance;
     DebugMessenger *debugMessenger;
@@ -81,11 +82,14 @@ private:
 
     Model *model;
 public:
-    GLFWwindow *getWindow();
     void addVertice(Vertex &data);
     std::vector<Vertex> &getVertices();
     void addIndex(uint32_t indice);
     std::vector<uint32_t> &getIndices();
+
+    HWND &getHwnd();
+
+    HINSTANCE &getWindowInstance();
 
 private:
     Framebuffers *framebuffers;
@@ -94,17 +98,36 @@ private:
     Semaphore *semaphore;
     size_t currentFrame = 0;
 
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+
     bool framebufferResized = false;
 
+
+    HWND createWindow(HINSTANCE hinstance, WNDPROC wndproc);
+
+    static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+    {
+        switch (uMsg)
+        {
+            case WM_CLOSE:
+                DestroyWindow(hWnd);
+                PostQuitMessage(0);
+                break;
+        }
+
+        return (DefWindowProc(hWnd, uMsg, wParam, lParam));
+    }
+
+
+
     std::vector<uint32_t> indices = {
-                0, 1, 2, 2, 3, 0,
+/*                0, 1, 2, 2, 3, 0,
                 4, 5, 6, 6, 7, 4,
-                8, 9, 10, 10, 11, 8
+                8, 9, 10, 10, 11, 8*/
     };
 
 private:
     void drawFrame();
-    static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
     void cleanupSwapChain();
     void recreateSwapChain();
     void updateUniformBuffer(uint32_t currentImage);

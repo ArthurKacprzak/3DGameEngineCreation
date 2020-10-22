@@ -196,3 +196,8 @@ VkImage &TextureImage::getTextureImage()
 {
     return textureImage;
 }
+
+VkDeviceMemory &TextureImage::getTextureImageMemory()
+{
+    return textureImageMemory;
+}

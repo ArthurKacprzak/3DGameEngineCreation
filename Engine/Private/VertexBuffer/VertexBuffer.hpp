@@ -25,10 +25,6 @@ public:
 private:
     void copyBuffer(Device &device, CommandPool &commandPool, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
-public:
-    VkBuffer &getIndexBuffer();
-
-
 private:
     void createIndexBuffer(Window *window, Device &device, CommandPool &commandPool);
 
@@ -41,6 +37,8 @@ private:
 public:
     VkDeviceMemory &getVertexBufferMemory();
     VkBuffer &getVertexBuffer();
+    VkBuffer &getIndexBuffer();
+    VkDeviceMemory &getIndexBufferMemory();
 };
 
 

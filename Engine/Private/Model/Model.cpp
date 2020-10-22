@@ -7,11 +7,9 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 #include "../Window/Window.hpp"
-#include <iostream>
 
 Model::Model(Window *window)
 {
-    std::cout << "azd" << "\n";
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
@@ -20,7 +18,6 @@ Model::Model(Window *window)
     if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, Model::getModelPath().c_str())) {
         throw std::runtime_error(warn + err);
     }
-    std::cout << Model::getModelPath() << "\n";
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 
@@ -45,8 +42,6 @@ Model::Model(Window *window)
                 uniqueVertices[vertex] = static_cast<uint32_t>(window->getVertices().size());
                 window->addVertice(vertex);
             }
-
-            std::cout << uniqueVertices[vertex] <<"\n";
 
             window->addIndex(uniqueVertices[vertex]);
         }

@@ -8,7 +8,6 @@
 #include "../Instance/Instance.hpp"
 
 #include <set>
-#include <iostream>
 #include <vector>
 #include <cstdlib>
 

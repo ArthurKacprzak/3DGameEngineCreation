@@ -6,7 +6,6 @@
 #define INC_3DGAMEENGINECREATION_DEBUGMESSENGER_HPP
 
 #include <vulkan/vulkan.hpp>
-#include <iostream>
 
 #include "../Instance/Instance.hpp"
 
@@ -14,6 +13,7 @@ class DebugMessenger
 {
 public:
     DebugMessenger(Instance &instance);
+    void release(Instance &instance, const VkAllocationCallbacks* pAllocator);
 
 public:
     static void populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
@@ -31,6 +31,8 @@ private:
 public:
 
     static std::vector<const char*> &getValidationLayers();
+
+    VkDebugUtilsMessengerEXT &getDebugMessenger();
 };
 
 

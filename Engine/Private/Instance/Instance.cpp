@@ -4,6 +4,8 @@
 
 #include "Instance.hpp"
 #include "../DebugMessenger/DebugMessenger.hpp"
+#include <windows.h>
+#include <vulkan/vulkan_win32.h>
 
 Instance::Instance()
 {
@@ -48,17 +50,14 @@ Instance::Instance()
 
 std::vector<const char *> Instance::getRequiredExtensions()
 {
-    uint32_t glfwExtensionCount = 0;
-    const char** glfwExtensions;
-    glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-    std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+    std::vector<const char*> enabledExtensions = { VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME };
 
-    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
-        extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-    }
 
-    return extensions;
+    enabledExtensions.push_back(VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
+    enabledExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+
+    return enabledExtensions;
 }
 
 Instance::~Instance()
