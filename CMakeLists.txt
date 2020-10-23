@@ -72,10 +72,9 @@ add_executable(3DGameEngineCreation ${SRC})
 include_directories(./stb-master/stb-master)
 
 find_package(Vulkan REQUIRED)
-add_subdirectory(./glfw-3.3.2)
 add_subdirectory(./glm)
 add_subdirectory(./tinyobjloader)
 
 
-set(LIBS Vulkan::Vulkan glfw glm tinyobjloader)
+set(LIBS Vulkan::Vulkan glm tinyobjloader)
 target_link_libraries(3DGameEngineCreation ${LIBS})
