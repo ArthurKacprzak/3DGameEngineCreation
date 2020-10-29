@@ -3,8 +3,8 @@ project(3DGameEngineCreation)
 
 set(CMAKE_CXX_STANDARD 17)
 
-#set(Vulkan_LIBRARY "C:/Users/arthur/VulkanSDK/1.2.154.1/Lib")
-#set(Vulkan_INCLUDE_DIR "C:/Users/arthur/VulkanSDK/1.2.154.1/Include")
+#set(Vulkan_LIBRARY "C:/VulkanSDK/1.2.148.1/Lib")
+#set(Vulkan_INCLUDE_DIR "C:/VulkanSDK/1.2.148.1/Include")
 
 
 set(SRC main.cpp
@@ -66,15 +66,48 @@ set(SRC main.cpp
         Engine/Public/Application/Application.hpp
         Engine/Public/Object/Object.cpp
         Engine/Public/Object/Object.hpp
-        Engine/Private/CommandPool/CommandPool.cpp Engine/Private/CommandPool/CommandPool.hpp Engine/Private/CommandBuffers/CommandBuffers.cpp Engine/Private/CommandBuffers/CommandBuffers.hpp Engine/Private/Semaphore/Semaphore.cpp Engine/Private/Semaphore/Semaphore.hpp Engine/Private/Vertex/Vertex.cpp Engine/Private/Vertex/Vertex.hpp Engine/Private/VertexBuffer/VertexBuffer.cpp Engine/Private/VertexBuffer/VertexBuffer.hpp Engine/Private/DescriptorSetLayout/DescriptorSetLayout.cpp Engine/Private/DescriptorSetLayout/DescriptorSetLayout.hpp Engine/Private/UniformBuffers/UniformBuffers.cpp Engine/Private/UniformBuffers/UniformBuffers.hpp Engine/Private/DescriptorPool/DescriptorPool.cpp Engine/Private/DescriptorPool/DescriptorPool.hpp Engine/Private/DescriptorSets/DescriptorSets.cpp Engine/Private/DescriptorSets/DescriptorSets.hpp Engine/Private/DebugMessenger/DebugMessenger.cpp Engine/Private/DebugMessenger/DebugMessenger.hpp Engine/Private/TextureImage/TextureImage.cpp Engine/Private/TextureImage/TextureImage.hpp Engine/Private/TextureImageView/TextureImageView.cpp Engine/Private/TextureImageView/TextureImageView.hpp Engine/Private/TextureSampler/TextureSampler.cpp Engine/Private/TextureSampler/TextureSampler.hpp Engine/Private/DepthResources/DepthResources.cpp Engine/Private/DepthResources/DepthResources.hpp Engine/Private/Model/Model.cpp Engine/Private/Model/Model.hpp ourLibs/miniobjloader/loader.cpp ourLibs/miniobjloader/loader.hpp ourLibs/miniobjloader/tools.cpp ourLibs/miniobjloader/tools.hpp)
+        Engine/Private/CommandPool/CommandPool.cpp
+        Engine/Private/CommandPool/CommandPool.hpp
+        Engine/Private/CommandBuffers/CommandBuffers.cpp
+        Engine/Private/CommandBuffers/CommandBuffers.hpp
+        Engine/Private/Semaphore/Semaphore.cpp
+        Engine/Private/Semaphore/Semaphore.hpp
+        Engine/Private/Vertex/Vertex.cpp
+        Engine/Private/Vertex/Vertex.hpp
+        Engine/Private/VertexBuffer/VertexBuffer.cpp
+        Engine/Private/VertexBuffer/VertexBuffer.hpp
+        Engine/Private/DescriptorSetLayout/DescriptorSetLayout.cpp
+        Engine/Private/DescriptorSetLayout/DescriptorSetLayout.hpp
+        Engine/Private/UniformBuffers/UniformBuffers.cpp
+        Engine/Private/UniformBuffers/UniformBuffers.hpp
+        Engine/Private/DescriptorPool/DescriptorPool.cpp
+        Engine/Private/DescriptorPool/DescriptorPool.hpp
+        Engine/Private/DescriptorSets/DescriptorSets.cpp
+        Engine/Private/DescriptorSets/DescriptorSets.hpp
+        Engine/Private/DebugMessenger/DebugMessenger.cpp
+        Engine/Private/DebugMessenger/DebugMessenger.hpp
+        Engine/Private/TextureImage/TextureImage.cpp
+        Engine/Private/TextureImage/TextureImage.hpp
+        Engine/Private/TextureImageView/TextureImageView.cpp
+        Engine/Private/TextureImageView/TextureImageView.hpp
+        Engine/Private/TextureSampler/TextureSampler.cpp
+        Engine/Private/TextureSampler/TextureSampler.hpp
+        Engine/Private/DepthResources/DepthResources.cpp
+        Engine/Private/DepthResources/DepthResources.hpp
+        Engine/Private/Model/Model.cpp
+        Engine/Private/Model/Model.hpp
+        ourLibs/miniobjloader/loader.cpp
+        ourLibs/miniobjloader/loader.hpp
+        ourLibs/miniobjloader/tools.cpp
+        ourLibs/miniobjloader/tools.hpp)
 
 add_executable(3DGameEngineCreation ${SRC})
 
-include_directories(./stb-master/stb-master)
+include_directories(./libs/stb-master)
 
 find_package(Vulkan REQUIRED)
-add_subdirectory(./glfw-3.3.2)
-add_subdirectory(./glm)
+add_subdirectory(./libs/glfw-3.3.2)
+add_subdirectory(./libs/glm)
 add_subdirectory(./tinyobjloader)
 
 

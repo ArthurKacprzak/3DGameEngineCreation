@@ -4,6 +4,8 @@
 
 #include "Window.hpp"
 #include <exception>
+#include <wincon.h>
+#include <cstdio>
 
 
 Window::Window()
@@ -269,7 +271,6 @@ void Window::addIndex(uint32_t data)
 }
 
 
-
 HWND Window::createWindow(HINSTANCE hinstance, WNDPROC wndproc)
 {
     this->windowInstance = hinstance;
@@ -277,9 +278,9 @@ HWND Window::createWindow(HINSTANCE hinstance, WNDPROC wndproc)
     bool fullscreen = false;
 
     AllocConsole();
-    AttachConsole(GetCurrentProcessId());
+//    AttachConsole(GetCurrentProcessId());
     FILE *stream;
-    freopen_s(&stream, "CONOUT$", "w+", stdout);
+    freopen(reinterpret_cast<const char *>(&stream), "w+", stdout);
     SetConsoleTitle(TEXT("VULKAN_TUTORIAL"));
 
     WNDCLASSEX wndClass;
