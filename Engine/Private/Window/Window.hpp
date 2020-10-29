@@ -37,7 +37,8 @@
 #include "../TextureImageView/TextureImageView.hpp"
 #include "../TextureSampler/TextureSampler.hpp"
 #include "../DepthResources/DepthResources.hpp"
-#include "../Model/Model.hpp"
+
+class Model;
 
 class Window
 {

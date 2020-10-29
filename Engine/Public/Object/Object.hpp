@@ -13,11 +13,15 @@ public:
     Object();
 
 public:
-    virtual void init(Window &window) = 0;
+    virtual void init(Window &window);
 
 public:
-    virtual bool operator==(const Object &other) const = 0;
-    virtual Object &operator=(const Object &rhs) = 0;
+    void addPoint(Vertex v);
+    void setIndices(const std::vector<uint32_t> &indices);
+
+private:
+    std::vector<Vertex> vertex;
+    std::vector<uint32_t> indices;
 };
 
 #endif //INC_3DGAMEENGINECREATION_OBJECT_HPP

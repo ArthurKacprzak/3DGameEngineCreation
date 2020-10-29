@@ -1,0 +1,15 @@
+//
+// Created by arthur on 24/10/2020.
+//
+
+#ifndef INC_3DGAMEENGINECREATION_TEXTURE_HPP
+#define INC_3DGAMEENGINECREATION_TEXTURE_HPP
+
+
+class Texture
+{
+
+};
+
+
+#endif //INC_3DGAMEENGINECREATION_TEXTURE_HPP

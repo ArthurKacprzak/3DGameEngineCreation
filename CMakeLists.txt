@@ -3,8 +3,8 @@ project(3DGameEngineCreation)
 
 set(CMAKE_CXX_STANDARD 17)
 
-#set(Vulkan_LIBRARY "C:/VulkanSDK/1.2.148.1/Lib")
-#set(Vulkan_INCLUDE_DIR "C:/VulkanSDK/1.2.148.1/Include")
+#set(Vulkan_LIBRARY "C:/Users/arthur/VulkanSDK/1.2.154.1/Lib")
+#set(Vulkan_INCLUDE_DIR "C:/Users/arthur/VulkanSDK/1.2.154.1/Include")
 
 
 set(SRC main.cpp
@@ -60,8 +60,6 @@ set(SRC main.cpp
         Engine/Private/DepthResources/DepthResources.hpp
         Engine/Private/Model/Model.cpp
         Engine/Private/Model/Model.hpp
-        Engine/Public/Rect/Rect.cpp
-        Engine/Public/Rect/Rect.hpp
         Engine/Public/Application/Application.cpp
         Engine/Public/Application/Application.hpp
         Engine/Public/Object/Object.cpp
@@ -99,17 +97,19 @@ set(SRC main.cpp
         ourLibs/miniobjloader/loader.cpp
         ourLibs/miniobjloader/loader.hpp
         ourLibs/miniobjloader/tools.cpp
-        ourLibs/miniobjloader/tools.hpp)
+        ourLibs/miniobjloader/tools.hpp
+        Engine/Public/PublicModel/PublicModel.cpp
+        Engine/Public/PublicModel/PublicModel.hpp Engine/Public/Texture/Texture.cpp Engine/Public/Texture/Texture.hpp)
+
 
 add_executable(3DGameEngineCreation ${SRC})
 
-include_directories(./libs/stb-master)
+include_directories(./stb-master/stb-master)
 
 find_package(Vulkan REQUIRED)
-add_subdirectory(./libs/glfw-3.3.2)
-add_subdirectory(./libs/glm)
+add_subdirectory(./glm)
 add_subdirectory(./tinyobjloader)
 
 
-set(LIBS Vulkan::Vulkan glfw glm tinyobjloader)
+set(LIBS Vulkan::Vulkan glm tinyobjloader)
 target_link_libraries(3DGameEngineCreation ${LIBS})

@@ -5,7 +5,6 @@
 #include "Model.hpp"
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <tiny_obj_loader.h>
 #include "../Window/Window.hpp"
 #include <iostream>
 #include "../ourLibs/miniobjloader/loader.hpp"
@@ -15,15 +14,6 @@ Model::Model(Window *window)
     miniobj::loader loader;
     miniobj::attrib_t attribM;
     std::vector<miniobj::shape_t> shapesM;
-//    tinyobj::attrib_t attrib;
-//    std::vector<tinyobj::shape_t> shapes;
-//    std::vector<tinyobj::material_t> materials;
-//    std::string warn, err;
-
-//    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, Model::getModelPath().c_str())) {
-//        throw std::runtime_error(warn + err);
-//    }
-    std::cout << Model::getModelPath() << "\n";
     loader.load(&attribM, &shapesM, Model::getModelPath());
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
