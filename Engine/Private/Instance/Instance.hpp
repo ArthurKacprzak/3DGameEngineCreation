@@ -7,8 +7,7 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include <iostream>
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 
 class Surface;
 

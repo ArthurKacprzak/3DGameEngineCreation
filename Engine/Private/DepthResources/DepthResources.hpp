@@ -25,6 +25,10 @@ public:
 public:
     VkImageView &getDepthImageView();
 
+    VkImage &getDepthImage();
+
+    VkDeviceMemory &getDepthImageMemory();
+
 private:
     static VkFormat findSupportedFormat(Device &device, const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 private:

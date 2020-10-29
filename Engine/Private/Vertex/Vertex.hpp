@@ -35,5 +35,4 @@ namespace std {
     };
 }
 
-
 #endif //INC_3DGAMEENGINECREATION_VERTEX_HPP

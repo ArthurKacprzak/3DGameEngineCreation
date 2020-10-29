@@ -3,6 +3,7 @@
 //
 
 #include "DebugMessenger.hpp"
+#include <iostream>
 
 DebugMessenger::DebugMessenger(Instance &instance)
 {
@@ -78,4 +79,17 @@ bool DebugMessenger::checkValidationLayerSupport()
     }
 
     return true;
+}
+
+VkDebugUtilsMessengerEXT &DebugMessenger::getDebugMessenger()
+{
+    return debugMessenger;
+}
+
+void DebugMessenger::release(Instance &instance, const VkAllocationCallbacks* pAllocator)
+{
+    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance.getVkInstance(), "vkDestroyDebugUtilsMessengerEXT");
+    if (func != nullptr) {
+        func(instance.getVkInstance(), this->debugMessenger, pAllocator);
+    }
 }

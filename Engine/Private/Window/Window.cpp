@@ -3,40 +3,20 @@
 //
 
 #include "Window.hpp"
+#include <exception>
+
 
 Window::Window()
 {
+}
 
-    this->vertices = {
-
-            {{-0.5f, -0.5f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-            {{0.5f, -0.5f, 1.0f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-            {{0.5f, 0.5f, 1.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f, 1.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-
-            {{-0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-            {{0.5f, -0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-            {{0.5f, 0.5f, -0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-
-            {{-0.5f, -0.5f, -1.f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-            {{0.5f, -0.5f, -1.f}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-            {{0.5f, 0.5f, -1.f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f, -1.f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
-    };
-
-    glfwInit();
-
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-    //    this->window = glfwCreateWindow(1920, 1080, "Vulkan window", glfwGetPrimaryMonitor(), nullptr);
-    this->window = glfwCreateWindow(Window::WIDTH, Window::HEIGHT, "Vulkan window", nullptr, nullptr);
-    glfwSetWindowUserPointer(this->window, this);
-    glfwSetFramebufferSizeCallback(this->window, Window::framebufferResizeCallback);
+void Window::init(HINSTANCE hinstance)
+{
+    this->createWindow(hinstance, WndProc);
 
     this->instance = new Instance();
     this->debugMessenger = new DebugMessenger(*this->instance);
-    this->surface = new Surface(*this->window, *this->instance);
+    this->surface = new Surface(*this, *this->instance);
     this->device = new Device(*this->instance, *this->surface);
     this->imageViews = new ImageViews();
     this->swapChain = new SwapChain(*this, *this->device, *this->surface, *this->imageViews);
@@ -70,19 +50,23 @@ Window::Window()
 
 }
 
-void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-    auto app = reinterpret_cast<Window*>(glfwGetWindowUserPointer(window));
-    app->framebufferResized = true;
-}
-
-
 void Window::start()
 {
-    while(!glfwWindowShouldClose(this->window)) {
-        glfwPollEvents();
+    MSG msg;
+    bool quit = false;
+    while (!quit) {
+        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            if (msg.message == WM_QUIT) {
+                quit = true;
+            }
+        }
         this->drawFrame();
     }
-    this->cleanup();
+
+    // Flush device to make sure all resources can be freed if application is about to close
+    vkDeviceWaitIdle(this->device->getDevice());
 }
 
 void Window::drawFrame()
@@ -173,6 +157,10 @@ void Window::updateUniformBuffer(uint32_t currentImage)
 
 void Window::cleanupSwapChain()
 {
+    vkDestroyImageView(this->device->getDevice(), this->depthResources->getDepthImageView(), nullptr);
+    vkDestroyImage(this->device->getDevice(), this->depthResources->getDepthImage(), nullptr);
+    vkFreeMemory(this->device->getDevice(), this->depthResources->getDepthImageMemory(), nullptr);
+
     for (size_t i = 0; i < this->framebuffers->getSwapChainFramebuffers().size(); i++) {
         vkDestroyFramebuffer(this->device->getDevice(), this->framebuffers->getSwapChainFramebuffers()[i], nullptr);
     }
@@ -200,7 +188,16 @@ void Window::cleanupSwapChain()
 void Window::cleanup() {
     this->cleanupSwapChain();
 
+    vkDestroySampler(this->device->getDevice(), this->textureSampler->getTextureSampler(), nullptr);
+    vkDestroyImageView(this->device->getDevice(), this->textureImageView->getTextureImageView(), nullptr);
+
+    vkDestroyImage(this->device->getDevice(), this->textureImage->getTextureImage(), nullptr);
+    vkFreeMemory(this->device->getDevice(), this->textureImage->getTextureImageMemory(), nullptr);
+
     vkDestroyDescriptorSetLayout(this->device->getDevice(), this->descriptorSetLayout->getDescriptorSetLayout(), nullptr);
+
+    vkDestroyBuffer(this->device->getDevice(), this->vertexBuffer->getIndexBuffer(), nullptr);
+    vkFreeMemory(this->device->getDevice(), this->vertexBuffer->getIndexBufferMemory(), nullptr);
 
     vkDestroyBuffer(this->device->getDevice(), this->vertexBuffer->getVertexBuffer(), nullptr);
     vkFreeMemory(this->device->getDevice(), this->vertexBuffer->getVertexBufferMemory(), nullptr);
@@ -215,22 +212,17 @@ void Window::cleanup() {
 
     vkDestroyDevice(this->device->getDevice(), nullptr);
 
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
+        this->debugMessenger->release(*this->instance, nullptr);
+    }
+
     vkDestroySurfaceKHR(this->instance->getVkInstance(), this->surface->getSurface(), nullptr);
     vkDestroyInstance(this->instance->getVkInstance(), nullptr);
-
-    glfwDestroyWindow(this->window);
-
-    glfwTerminate();
 }
 
 void Window::recreateSwapChain()
 {
     int width = 0, height = 0;
-    glfwGetFramebufferSize(this->window, &width, &height);
-    while (width == 0 || height == 0) {
-        glfwGetFramebufferSize(this->window, &width, &height);
-        glfwWaitEvents();
-    }
 
     vkDeviceWaitIdle(device->getDevice());
 
@@ -254,14 +246,6 @@ Window::~Window()
     this->surface->release(*this->instance);
     delete this->instance;
     delete this->device;
-    glfwDestroyWindow(this->window);
-
-    glfwTerminate();
-}
-
-GLFWwindow *Window::getWindow()
-{
-    return window;
 }
 
 void Window::addVertice(Vertex &data)
@@ -282,4 +266,122 @@ std::vector<uint32_t> &Window::getIndices()
 void Window::addIndex(uint32_t data)
 {
     this->indices.push_back(data);
+}
+
+
+
+HWND Window::createWindow(HINSTANCE hinstance, WNDPROC wndproc)
+{
+    this->windowInstance = hinstance;
+
+    bool fullscreen = false;
+
+    AllocConsole();
+    AttachConsole(GetCurrentProcessId());
+    FILE *stream;
+    freopen_s(&stream, "CONOUT$", "w+", stdout);
+    SetConsoleTitle(TEXT("VULKAN_TUTORIAL"));
+
+    WNDCLASSEX wndClass;
+
+    wndClass.cbSize = sizeof(WNDCLASSEX);
+    wndClass.style = CS_HREDRAW | CS_VREDRAW;
+    wndClass.lpfnWndProc = wndproc;
+    wndClass.cbClsExtra = 0;
+    wndClass.cbWndExtra = 0;
+    wndClass.hInstance = hinstance;
+    wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+    wndClass.lpszMenuName = NULL;
+    wndClass.lpszClassName = "VULKAN_TUTORIAL";
+    wndClass.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
+
+    if (!RegisterClassEx(&wndClass))
+    {
+        std::cout << "Could not register window class!\n";
+        fflush(stdout);
+        exit(1);
+    }
+
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    if (fullscreen)
+    {
+        DEVMODE dmScreenSettings;
+        memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+        dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+        dmScreenSettings.dmPelsWidth = screenWidth;
+        dmScreenSettings.dmPelsHeight = screenHeight;
+        dmScreenSettings.dmBitsPerPel = 32;
+        dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+    }
+
+    DWORD dwExStyle;
+    DWORD dwStyle;
+
+    if (fullscreen)
+    {
+        dwExStyle = WS_EX_APPWINDOW;
+        dwStyle = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+    }
+    else
+    {
+        dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE;
+        dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+    }
+
+    RECT windowRect;
+    windowRect.left = 0L;
+    windowRect.top = 0L;
+    windowRect.right = fullscreen ? (long)screenWidth : (long)windowSize.width;
+    windowRect.bottom = fullscreen ? (long)screenHeight : (long)windowSize.height;
+
+    AdjustWindowRectEx(&windowRect, dwStyle, FALSE, dwExStyle);
+
+    this->hwnd = CreateWindowEx(0,
+                            "VULKAN_TUTORIAL",
+                            "VULKAN TUTORIAL 01",
+                            dwStyle | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
+                            0,
+                            0,
+                            windowRect.right - windowRect.left,
+                            windowRect.bottom - windowRect.top,
+                            NULL,
+                            NULL,
+                            hinstance,
+                            NULL);
+
+    if (!fullscreen)
+    {
+        // Center on screen
+        uint32_t x = (GetSystemMetrics(SM_CXSCREEN) - windowRect.right) / 2;
+        uint32_t y = (GetSystemMetrics(SM_CYSCREEN) - windowRect.bottom) / 2;
+        SetWindowPos(this->hwnd, 0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+    }
+
+    if (!this->hwnd)
+    {
+        printf("Could not create window!\n");
+        fflush(stdout);
+        return 0;
+        exit(1);
+    }
+
+    ShowWindow(this->hwnd, SW_SHOW);
+    SetForegroundWindow(this->hwnd);
+    SetFocus(this->hwnd);
+
+    return this->hwnd;
+}
+
+HWND &Window::getHwnd()
+{
+    return hwnd;
+}
+
+HINSTANCE &Window::getWindowInstance()
+{
+    return windowInstance;
 }

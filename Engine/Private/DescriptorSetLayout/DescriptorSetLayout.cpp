@@ -3,7 +3,6 @@
 //
 
 #include "DescriptorSetLayout.hpp"
-#include <iostream>
 
 DescriptorSetLayout::DescriptorSetLayout(Device &device)
 {

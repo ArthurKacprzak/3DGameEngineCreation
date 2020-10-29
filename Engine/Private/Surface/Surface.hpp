@@ -7,13 +7,16 @@
 
 #include "../Instance/Instance.hpp"
 
+#include <iostream>
 #include <vulkan/vulkan.h>
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
+
+class Window;
 
 class Surface
 {
 public:
-    Surface(GLFWwindow &window, Instance &instance);
+    Surface(Window &window, Instance &instance);
     void release(Instance &instance);
     ~Surface();
 

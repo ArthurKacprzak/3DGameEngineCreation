@@ -49,6 +49,9 @@ Model::Model(Window *window)
                 uniqueVertices[vertex] = static_cast<uint32_t>(window->getVertices().size());
                 window->addVertice(vertex);
             }
+
+            std::cout << uniqueVertices[vertex] <<"\n";
+
             window->addIndex(uniqueVertices[vertex]);
         }
     }

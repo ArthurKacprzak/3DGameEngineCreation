@@ -43,3 +43,13 @@ VkImageView &DepthResources::getDepthImageView()
 {
     return depthImageView;
 }
+
+VkImage &DepthResources::getDepthImage()
+{
+    return depthImage;
+}
+
+VkDeviceMemory &DepthResources::getDepthImageMemory()
+{
+    return depthImageMemory;
+}
