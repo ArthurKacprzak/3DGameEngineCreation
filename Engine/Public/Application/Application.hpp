@@ -8,6 +8,7 @@
 #include "../../Private/Window/Window.hpp"
 #include "../Object/Object.hpp"
 #include <windows.h>
+#include "../Key/Key.hpp"
 
 #include <vector>
 
@@ -19,14 +20,17 @@ public:
 
 public:
     void start(HINSTANCE hInstance);
-    void add(Object *object);
+    void addObject(Object *object);
+    void addKey(Key *key);
 
 private:
     void initObject();
+    void initKey();
 
 private:
     Window window;
     std::vector<std::unique_ptr<Object>> objectVector;
+    std::vector<std::unique_ptr<Key>> keyVector;
 };
 
 

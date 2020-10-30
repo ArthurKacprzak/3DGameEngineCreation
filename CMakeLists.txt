@@ -99,7 +99,9 @@ set(SRC main.cpp
         ourLibs/miniobjloader/tools.cpp
         ourLibs/miniobjloader/tools.hpp
         Engine/Public/PublicModel/PublicModel.cpp
-        Engine/Public/PublicModel/PublicModel.hpp Engine/Public/Texture/Texture.cpp Engine/Public/Texture/Texture.hpp)
+        Engine/Public/PublicModel/PublicModel.hpp
+        Engine/Public/Texture/Texture.cpp
+        Engine/Public/Texture/Texture.hpp Engine/Public/Key/Key.cpp Engine/Public/Key/Key.hpp)
 
 
 add_executable(3DGameEngineCreation ${SRC})

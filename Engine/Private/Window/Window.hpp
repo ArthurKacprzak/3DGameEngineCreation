@@ -82,11 +82,16 @@ private:
     DepthResources *depthResources;
 
     Model *model;
+
+    std::vector<std::pair<int, std::function<void()>>> keyVector;
 public:
     void addVertice(Vertex &data);
     std::vector<Vertex> &getVertices();
     void addIndex(uint32_t indice);
     std::vector<uint32_t> &getIndices();
+
+    void addKey(int value, std::function<void()> &f);
+
 
     HWND &getHwnd();
 
@@ -132,6 +137,7 @@ private:
     void cleanupSwapChain();
     void recreateSwapChain();
     void updateUniformBuffer(uint32_t currentImage);
+    void keyManagement();
     void cleanup();
 };
 

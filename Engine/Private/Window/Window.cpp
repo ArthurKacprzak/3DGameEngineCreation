@@ -63,6 +63,8 @@ void Window::start()
                 quit = true;
             }
         }
+        this->keyManagement();
+
         this->drawFrame();
     }
 
@@ -382,4 +384,18 @@ HWND &Window::getHwnd()
 HINSTANCE &Window::getWindowInstance()
 {
     return windowInstance;
+}
+
+void Window::addKey(int value, std::function<void()> &f)
+{
+    this->keyVector.push_back(std::make_pair(value, f));
+}
+
+void Window::keyManagement()
+{
+    for (auto &i : this->keyVector) {
+        if (GetKeyState(i.first) < 0) {
+            i.second();
+        }
+    }
 }

@@ -4,6 +4,7 @@
 
 #include "Engine/Public/Application/Application.hpp"
 #include "Engine/Public/PublicModel/PublicModel.hpp"
+#include "Engine/Public/Key/Key.hpp"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 {
@@ -23,7 +24,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
 
     model.setPath("../Resources/viking_room.obj");
 
-    application.add(&rect);
+
+    std::function<void()> s = []() {
+        std::cout << "s\n";
+    };
+
+    Key key;
+    key.setValue('S');
+    key.setFunction(s);
+
+
+    application.addKey(&key);
+    application.addObject(&rect);
     application.start(hInstance);
     return 0;
 }

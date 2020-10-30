@@ -11,19 +11,32 @@ Application::Application()
 void Application::start(HINSTANCE hInstance)
 {
     this->initObject();
+    this->initKey();
     this->window.init(hInstance);
     this->window.start();
 }
 
-void Application::add(Object *object)
+void Application::addObject(Object *object)
 {
     this->objectVector.push_back(std::unique_ptr<Object>(object));
+}
+
+void Application::addKey(Key *key)
+{
+    this->keyVector.push_back(std::unique_ptr<Key>(key));
 }
 
 void Application::initObject()
 {
     for (auto & i : this->objectVector) {
         i->init(this->window);
+    }
+}
+
+void Application::initKey()
+{
+    for (auto &i : this->keyVector) {
+        this->window.addKey(i->value, i->function);
     }
 }
 
