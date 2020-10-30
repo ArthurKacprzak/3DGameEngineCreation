@@ -5,7 +5,7 @@
 #include "Window.hpp"
 #include <exception>
 
-#include "../Model/Model.hpp"
+#include "../Graphics/Model/Model.hpp"
 
 Window::Window()
 {

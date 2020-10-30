@@ -7,7 +7,6 @@
 
 #include <string>
 #include "../Object/Object.hpp"
-#include "../../Private/Model/Model.hpp"
 
 class PublicModel : public Object
 {
