@@ -39,14 +39,13 @@
 #include "../Graphics/TextureSampler/TextureSampler.hpp"
 #include "../Graphics/DepthResources/DepthResources.hpp"
 
+#include "../Graphics/Camera/Camera.hpp"
+
 class Model;
 
 class Window
 {
 public:
-    static const int WIDTH = 800;
-    static const int HEIGHT = 600;
-
     static const int MAX_FRAMES_IN_FLIGHT = 2;
 public:
     Window();
@@ -56,31 +55,48 @@ public:
     void start();
     void init(HINSTANCE hInstance);
 
+    struct {
+        bool left = false;
+        bool right = false;
+        bool middle = false;
+    } mouseButtons;
+
+    glm::vec2 mousePos;
+
 private:
-    vk::Extent2D windowSize = { 1280, 720 };
-    HINSTANCE windowInstance;
-    HWND hwnd;
+
+
+    struct {
+        vk::Extent2D windowSize = { 1280, 720 };
+        HINSTANCE windowInstance;
+        HWND hwnd;
+
+        Camera *camera;
+
+        SwapChain *swapChain;
+        ImageViews *imageViews;
+        DescriptorSetLayout *descriptorSetLayout;
+        GraphicsPipeline *graphicsPipeline;
+        VertexBuffer *vertexBuffer;
+        UniformBuffers *uniformBuffers;
+        DescriptorPool *descriptorPool;
+        DescriptorSets *descriptorSets;
+        TextureImage *textureImage;
+        TextureImageView *textureImageView;
+        TextureSampler *textureSampler;
+        DepthResources *depthResources;
+    } graphics;
+
+
 
     Instance *instance;
     DebugMessenger *debugMessenger;
     Surface *surface;
     Device *device;
-    SwapChain *swapChain;
-    ImageViews *imageViews;
-    DescriptorSetLayout *descriptorSetLayout;
-    GraphicsPipeline *graphicsPipeline;
 
     std::vector<Vertex> vertices;
 
-    VertexBuffer *vertexBuffer;
-    UniformBuffers *uniformBuffers;
-    DescriptorPool *descriptorPool;
-    DescriptorSets *descriptorSets;
-    TextureImage *textureImage;
-    TextureImageView *textureImageView;
-    TextureSampler *textureSampler;
 
-    DepthResources *depthResources;
 
     Model *model;
 
@@ -98,6 +114,9 @@ public:
 
     HINSTANCE &getWindowInstance();
 
+    void handleMouseMove(int32_t x, int32_t y);
+    void handleMouseWheel(short );
+
 private:
     Framebuffers *framebuffers;
     CommandPool *commandPool;
@@ -112,34 +131,15 @@ private:
 
     HWND createWindow(HINSTANCE hinstance, WNDPROC wndproc);
 
-    static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-    {
-        switch (uMsg)
-        {
-            case WM_CLOSE:
-                DestroyWindow(hWnd);
-                PostQuitMessage(0);
-                break;
-        }
-
-        return (DefWindowProc(hWnd, uMsg, wParam, lParam));
-    }
-
 
 
     std::vector<uint32_t> indices = {
-/*                0, 1, 2, 2, 3, 0,
-                4, 5, 6, 6, 7, 4,
-                8, 9, 10, 10, 11, 8*/
     };
 
 private:
     void drawFrame();
-    void cleanupSwapChain();
-    void recreateSwapChain();
     void updateUniformBuffer(uint32_t currentImage);
     void keyManagement();
-    void cleanup();
 };
 
 
