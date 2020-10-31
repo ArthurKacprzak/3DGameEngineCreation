@@ -202,13 +202,13 @@ void Window::handleMouseMove(int32_t x, int32_t y)
 
 
     if (mouseButtons.left) {
-        this->graphics.camera->rotate(glm::vec3(dy * this->graphics.camera->rotationSpeed, -dx * this->graphics.camera->rotationSpeed, 0.0f));
+        this->graphics.camera->rotate(glm::vec3(dy * this->graphics.camera->rotationSpeed, 0.0f, -dx * this->graphics.camera->rotationSpeed));
     }
     if (mouseButtons.right) {
         this->graphics.camera->translate(glm::vec3(-0.0f, 0.0f, dy * .005f));
     }
     if (mouseButtons.middle) {
-        this->graphics.camera->translate(glm::vec3(-dx * 0.01f, -dy * 0.01f, 0.0f));
+        this->graphics.camera->translate(glm::vec3(-dy * 0.01f, dx * 0.01f, 0.0f));
     }
 
 
