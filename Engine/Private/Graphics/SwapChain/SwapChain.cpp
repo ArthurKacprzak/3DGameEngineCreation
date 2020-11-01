@@ -128,3 +128,8 @@ VkSwapchainKHR &SwapChain::getSwapChain()
 {
     return swapChain;
 }
+
+void SwapChain::release(Device &device)
+{
+    vkDestroySwapchainKHR(device.getDevice(), swapChain, nullptr);
+}

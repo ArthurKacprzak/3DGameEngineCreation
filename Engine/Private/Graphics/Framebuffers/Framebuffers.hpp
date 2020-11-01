@@ -17,6 +17,8 @@ public:
 
     std::vector<VkFramebuffer> &getSwapChainFramebuffers();
 
+    void release(Device &device);
+
 private:
     std::vector<VkFramebuffer> swapChainFramebuffers;
 };

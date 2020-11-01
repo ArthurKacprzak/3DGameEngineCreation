@@ -33,6 +33,7 @@ private:
 
     std::vector<VkImageView> swapChainImageViews;
 public:
+    void release(Device &device);
 };
 
 

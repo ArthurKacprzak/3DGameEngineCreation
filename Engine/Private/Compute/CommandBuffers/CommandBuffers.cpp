@@ -77,3 +77,8 @@ std::vector<VkCommandBuffer> &CommandBuffers::getCommandBuffers()
 {
     return commandBuffers;
 }
+
+void CommandBuffers::release(Device &device, CommandPool &commandPool)
+{
+    vkFreeCommandBuffers(device.getDevice(), commandPool.getCommandPool(), static_cast<uint32_t>(commandBuffers.size()), commandBuffers.data());
+}

@@ -18,6 +18,7 @@ class DepthResources
 {
 public:
     DepthResources(Device &device, ImageViews &imageViews);
+    void release(Device &device);
 
 public:
     static VkFormat findDepthFormat(Device &device);

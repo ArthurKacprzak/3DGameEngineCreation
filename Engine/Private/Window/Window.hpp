@@ -116,6 +116,8 @@ public:
 
     void handleMouseMove(int32_t x, int32_t y);
     void handleMouseWheel(short );
+    void handleKeyDown(uint32_t key);
+    void handleKeyUp(uint32_t key);
 
 private:
     Framebuffers *framebuffers;
@@ -140,6 +142,10 @@ private:
     void drawFrame();
     void updateUniformBuffer(uint32_t currentImage);
     void keyManagement();
+
+    void recreateSwapChain();
+
+    void cleanupSwapChain();
 };
 
 

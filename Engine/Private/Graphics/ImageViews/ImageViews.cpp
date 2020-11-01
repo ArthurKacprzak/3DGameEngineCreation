@@ -69,3 +69,10 @@ std::vector<VkImageView> &ImageViews::getSwapChainImageViews()
 {
     return this->swapChainImageViews;
 }
+
+void ImageViews::release(Device &device)
+{
+    for (auto imageView : swapChainImageViews) {
+        vkDestroyImageView(device.getDevice(), imageView, nullptr);
+    }
+}

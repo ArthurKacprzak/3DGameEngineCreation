@@ -53,3 +53,10 @@ VkDeviceMemory &DepthResources::getDepthImageMemory()
 {
     return depthImageMemory;
 }
+
+void DepthResources::release(Device &device)
+{
+    vkDestroyImageView(device.getDevice(), depthImageView, nullptr);
+    vkDestroyImage(device.getDevice(), depthImage, nullptr);
+    vkFreeMemory(device.getDevice(), depthImageMemory, nullptr);
+}

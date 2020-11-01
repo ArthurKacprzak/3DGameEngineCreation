@@ -10,6 +10,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <iostream>
 class Camera
 {
 
@@ -75,6 +76,7 @@ public:
 
     bool moving()
     {
+        std::cout << keys.left << keys.right << keys.up << keys.down <<"\n";
         return keys.left || keys.right || keys.up || keys.down;
     }
 

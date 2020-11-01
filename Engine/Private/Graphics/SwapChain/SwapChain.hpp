@@ -18,6 +18,9 @@ class SwapChain
 {
 public:
     SwapChain(Window &window, Device &device, Surface &surface, ImageViews &imageViews);
+
+    void release(Device &device);
+
 public:
     struct SwapChainSupportDetails {
         VkSurfaceCapabilitiesKHR capabilities;

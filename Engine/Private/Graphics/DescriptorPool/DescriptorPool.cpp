@@ -28,3 +28,8 @@ VkDescriptorPool &DescriptorPool::getDescriptorPool()
 {
     return this->descriptorPool;
 }
+
+void DescriptorPool::release(Device &device)
+{
+    vkDestroyDescriptorPool(device.getDevice(), descriptorPool, nullptr);
+}

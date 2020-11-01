@@ -26,3 +26,11 @@ std::vector<VkDeviceMemory> &UniformBuffers::getUniformBuffersMemory()
 {
     return uniformBuffersMemory;
 }
+
+void UniformBuffers::release(Device &device, ImageViews &views)
+{
+    for (size_t i = 0; i < views.getSwapChainImages().size(); i++) {
+        vkDestroyBuffer(device.getDevice(), uniformBuffers[i], nullptr);
+        vkFreeMemory(device.getDevice(), uniformBuffersMemory[i], nullptr);
+    }
+}

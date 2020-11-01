@@ -26,6 +26,8 @@ public:
                    GraphicsPipeline &graphicsPipeline, std::vector<Vertex> &vertices, VertexBuffer &vertexBuffer,
                    DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout);
 
+    void release(Device &device, CommandPool &commandPool);
+
 public:
     std::vector<VkCommandBuffer> &getCommandBuffers();
 

@@ -233,3 +233,10 @@ VkPipelineLayout &GraphicsPipeline::getPipelineLayout()
 {
     return pipelineLayout;
 }
+
+void GraphicsPipeline::release(Device device)
+{
+    vkDestroyPipeline(device.getDevice(), graphicsPipeline, nullptr);
+    vkDestroyPipelineLayout(device.getDevice(), pipelineLayout, nullptr);
+    vkDestroyRenderPass(device.getDevice(), renderPass, nullptr);
+}

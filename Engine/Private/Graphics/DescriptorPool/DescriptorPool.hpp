@@ -13,6 +13,8 @@ class DescriptorPool
 public:
     DescriptorPool(Device &device, ImageViews &imageViews);
 
+    void release(Device &device);
+
 public:
     VkDescriptorPool &getDescriptorPool();
 

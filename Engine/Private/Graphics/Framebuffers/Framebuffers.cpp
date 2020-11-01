@@ -33,3 +33,10 @@ std::vector<VkFramebuffer> &Framebuffers::getSwapChainFramebuffers()
 {
     return swapChainFramebuffers;
 }
+
+void Framebuffers::release(Device &device)
+{
+    for (auto framebuffer : this->swapChainFramebuffers) {
+        vkDestroyFramebuffer(device.getDevice(), framebuffer, nullptr);
+    }
+}

@@ -14,6 +14,8 @@ class GraphicsPipeline
 public:
     GraphicsPipeline(Device &device, ImageViews &imageViews, DescriptorSetLayout &descriptorSetLayout);
 
+    void release(Device device);
+
 private:
     VkPipelineLayout pipelineLayout;
     VkRenderPass renderPass;

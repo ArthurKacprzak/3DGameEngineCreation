@@ -16,11 +16,15 @@ class UniformBuffers
 public:
     UniformBuffers(Device &device, ImageViews &imageViews);
 
+    void release(Device &device, ImageViews &views);
+
 public:
     struct UniformBufferObject {
-        alignas(16) glm::mat4 model;
-        alignas(16) glm::mat4 view;
-        alignas(16) glm::mat4 proj;
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 proj;
+        glm::vec4 lightPos = glm::vec4(0.0f, -2.0f, 0.0f, 1.0f);
+        glm::vec4 cameraPos;
     };
 
 public:

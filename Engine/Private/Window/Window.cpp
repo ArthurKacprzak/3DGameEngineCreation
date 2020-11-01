@@ -51,6 +51,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             w->handleMouseWheel(wheelDelta);
             break;
         }
+
+        case WM_KEYDOWN:
+
+            w->handleKeyDown((uint32_t)wParam);
+            break;
+        case WM_KEYUP:
+            w->handleKeyUp((uint32_t)wParam);
+            break;
         default:
             break;
     }
@@ -138,12 +146,27 @@ void Window::drawFrame()
     VkResult result = vkAcquireNextImageKHR(this->device->getDevice(), this->graphics.swapChain->getSwapChain(), UINT64_MAX, this->semaphore->getImageAvailableSemaphores()[this->currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+        this->recreateSwapChain();
         return;
     } else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
+
+
+
+
     this->updateUniformBuffer(imageIndex);
+
+
+
+    auto tStart = std::chrono::high_resolution_clock::now();
+
+    auto tEnd = std::chrono::high_resolution_clock::now();
+    auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count();
+    float frameTimer = (float)tDiff / 1000.0f;
+    this->graphics.camera->update(frameTimer);
+
 
     if (this->semaphore->getImagesInFlight()[imageIndex] != VK_NULL_HANDLE) {
         vkWaitForFences(this->device->getDevice(), 1, &this->semaphore->getImagesInFlight()[imageIndex], VK_TRUE, UINT64_MAX);
@@ -232,6 +255,14 @@ void Window::updateUniformBuffer(uint32_t currentImage)
     ubo.view = this->graphics.camera->matrices.view;
     ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 
+
+//    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
+//    ubo.lightPos.z = cos(glm::radians(timer * 360.0f)) * 1.5f;
+
+    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
+
+    ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
+
     void* data;
     vkMapMemory(this->device->getDevice(), this->graphics.uniformBuffers->getUniformBuffersMemory()[currentImage], 0, sizeof(ubo), 0, &data);
     memcpy(data, &ubo, sizeof(ubo));
@@ -266,7 +297,7 @@ HWND Window::createWindow(HINSTANCE hinstance, WNDPROC wndproc)
 {
     this->graphics.windowInstance = hinstance;
 
-    bool fullscreen = true;
+    bool fullscreen = false;
 
     AllocConsole();
     SetConsoleTitle(TEXT("VULKAN_TUTORIAL"));
@@ -393,9 +424,121 @@ void Window::handleMouseWheel(short wheelDelta)
     this->graphics.camera->translate(glm::vec3(0.0f, 0.0f, (float)wheelDelta * 0.005f));
 }
 
+void Window::handleKeyDown(uint32_t key)
+{
+    switch (key)
+    {
+        case VK_ESCAPE:
+            PostQuitMessage(0);
+            break;
+        default:
+            break;
+    }
+
+    std::cout << this->graphics.camera->type << " " << key << " " << (uint32_t)'z' << "\n";
+
+    if (this->graphics.camera->type == Camera::firstperson)
+    {
+        switch (key)
+        {
+            case 'z':
+                this->graphics.camera->keys.up = true;
+                break;
+            case 's':
+                this->graphics.camera->keys.down = true;
+                break;
+            case 'q':
+                this->graphics.camera->keys.left = true;
+                break;
+            case 'd':
+                this->graphics.camera->keys.right = true;
+                break;
+        }
+    }
+}
+
+void Window::handleKeyUp(uint32_t key)
+{
+    if (this->graphics.camera->type == Camera::firstperson)
+    {
+        switch (key)
+        {
+            case 'z':
+                this->graphics.camera->keys.up = false;
+                break;
+            case 's':
+                this->graphics.camera->keys.down = false;
+                break;
+            case 'q':
+                this->graphics.camera->keys.left = false;
+                break;
+            case 'd':
+                this->graphics.camera->keys.right = false;
+                break;
+        }
+    }
+}
+
 Window::~Window()
 {
     this->surface->release(*this->instance);
     delete this->instance;
     delete this->device;
 }
+
+void Window::recreateSwapChain()
+{
+
+    vkDeviceWaitIdle(this->device->getDevice());
+
+    this->cleanupSwapChain();
+
+
+
+
+    this->graphics.imageViews = new ImageViews();
+    this->graphics.swapChain = new SwapChain(*this, *this->device, *this->surface, *this->graphics.imageViews);
+    this->graphics.imageViews->init(*this->device);
+
+    this->graphics.graphicsPipeline = new GraphicsPipeline(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout);
+
+    this->graphics.depthResources = new DepthResources(*this->device, *this->graphics.imageViews);
+    this->framebuffers = new Framebuffers(*this->graphics.imageViews, *this->device, *this->graphics.graphicsPipeline, *this->graphics.depthResources);
+
+
+
+
+
+
+    this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
+    this->graphics.descriptorPool = new DescriptorPool(*this->device, *this->graphics.imageViews);
+    this->graphics.descriptorSets = new DescriptorSets(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
+                                                       *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
+    this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
+                                              *this->graphics.graphicsPipeline, this->vertices, *this->graphics.vertexBuffer,
+                                              *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
+}
+
+void Window::cleanupSwapChain()
+{
+    this->graphics.depthResources->release(*this->device);
+    this->framebuffers->release(*this->device);
+    this->commandBuffers->release(*this->device, *this->commandPool);
+    this->graphics.graphicsPipeline->release(*this->device);
+    this->graphics.imageViews->release(*this->device);
+    this->graphics.swapChain->release(*this->device);
+    this->graphics.uniformBuffers->release(*this->device, *this->graphics.imageViews);
+    this->graphics.descriptorPool->release(*this->device);
+
+    delete this->graphics.depthResources;
+    delete this->framebuffers;
+    delete this->commandBuffers;
+    delete this->graphics.graphicsPipeline;
+    delete this->graphics.imageViews;
+    delete this->graphics.swapChain;
+    delete this->graphics.uniformBuffers;
+    delete this->graphics.descriptorPool;
+    delete this->graphics.descriptorSets;
+}
+
+
