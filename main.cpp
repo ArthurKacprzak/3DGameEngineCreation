@@ -4,16 +4,19 @@
 
 #include "Engine/Public/Application/Application.hpp"
 #include "Engine/Public/PublicModel/PublicModel.hpp"
+#include "Engine/Public/Texture/Texture.hpp"
 #include "Engine/Public/Key/Key.hpp"
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 {
     Application application;
-    PublicModel model;
-    PublicModel model2;
+    PublicModel model("../Resources/cube.obj");
+    PublicModel model2("../Resources/cube.obj");
+    Texture sand("../textures/sand.jpg");
+    Texture face("../textures/texture.jpg");
 
-    model.setObjPath("../Resources/cube.obj");
-    model2.setObjPath("../Resources/cube.obj");
+    model.setTexture(&sand);
+    model2.setTexture(&face);
     model2.setOffset({3, 0, 0});
 
 

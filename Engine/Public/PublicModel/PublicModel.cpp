@@ -6,14 +6,10 @@
 
 #include <utility>
 
-PublicModel::PublicModel()
-{
-    offset = {0, 0, 0};
-}
-
-void PublicModel::setObjPath(std::string objPath)
+PublicModel::PublicModel(std::string objPath)
 {
     this->objPath = std::move(objPath);
+    offset = {0, 0, 0};
 }
 
 void PublicModel::init(Window &window)
@@ -55,4 +51,9 @@ void PublicModel::init(Window &window)
 void PublicModel::setOffset(glm::vec3 pos)
 {
     this->offset = pos;
+}
+
+void PublicModel::setTexture(Texture *texture_ptr)
+{
+    _texture = texture_ptr;
 }
