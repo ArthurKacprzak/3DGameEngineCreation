@@ -4,14 +4,16 @@
 
 #include "PublicModel.hpp"
 
+#include <utility>
+
 PublicModel::PublicModel()
 {
     offset = {0, 0, 0};
 }
 
-void PublicModel::setPath(std::string modelPath)
+void PublicModel::setObjPath(std::string objPath)
 {
-    this->path = modelPath;
+    this->objPath = std::move(objPath);
 }
 
 void PublicModel::init(Window &window)
@@ -19,7 +21,7 @@ void PublicModel::init(Window &window)
     miniobj::loader loader;
     miniobj::attrib_t attribM;
     std::vector<miniobj::shape_t> shapesM;
-    loader.load(&attribM, &shapesM, path);
+    loader.load(&attribM, &shapesM, objPath);
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 

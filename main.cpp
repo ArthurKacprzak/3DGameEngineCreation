@@ -12,8 +12,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     PublicModel model;
     PublicModel model2;
 
-    model.setPath("../Resources/cube.obj");
-    model2.setPath("../Resources/cube.obj");
+    model.setObjPath("../Resources/cube.obj");
+    model2.setObjPath("../Resources/cube.obj");
     model2.setOffset({3, 0, 0});
 
 
