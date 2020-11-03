@@ -9,6 +9,7 @@
 #include "../Object/Object.hpp"
 #include <windows.h>
 #include "../Key/Key.hpp"
+#include "../PublicModel/PublicModel.hpp"
 
 #include <vector>
 
@@ -22,6 +23,7 @@ public:
     void start(HINSTANCE hInstance);
     void addObject(Object *object);
     void addKey(Key *key);
+    void addModel(PublicModel *model);
 
 private:
     void initObject();
@@ -30,6 +32,7 @@ private:
 private:
     Window window;
     std::vector<std::unique_ptr<Object>> objectVector;
+    std::vector<std::unique_ptr<PublicModel>> modelVector;
     std::vector<std::unique_ptr<Key>> keyVector;
 };
 

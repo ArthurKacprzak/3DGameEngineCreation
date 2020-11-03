@@ -94,7 +94,6 @@ void Window::init(HINSTANCE hinstance)
     this->graphics.textureImageView = new TextureImageView(*this->device, *this->graphics.textureImage);
     this->graphics.textureSampler = new TextureSampler(*this->device);
 
-    this->model = new Model(this);
     this->graphics.vertexBuffer = new VertexBuffer(this, *this->device, *this->commandPool, this->vertices);
 
     this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
@@ -259,7 +258,7 @@ void Window::updateUniformBuffer(uint32_t currentImage)
 //    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
 //    ubo.lightPos.z = cos(glm::radians(timer * 360.0f)) * 1.5f;
 
-    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
+//    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
 
     ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
 

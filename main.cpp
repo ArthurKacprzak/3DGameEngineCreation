@@ -22,7 +22,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
 
     PublicModel model;
 
-    model.setPath("../Resources/viking_room.obj");
+    model.setPath("../Resources/cube.obj");
 
 
     std::function<void()> s = []() {
@@ -35,7 +35,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
 
 
     application.addKey(&key);
-    application.addObject(&rect);
+//    application.addObject(&rect);
+    application.addModel(&model);
     application.start(hInstance);
     return 0;
 }

@@ -7,6 +7,7 @@
 
 #include <string>
 #include "../Object/Object.hpp"
+#include "../../ourLibs/miniobjloader/loader.hpp"
 
 class PublicModel : public Object
 {

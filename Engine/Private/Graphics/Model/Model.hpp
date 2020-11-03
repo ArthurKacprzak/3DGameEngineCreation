@@ -18,11 +18,9 @@ public:
 
 public:
     static std::string getTexturePath();
-    static std::string getModelPath();
 
 private:
-//    std::vector<Vertex> vertices;
-//    std::vector<uint32_t> indices;
+
 };
 
 
