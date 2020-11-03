@@ -6,7 +6,7 @@
 
 PublicModel::PublicModel()
 {
-
+    offset = {0, 0, 0};
 }
 
 void PublicModel::setPath(std::string modelPath)
@@ -28,9 +28,9 @@ void PublicModel::init(Window &window)
             Vertex vertex{};
 
             vertex.pos = {
-                    attribM.vertices[3 * index.vertex_index + 0],
-                    attribM.vertices[3 * index.vertex_index + 1],
-                    attribM.vertices[3 * index.vertex_index + 2]
+                    attribM.vertices[3 * index.vertex_index + 0] + offset.x,
+                    attribM.vertices[3 * index.vertex_index + 1] + offset.y,
+                    attribM.vertices[3 * index.vertex_index + 2] + offset.z
             };
 
             vertex.texCoord = {
@@ -48,4 +48,9 @@ void PublicModel::init(Window &window)
             window.addIndex(uniqueVertices[vertex]);
         }
     }
+}
+
+void PublicModel::setOffset(glm::vec3 pos)
+{
+    this->offset = pos;
 }

@@ -9,20 +9,12 @@
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 {
     Application application;
-    Object rect;
-
-    float size = 1.f;
-    float zPos = -0.1;
-
-    rect.addPoint({{-size, -size, zPos}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
-    rect.addPoint({{size, -size, zPos}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}});
-    rect.addPoint({{size, size, zPos}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}});
-    rect.addPoint({{-size, size, zPos}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}});
-    rect.setIndices({0, 1, 2, 2, 3, 0});
-
     PublicModel model;
+    PublicModel model2;
 
     model.setPath("../Resources/cube.obj");
+    model2.setPath("../Resources/cube.obj");
+    model2.setOffset({3, 0, 0});
 
 
     std::function<void()> s = []() {
@@ -37,6 +29,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     application.addKey(&key);
 //    application.addObject(&rect);
     application.addModel(&model);
+    application.addModel(&model2);
     application.start(hInstance);
     return 0;
 }

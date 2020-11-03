@@ -76,7 +76,7 @@ public:
 
     bool moving()
     {
-        std::cout << keys.left << keys.right << keys.up << keys.down <<"\n";
+//        std::cout << keys.left << keys.right << keys.up << keys.down <<"\n";
         return keys.left || keys.right || keys.up || keys.down;
     }
 

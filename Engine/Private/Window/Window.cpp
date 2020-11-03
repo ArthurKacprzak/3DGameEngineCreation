@@ -434,7 +434,7 @@ void Window::handleKeyDown(uint32_t key)
             break;
     }
 
-    std::cout << this->graphics.camera->type << " " << key << " " << (uint32_t)'z' << "\n";
+//    std::cout << this->graphics.camera->type << " " << key << " " << (uint32_t)'z' << "\n";
 
     if (this->graphics.camera->type == Camera::firstperson)
     {

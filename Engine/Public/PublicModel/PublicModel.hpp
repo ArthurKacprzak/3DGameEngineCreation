@@ -17,9 +17,12 @@ public:
 public:
     void init(Window &window) override;
     void setPath(std::string modelPath);
+    void setOffset(glm::vec3 pos);
 
 private:
     std::string path;
+    glm::vec3 offset;
+
 //    std::unique_ptr<Model> model;
 };
 
