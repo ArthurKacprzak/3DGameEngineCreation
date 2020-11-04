@@ -12,8 +12,8 @@
 GraphicsPipeline::GraphicsPipeline(Device &device, ImageViews &imageViews, DescriptorSetLayout &descriptorSetLayout)
 {
     this->createRenderPass(device, imageViews);
-    auto vertShaderCode = FileReader::readFile("../shaders/vert.spv");
-    auto fragShaderCode = FileReader::readFile("../shaders/frag.spv");
+    auto vertShaderCode = FileReader::readFile("shaders/vert.spv");
+    auto fragShaderCode = FileReader::readFile("shaders/frag.spv");
 
     VkShaderModule vertShaderModule = Shader::createShaderModule(vertShaderCode, device);
     VkShaderModule fragShaderModule = Shader::createShaderModule(fragShaderCode, device);

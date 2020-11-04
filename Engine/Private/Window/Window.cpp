@@ -129,7 +129,7 @@ void Window::start()
                 quit = true;
             }
         }
-        this->keyManagement();
+//        this->keyManagement();
 
         this->drawFrame();
     }
@@ -140,6 +140,7 @@ void Window::start()
 
 void Window::drawFrame()
 {
+    auto tStart = std::chrono::high_resolution_clock::now();
     vkWaitForFences(this->device->getDevice(), 1, &this->semaphore->getInFlightFences()[this->currentFrame], VK_TRUE, UINT64_MAX);
 
     uint32_t imageIndex;
@@ -160,11 +161,11 @@ void Window::drawFrame()
 
 
 
-    auto tStart = std::chrono::high_resolution_clock::now();
 
     auto tEnd = std::chrono::high_resolution_clock::now();
     auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count();
     float frameTimer = (float)tDiff / 1000.0f;
+    std::cout << frameTimer << "\n";
     this->graphics.camera->update(frameTimer);
 
 
@@ -259,7 +260,6 @@ void Window::updateUniformBuffer(uint32_t currentImage)
 //    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
 //    ubo.lightPos.z = cos(glm::radians(timer * 360.0f)) * 1.5f;
 
-    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
 
     ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
 
@@ -435,22 +435,20 @@ void Window::handleKeyDown(uint32_t key)
             break;
     }
 
-    std::cout << this->graphics.camera->type << " " << key << " " << (uint32_t)'z' << "\n";
-
     if (this->graphics.camera->type == Camera::firstperson)
     {
         switch (key)
         {
-            case 'z':
+            case 'Z':
                 this->graphics.camera->keys.up = true;
                 break;
-            case 's':
+            case 'S':
                 this->graphics.camera->keys.down = true;
                 break;
-            case 'q':
+            case 'Q':
                 this->graphics.camera->keys.left = true;
                 break;
-            case 'd':
+            case 'D':
                 this->graphics.camera->keys.right = true;
                 break;
         }
@@ -463,16 +461,16 @@ void Window::handleKeyUp(uint32_t key)
     {
         switch (key)
         {
-            case 'z':
+            case 'Z':
                 this->graphics.camera->keys.up = false;
                 break;
-            case 's':
+            case 'S':
                 this->graphics.camera->keys.down = false;
                 break;
-            case 'q':
+            case 'Q':
                 this->graphics.camera->keys.left = false;
                 break;
-            case 'd':
+            case 'D':
                 this->graphics.camera->keys.right = false;
                 break;
         }

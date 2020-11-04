@@ -49,12 +49,12 @@ Model::Model(Window *window)
 
 std::string Model::getTexturePath()
 {
-    return "../textures/viking_room.png";
+    return "textures/viking_room.png";
 }
 
 std::string Model::getModelPath()
 {
-    return "../Resources/viking_room.obj";
+    return "Resources/viking_room.obj";
 }
 
 
