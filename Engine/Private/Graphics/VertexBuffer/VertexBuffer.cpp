@@ -5,7 +5,7 @@
 #include "VertexBuffer.hpp"
 #include "../../Window/Window.hpp"
 
-VertexBuffer::VertexBuffer(Window *window, Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices)
+VertexBuffer::VertexBuffer(Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices, std::vector<uint32_t> indices)
 {
     VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();
 
@@ -28,7 +28,7 @@ VertexBuffer::VertexBuffer(Window *window, Device &device, CommandPool &commandP
     vkDestroyBuffer(device.getDevice(), stagingBuffer, nullptr);
     vkFreeMemory(device.getDevice(), stagingBufferMemory, nullptr);
 
-    this->createIndexBuffer(window, device, commandPool);
+    this->createIndexBuffer(indices, device, commandPool);
 }
 
 void VertexBuffer::createBuffer(Device &device, VkDeviceSize size, VkBufferUsageFlags usage,
@@ -94,9 +94,9 @@ void VertexBuffer::copyBuffer(Device &device, CommandPool &commandPool, VkBuffer
     vkFreeCommandBuffers(device.getDevice(), commandPool.getCommandPool(), 1, &commandBuffer);
 }
 
-void VertexBuffer::createIndexBuffer(Window *window, Device &device, CommandPool &commandPool)
+void VertexBuffer::createIndexBuffer(std::vector<uint32_t> &indices, Device &device, CommandPool &commandPool)
 {
-    VkDeviceSize bufferSize = sizeof(window->getIndices()[0]) * window->getIndices().size();
+    VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
@@ -106,7 +106,7 @@ void VertexBuffer::createIndexBuffer(Window *window, Device &device, CommandPool
 
     void *data;
     vkMapMemory(device.getDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
-    memcpy(data, window->getIndices().data(), (size_t) bufferSize);
+    memcpy(data, indices.data(), (size_t) bufferSize);
     vkUnmapMemory(device.getDevice(), stagingBufferMemory);
 
     this->createBuffer(device, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT,

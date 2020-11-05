@@ -48,6 +48,8 @@ bool Device::isDeviceSuitable(VkPhysicalDevice vkPhysicalDevice, Surface &surfac
     VkPhysicalDeviceFeatures supportedFeatures;
     vkGetPhysicalDeviceFeatures(vkPhysicalDevice, &supportedFeatures);
 
+    vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice, &this->vkPhysicalDeviceMemoryProperties);
+
     return indices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
@@ -135,4 +137,33 @@ VkQueue &Device::getGraphicsQueue()
 VkQueue &Device::getPresentQueue()
 {
     return presentQueue;
+}
+
+uint32_t Device::getMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properties, VkBool32 *memTypeFound) const
+{
+    for (uint32_t i = 0; i < vkPhysicalDeviceMemoryProperties.memoryTypeCount; i++)
+    {
+        if ((typeBits & 1) == 1)
+        {
+            if ((vkPhysicalDeviceMemoryProperties.memoryTypes[i].propertyFlags & properties) == properties)
+            {
+                if (memTypeFound)
+                {
+                    *memTypeFound = true;
+                }
+                return i;
+            }
+        }
+        typeBits >>= 1;
+    }
+
+    if (memTypeFound)
+    {
+        *memTypeFound = false;
+        return 0;
+    }
+    else
+    {
+        throw std::runtime_error("Could not find a matching memory type");
+    }
 }

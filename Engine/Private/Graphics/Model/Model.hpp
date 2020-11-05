@@ -8,21 +8,43 @@
 #include <string>
 #include <vector>
 #include "../Vertex/Vertex.hpp"
+#include "../VertexBuffer/VertexBuffer.hpp"
 
 class Window;
 
 class Model
 {
 public:
-    Model(Window *window);
+    Model(Window *window, Device &device, CommandPool &commandPool);
 
 public:
     static std::string getTexturePath();
     static std::string getModelPath();
 
+    VkDescriptorBufferInfo &getDescriptor();
+    void setModelMat(glm::mat4);
+
+    glm::mat4 &getModelMat();
+
+    glm::vec3 &getRotation();
+
+    void *getMapped();
+
 private:
-//    std::vector<Vertex> vertices;
-//    std::vector<uint32_t> indices;
+    VkDescriptorBufferInfo descriptor;
+    VkBuffer buffer = VK_NULL_HANDLE;
+    VkDeviceMemory memory = VK_NULL_HANDLE;
+    VkDeviceSize size = 0;
+    VkDeviceSize alignment = 0;
+    VkBufferUsageFlags usageFlags;
+    VkMemoryPropertyFlags memoryPropertyFlags;
+    void* mapped = nullptr;
+
+    glm::mat4 modelMat;
+    glm::vec3 rotation;
+
+    VkResult createBuffer(Device &device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size);
+    VkBufferCreateInfo bufferCreateInfo(VkBufferUsageFlags usage, VkDeviceSize size);
 };
 
 

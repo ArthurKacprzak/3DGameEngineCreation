@@ -22,6 +22,7 @@ public:
     VkDevice &getDevice();
     VkQueue &getGraphicsQueue();
     VkQueue &getPresentQueue();
+    uint32_t getMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properties, VkBool32 *memTypeFound = nullptr) const;
 
 private:
     VkPhysicalDevice physicalDevice;
@@ -32,6 +33,7 @@ private:
 private:
     VkQueue graphicsQueue;
     VkQueue presentQueue;
+    VkPhysicalDeviceMemoryProperties vkPhysicalDeviceMemoryProperties;
 
 private:
     bool isDeviceSuitable(VkPhysicalDevice vkPhysicalDevice, Surface &surface);

@@ -12,12 +12,14 @@
 #include "../TextureSampler/TextureSampler.hpp"
 #include "../TextureImageView/TextureImageView.hpp"
 
+class Model;
+
 class DescriptorSets
 {
 public:
     DescriptorSets(Device &device, ImageViews &imageViews, DescriptorSetLayout &descriptorSetLayout,
                    UniformBuffers &uniformBuffers, DescriptorPool &descriptorPool,
-                   TextureImageView &textureImageView, TextureSampler &textureSampler);
+                   TextureImageView &textureImageView, TextureSampler &textureSampler, Model &model);
 
 public:
     std::vector<VkDescriptorSet> &getDescriptorSets();

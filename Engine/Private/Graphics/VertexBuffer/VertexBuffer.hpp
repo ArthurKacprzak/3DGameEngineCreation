@@ -16,7 +16,7 @@ class Window;
 class VertexBuffer
 {
 public:
-    VertexBuffer(Window *window, Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices);
+    VertexBuffer(Device &device, CommandPool &commandPool, std::vector<Vertex> &vertices, std::vector<uint32_t> indices);
 
 public:
     static void createBuffer(Device &device, VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer &buffer, VkDeviceMemory &bufferMemory);
@@ -26,7 +26,7 @@ private:
     void copyBuffer(Device &device, CommandPool &commandPool, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 
 private:
-    void createIndexBuffer(Window *window, Device &device, CommandPool &commandPool);
+    void createIndexBuffer(std::vector<uint32_t> &indices, Device &device, CommandPool &commandPool);
 
 private:
     VkBuffer vertexBuffer;

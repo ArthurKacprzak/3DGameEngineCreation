@@ -65,6 +65,8 @@ public:
 
 private:
 
+    float timer = 0.0f;
+    float timerSpeed = 0.25f;
 
     struct {
         vk::Extent2D windowSize = { 1280, 720 };
@@ -125,6 +127,7 @@ private:
     CommandBuffers *commandBuffers;
     Semaphore *semaphore;
     size_t currentFrame = 0;
+    float frameTimer = 0;
 
     std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 

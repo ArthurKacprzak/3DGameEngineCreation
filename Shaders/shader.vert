@@ -1,36 +1,21 @@
 #version 450
+#extension GL_ARB_separate_shader_objects : enable
 
-layout (location = 0) in vec3 inPos;
-layout (location = 1) in vec2 inUV;
-layout (location = 2) in vec3 inNormal;
-layout (location = 3) in vec4 inTangent;
-
-layout (binding = 0) uniform UBO
-{
+layout(binding = 0) uniform UniformBufferObject {
     mat4 model;
     mat4 view;
     mat4 proj;
-    vec4 lightPos;
-    vec4 cameraPos;
 } ubo;
 
-layout (location = 0) out vec2 outUV;
-layout (location = 1) out vec3 outTangentLightPos;
-layout (location = 2) out vec3 outTangentViewPos;
-layout (location = 3) out vec3 outTangentFragPos;
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec3 inColor;
+layout(location = 2) in vec2 inTexCoord;
 
-void main(void)
-{
-    gl_Position = ubo.proj * ubo.view * ubo.model * vec4(inPos, 1.0f);
-    outTangentFragPos = vec3(ubo.model * vec4(inPos, 1.0));
-    outUV = inUV;
+layout(location = 0) out vec3 fragColor;
+layout(location = 1) out vec2 fragTexCoord;
 
-    vec3 N = normalize(mat3(ubo.model) * inNormal);
-    vec3 T = normalize(mat3(ubo.model) * inTangent.xyz);
-    vec3 B = normalize(cross(N, T));
-    mat3 TBN = transpose(mat3(T, B, N));
-
-    outTangentLightPos = TBN * ubo.lightPos.xyz;
-    outTangentViewPos  = TBN * ubo.cameraPos.xyz;
-    outTangentFragPos  = TBN * outTangentFragPos;
+void main() {
+    gl_Position = ubo.proj * ubo.view * ubo.model * vec4(inPosition, 1.0);
+    fragColor = inColor;
+    fragTexCoord = inTexCoord;
 }

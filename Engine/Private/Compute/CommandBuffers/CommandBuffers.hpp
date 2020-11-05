@@ -18,13 +18,14 @@
 #include "../../Graphics/DescriptorSetLayout/DescriptorSetLayout.hpp"
 
 class Window;
+class Model;
 
 class CommandBuffers
 {
 public:
     CommandBuffers(Window *window, ImageViews &imageViews, Device &device, CommandPool &commandPool, Framebuffers &framebuffers,
-                   GraphicsPipeline &graphicsPipeline, std::vector<Vertex> &vertices, VertexBuffer &vertexBuffer,
-                   DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout);
+                   GraphicsPipeline &graphicsPipeline, VertexBuffer &vertexBuffer,
+                   DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout, Model &model);
 
     void release(Device &device, CommandPool &commandPool);
 
@@ -33,6 +34,9 @@ public:
 
 private:
     std::vector<VkCommandBuffer> commandBuffers;
+
+
+
 };
 
 

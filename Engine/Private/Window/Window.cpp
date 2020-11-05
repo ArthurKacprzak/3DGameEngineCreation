@@ -94,24 +94,24 @@ void Window::init(HINSTANCE hinstance)
     this->graphics.textureImageView = new TextureImageView(*this->device, *this->graphics.textureImage);
     this->graphics.textureSampler = new TextureSampler(*this->device);
 
-    this->model = new Model(this);
-    this->graphics.vertexBuffer = new VertexBuffer(this, *this->device, *this->commandPool, this->vertices);
+    this->model = new Model(this, *this->device, *this->commandPool);
+    this->graphics.vertexBuffer = new VertexBuffer(*this->device, *this->commandPool, this->vertices, this->indices);
 
     this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
 
     this->graphics.descriptorPool = new DescriptorPool(*this->device, *this->graphics.imageViews);
     this->graphics.descriptorSets = new DescriptorSets(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
-                                              *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
+                                              *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler, *this->model);
 
     this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
-                                              *this->graphics.graphicsPipeline, this->vertices, *this->graphics.vertexBuffer,
-                                              *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
+                                              *this->graphics.graphicsPipeline,  *this->graphics.vertexBuffer,
+                                              *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout, *this->model);
 
     this->semaphore = new Semaphore(*this->graphics.imageViews, *this->device);
 
     this->graphics.camera = new Camera();
 
-    this->graphics.camera->type = Camera::CameraType::firstperson;
+    this->graphics.camera->type = Camera::CameraType::lookat;
     this->graphics.camera->setPosition(glm::vec3(0, 0, -1));
     this->graphics.camera->setRotation(glm::vec3(0, 0.0f, 90));
     this->graphics.camera->setPerspective(30.0f, this->graphics.imageViews->getSwapChainExtent().width / (float) this->graphics.imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
@@ -143,7 +143,7 @@ void Window::drawFrame()
     auto tStart = std::chrono::high_resolution_clock::now();
     vkWaitForFences(this->device->getDevice(), 1, &this->semaphore->getInFlightFences()[this->currentFrame], VK_TRUE, UINT64_MAX);
 
-    uint32_t imageIndex;
+    uint32_t imageIndex = 0;
     VkResult result = vkAcquireNextImageKHR(this->device->getDevice(), this->graphics.swapChain->getSwapChain(), UINT64_MAX, this->semaphore->getImageAvailableSemaphores()[this->currentFrame], VK_NULL_HANDLE, &imageIndex);
 
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
@@ -153,8 +153,9 @@ void Window::drawFrame()
         throw std::runtime_error("failed to acquire swap chain image!");
     }
 
-
-
+    auto tEnd = std::chrono::high_resolution_clock::now();
+    auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count();
+    this->frameTimer = (float)tDiff / 1000.0f;
 
 
     this->updateUniformBuffer(imageIndex);
@@ -162,11 +163,14 @@ void Window::drawFrame()
 
 
 
-    auto tEnd = std::chrono::high_resolution_clock::now();
-    auto tDiff = std::chrono::duration<double, std::milli>(tEnd - tStart).count();
-    float frameTimer = (float)tDiff / 1000.0f;
-    std::cout << frameTimer << "\n";
-    this->graphics.camera->update(frameTimer);
+
+    this->graphics.camera->update(this->frameTimer);
+
+    timer += timerSpeed * this->frameTimer;
+    if (timer > 1.0)
+    {
+        timer -= 1.0f;
+    }
 
 
     if (this->semaphore->getImagesInFlight()[imageIndex] != VK_NULL_HANDLE) {
@@ -247,21 +251,29 @@ void Window::updateUniformBuffer(uint32_t currentImage)
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
     UniformBuffers::UniformBufferObject ubo{};
-/*    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-    ubo.view = glm::lookAt(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.proj = glm::perspective(glm::radians(30.0f), this->imageViews->getSwapChainExtent().width / (float) this->imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
-    ubo.proj[1][1] *= -1;*/
 
     ubo.proj = this->graphics.camera->matrices.perspective;
     ubo.view = this->graphics.camera->matrices.view;
-    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-
-
-//    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
-//    ubo.lightPos.z = cos(glm::radians(timer * 360.0f)) * 1.5f;
+    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
 
 
     ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
+
+
+
+    this->model->setModelMat(glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)));
+
+    this->model->setModelMat(glm::rotate(this->model->getModelMat(), glm::radians(this->model->getRotation().x), glm::vec3(1.0f, 0.0f, 0.0f)));
+    this->model->setModelMat(glm::rotate(this->model->getModelMat(), glm::radians(this->model->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f)));
+    this->model->setModelMat(glm::rotate(this->model->getModelMat(), glm::radians(this->model->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f)));
+    this->model->setModelMat(glm::scale(this->model->getModelMat(), glm::vec3(0.25f)));
+    memcpy(this->model->getMapped(), &this->model->getModelMat(), sizeof(glm::mat4));
+
+    this->model->getRotation().x += 50.5f * this->frameTimer;
+    if (this->model->getRotation().x > 360.0f)
+        this->model->getRotation().x -= 360.0f;
+    std::cout << this->model->getRotation().x << "\n";
+
 
     void* data;
     vkMapMemory(this->device->getDevice(), this->graphics.uniformBuffers->getUniformBuffersMemory()[currentImage], 0, sizeof(ubo), 0, &data);
@@ -511,10 +523,10 @@ void Window::recreateSwapChain()
     this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
     this->graphics.descriptorPool = new DescriptorPool(*this->device, *this->graphics.imageViews);
     this->graphics.descriptorSets = new DescriptorSets(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
-                                                       *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
+                                                       *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler, *this->model);
     this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
-                                              *this->graphics.graphicsPipeline, this->vertices, *this->graphics.vertexBuffer,
-                                              *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
+                                              *this->graphics.graphicsPipeline, *this->graphics.vertexBuffer,
+                                              *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout, *this->model);
 }
 
 void Window::cleanupSwapChain()

@@ -6,19 +6,23 @@
 #include "Engine/Public/PublicModel/PublicModel.hpp"
 #include "Engine/Public/Key/Key.hpp"
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
+void createRect(Application &application, Object &rect, float zPos, float size, std::vector<uint32_t> index)
 {
-    Application application;
-    Object rect;
-
-    float size = 1.f;
-    float zPos = -0.1;
-
     rect.addPoint({{-size, -size, zPos}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
     rect.addPoint({{size, -size, zPos}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}});
     rect.addPoint({{size, size, zPos}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}});
     rect.addPoint({{-size, size, zPos}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}});
-    rect.setIndices({0, 1, 2, 2, 3, 0});
+    rect.setIndices(index);
+    application.addObject(&rect);
+}
+
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
+{
+    Application application;
+    Object rect;
+    createRect(application, rect, -1, 1.f, {0, 1, 2, 2, 3, 0});
+    Object rect2;
+    createRect(application, rect2, -1.1, 1.f, {4, 5, 6, 6, 7, 4});
 
     PublicModel model;
 
@@ -35,7 +39,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
 
 
     application.addKey(&key);
-    application.addObject(&rect);
     application.start(hInstance);
     return 0;
 }

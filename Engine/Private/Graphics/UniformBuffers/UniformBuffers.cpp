@@ -11,6 +11,7 @@ UniformBuffers::UniformBuffers(Device &device, ImageViews &imageViews)
     this->uniformBuffers.resize(imageViews.getSwapChainImages().size());
     this->uniformBuffersMemory.resize(imageViews.getSwapChainImages().size());
 
+    std::cout << "imageViews.getSwapChainImages().size() >  " << imageViews.getSwapChainImages().size() << "\n";
     for (size_t i = 0; i < imageViews.getSwapChainImages().size(); i++) {
         VertexBuffer::createBuffer(device, bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
                                    VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
