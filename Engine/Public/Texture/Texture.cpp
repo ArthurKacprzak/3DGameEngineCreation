@@ -3,3 +3,9 @@
 //
 
 #include "Texture.hpp"
+
+#include <utility>
+
+Texture::Texture(std::string texturePath) : texturePath(std::move(texturePath))
+{
+}

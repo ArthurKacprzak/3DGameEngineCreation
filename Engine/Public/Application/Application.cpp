@@ -21,6 +21,11 @@ void Application::addObject(Object *object)
     this->objectVector.push_back(std::unique_ptr<Object>(object));
 }
 
+void Application::addModel(PublicModel *model)
+{
+    this->modelVector.push_back(std::unique_ptr<PublicModel>(model));
+}
+
 void Application::addKey(Key *key)
 {
     this->keyVector.push_back(std::unique_ptr<Key>(key));
@@ -30,6 +35,9 @@ void Application::initObject()
 {
     for (auto & i : this->objectVector) {
         i->init(this->window);
+    }
+    for (auto &model : this->modelVector) {
+        model->init(this->window);
     }
 }
 
@@ -43,5 +51,6 @@ void Application::initKey()
 Application::~Application()
 {
 }
+
 
 

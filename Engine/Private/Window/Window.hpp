@@ -41,8 +41,6 @@
 
 #include "../Graphics/Camera/Camera.hpp"
 
-class Model;
-
 class Window
 {
 public:
@@ -98,9 +96,6 @@ private:
 
     std::vector<Vertex> vertices;
 
-
-
-    Model *model;
 
     std::vector<std::pair<int, std::function<void()>>> keyVector;
 public:
