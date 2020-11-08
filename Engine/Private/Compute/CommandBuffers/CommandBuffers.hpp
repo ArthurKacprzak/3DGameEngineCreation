@@ -25,7 +25,7 @@ class CommandBuffers
 public:
     CommandBuffers(Window *window, ImageViews &imageViews, Device &device, CommandPool &commandPool, Framebuffers &framebuffers,
                    GraphicsPipeline &graphicsPipeline, VertexBuffer &vertexBuffer,
-                   DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout, Model &model);
+                   DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout);
 
     void release(Device &device, CommandPool &commandPool);
 

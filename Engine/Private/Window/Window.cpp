@@ -94,7 +94,7 @@ void Window::init(HINSTANCE hinstance)
     this->graphics.textureImageView = new TextureImageView(*this->device, *this->graphics.textureImage);
     this->graphics.textureSampler = new TextureSampler(*this->device);
 
-    this->graphics.vertexBuffer = new VertexBuffer(this, *this->device, *this->commandPool, this->vertices);
+    this->graphics.vertexBuffer = new VertexBuffer(*this->device, *this->commandPool, this->vertices, this->indices);
 
     this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
 
@@ -103,7 +103,7 @@ void Window::init(HINSTANCE hinstance)
                                               *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
 
     this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
-                                              *this->graphics.graphicsPipeline, this->vertices, *this->graphics.vertexBuffer,
+                                              *this->graphics.graphicsPipeline, *this->graphics.vertexBuffer,
                                               *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
 
     this->semaphore = new Semaphore(*this->graphics.imageViews, *this->device);
@@ -514,7 +514,7 @@ void Window::recreateSwapChain()
     this->graphics.descriptorSets = new DescriptorSets(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
                                                        *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
     this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
-                                              *this->graphics.graphicsPipeline, this->vertices, *this->graphics.vertexBuffer,
+                                              *this->graphics.graphicsPipeline, *this->graphics.vertexBuffer,
                                               *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
 }
 

@@ -8,7 +8,7 @@
 
 CommandBuffers::CommandBuffers(Window *window, ImageViews &imageViews, Device &device, CommandPool &commandPool,
                                Framebuffers &framebuffers, GraphicsPipeline &graphicsPipeline, VertexBuffer &vertexBuffer,
-                               DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout, Model &model)
+                               DescriptorSets &descriptorSets, DescriptorSetLayout &descriptorSetLayout)
 {
     commandBuffers.resize(framebuffers.getSwapChainFramebuffers().size());
 

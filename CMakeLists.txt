@@ -109,7 +109,7 @@ add_executable(3DGameEngineCreation ${SRC})
 include_directories(./stb-master/stb-master)
 
 find_package(Vulkan REQUIRED)
-add_subdirectory(./libs/glm)
+add_subdirectory(./glm)
 
 
 set(LIBS Vulkan::Vulkan glm )

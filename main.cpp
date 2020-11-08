@@ -25,10 +25,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     Object rect2;
     createRect(application, rect2, -1.1, 1.f, {4, 5, 6, 6, 7, 4});
 
-    PublicModel model("../Resources/cube.obj");
-    PublicModel model2("../Resources/cube.obj");
-    Texture sand("../textures/sand.jpg");
-    Texture face("../textures/texture.jpg");
+    PublicModel model("Resources/cube.obj");
+    PublicModel model2("Resources/cube.obj");
+    Texture sand("textures/sand.jpg");
+    Texture face("textures/texture.jpg");
 
     model.setTexture(&sand);
     model2.setTexture(&face);

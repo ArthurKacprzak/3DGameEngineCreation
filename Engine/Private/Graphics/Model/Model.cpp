@@ -15,7 +15,7 @@ Model::Model(Window *window)
 
 std::string Model::getTexturePath()
 {
-    return "../textures/viking_room.png";
+    return "textures/viking_room.png";
 }
 
 

@@ -8,7 +8,7 @@
 
 DescriptorSets::DescriptorSets(Device &device, ImageViews &imageViews, DescriptorSetLayout &descriptorSetLayout,
                                UniformBuffers &uniformBuffers, DescriptorPool &descriptorPool,
-                               TextureImageView &textureImageView, TextureSampler &textureSampler, Model &model)
+                               TextureImageView &textureImageView, TextureSampler &textureSampler)
 {
     std::vector<VkDescriptorSetLayout> layouts(imageViews.getSwapChainImages().size(), descriptorSetLayout.getDescriptorSetLayout());
     VkDescriptorSetAllocateInfo allocInfo{};
@@ -34,7 +34,7 @@ DescriptorSets::DescriptorSets(Device &device, ImageViews &imageViews, Descripto
         imageInfo.imageView = textureImageView.getTextureImageView();
         imageInfo.sampler = textureSampler.getTextureSampler();
 
-        std::array<VkWriteDescriptorSet, 3> descriptorWrites{};
+        std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
 
         descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
         descriptorWrites[0].dstSet = this->descriptorSets[i];
@@ -51,13 +51,6 @@ DescriptorSets::DescriptorSets(Device &device, ImageViews &imageViews, Descripto
         descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         descriptorWrites[1].descriptorCount = 1;
         descriptorWrites[1].pImageInfo = &imageInfo;
-
-        descriptorWrites[2].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-        descriptorWrites[2].dstSet = this->descriptorSets[i];
-        descriptorWrites[2].dstBinding = 2;
-        descriptorWrites[2].descriptorCount = 1;
-        descriptorWrites[2].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        descriptorWrites[2].pBufferInfo = &model.getDescriptor();
 
 
 
