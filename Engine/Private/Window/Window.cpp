@@ -254,14 +254,13 @@ void Window::updateUniformBuffer(uint32_t currentImage)
 
     ubo.proj = this->graphics.camera->matrices.perspective;
     ubo.view = this->graphics.camera->matrices.view;
-    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
 
 
     ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
 
 
 
-    this->model->setModelMat(glm::translate(glm::mat4(1.0f), glm::vec3(-2.0f, 0.0f, 0.0f)));
+    this->model->setModelMat(glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f)));
 
     this->model->setModelMat(glm::rotate(this->model->getModelMat(), glm::radians(this->model->getRotation().x), glm::vec3(1.0f, 0.0f, 0.0f)));
     this->model->setModelMat(glm::rotate(this->model->getModelMat(), glm::radians(this->model->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f)));
@@ -272,7 +271,6 @@ void Window::updateUniformBuffer(uint32_t currentImage)
     this->model->getRotation().x += 50.5f * this->frameTimer;
     if (this->model->getRotation().x > 360.0f)
         this->model->getRotation().x -= 360.0f;
-    std::cout << this->model->getRotation().x << "\n";
 
 
     void* data;
