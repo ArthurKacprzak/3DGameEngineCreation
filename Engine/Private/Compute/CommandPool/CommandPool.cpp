@@ -22,3 +22,8 @@ VkCommandPool &CommandPool::getCommandPool()
 {
     return commandPool;
 }
+
+void CommandPool::release(Device &device)
+{
+    vkDestroyCommandPool(device.getDevice(), commandPool, nullptr);
+}

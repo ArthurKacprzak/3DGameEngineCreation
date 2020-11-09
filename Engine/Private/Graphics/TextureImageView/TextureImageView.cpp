@@ -33,3 +33,8 @@ VkImageView &TextureImageView::getTextureImageView()
 {
     return textureImageView;
 }
+
+void TextureImageView::release(Device &device)
+{
+    vkDestroyImageView(device.getDevice(), this->textureImageView, nullptr);
+}

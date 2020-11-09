@@ -47,3 +47,12 @@ std::vector<VkFence> &Semaphore::getImagesInFlight()
 {
     return imagesInFlight;
 }
+
+void Semaphore::release(Device &device)
+{
+    for (size_t i = 0; i < Window::MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroySemaphore(device.getDevice(), renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(device.getDevice(), imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(device.getDevice(), inFlightFences[i], nullptr);
+    }
+}

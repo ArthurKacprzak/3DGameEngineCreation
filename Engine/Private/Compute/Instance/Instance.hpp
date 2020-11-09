@@ -17,6 +17,8 @@ public:
     Instance();
     ~Instance();
 
+    void release();
+
 public:
     VkInstance getVkInstance();
 

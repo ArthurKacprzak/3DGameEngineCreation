@@ -167,3 +167,8 @@ uint32_t Device::getMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properti
         throw std::runtime_error("Could not find a matching memory type");
     }
 }
+
+void Device::release()
+{
+    vkDestroyDevice(this->device, nullptr);
+}

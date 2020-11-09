@@ -201,3 +201,9 @@ VkDeviceMemory &TextureImage::getTextureImageMemory()
 {
     return textureImageMemory;
 }
+
+void TextureImage::release(Device &device)
+{
+    vkDestroyImage(device.getDevice(), this->textureImage, nullptr);
+    vkFreeMemory(device.getDevice(), this->textureImageMemory, nullptr);
+}

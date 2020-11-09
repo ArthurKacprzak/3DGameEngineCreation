@@ -31,5 +31,4 @@ VkSurfaceKHR &Surface::getSurface()
 void Surface::release(Instance &instance)
 {
     vkDestroySurfaceKHR(instance.getVkInstance(), surface, nullptr);
-    delete this;
 }

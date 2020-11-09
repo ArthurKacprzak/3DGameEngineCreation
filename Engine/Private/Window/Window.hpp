@@ -144,6 +144,8 @@ private:
     void recreateSwapChain();
 
     void cleanupSwapChain();
+
+    void cleanup();
 };
 
 

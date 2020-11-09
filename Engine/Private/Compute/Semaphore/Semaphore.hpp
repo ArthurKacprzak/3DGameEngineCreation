@@ -14,6 +14,8 @@ class Semaphore
 public:
     Semaphore(ImageViews &imageViews, Device &device);
 
+    void release(Device &device);
+
 public:
     std::vector<VkSemaphore> &getImageAvailableSemaphores();
     std::vector<VkSemaphore> &getRenderFinishedSemaphores();

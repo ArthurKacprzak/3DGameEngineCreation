@@ -30,3 +30,8 @@ VkSampler &TextureSampler::getTextureSampler()
 {
     return textureSampler;
 }
+
+void TextureSampler::release(Device &device)
+{
+    vkDestroySampler(device.getDevice(), this->textureSampler, nullptr);
+}

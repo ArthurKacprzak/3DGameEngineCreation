@@ -17,6 +17,8 @@ public:
 
     VkCommandPool &getCommandPool();
 
+    void release(Device &device);
+
 private:
     VkCommandPool commandPool;
 };

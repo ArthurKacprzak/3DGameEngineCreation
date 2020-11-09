@@ -151,3 +151,12 @@ VkDeviceMemory &VertexBuffer::getIndexBufferMemory()
 {
     return indexBufferMemory;
 }
+
+void VertexBuffer::release(Device &device)
+{
+    vkDestroyBuffer(device.getDevice(), this->indexBuffer, nullptr);
+    vkFreeMemory(device.getDevice(), this->indexBufferMemory, nullptr);
+
+    vkDestroyBuffer(device.getDevice(), this->vertexBuffer, nullptr);
+    vkFreeMemory(device.getDevice(), this->vertexBufferMemory, nullptr);
+}
