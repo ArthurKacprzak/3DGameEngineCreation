@@ -7,6 +7,10 @@
 #include "Engine/Public/Texture/Texture.hpp"
 #include "Engine/Public/Key/Key.hpp"
 
+#include "Engine/Private/Physics/Maths/Math.hpp"
+#include <glm/gtx/string_cast.hpp>
+
+
 void createRect(Application &application, Object &rect, float zPos, float size, std::vector<uint32_t> index)
 {
     rect.addPoint({{-size, -size, zPos}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}});
@@ -28,7 +32,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     PublicModel model("Resources/cube.obj");
     PublicModel model2("Resources/cube.obj");
     PublicModel scene("Resources/viking_room.obj");
-    Texture viking_room("etxtures/viking_room.png");
+    Texture viking_room("textures/viking_room.png");
     Texture sand("textures/sand.jpg");
     Texture face("textures/texture.jpg");
 
@@ -50,6 +54,15 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     key.setValue('S');
     key.setFunction(s);
 
+    // Exemple de matrices
+    /*
+     * Matrice complété avec un nombre (float)
+     * mat4 testmat4 = Math::mat4(5);
+     * matrice complété avec des Vecteurs(float)
+     * mat3 testmat3 = Math::mat3(Math::vec3(1), Math::vec3(1), Math::vec3(1, 2, 1));
+     * Scale de la matrice testMath4 par le vecteur 2,2,2
+     * mat4 testResult = Math::scaleMat(testmat4, Math::vec3(2));
+    */
 
     application.addKey(&key);
     application.start(hInstance);
