@@ -27,12 +27,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
 
     PublicModel model("Resources/cube.obj");
     PublicModel model2("Resources/cube.obj");
+    PublicModel scene("Resources/viking_room.obj");
+    Texture viking_room("etxtures/viking_room.png");
     Texture sand("textures/sand.jpg");
     Texture face("textures/texture.jpg");
 
     model.setTexture(&sand);
     model2.setTexture(&face);
-    model2.setOffset({3, 0, 0});
+    scene.setTexture(&viking_room);
+    scene.setOffset({0, 0, -5});
+    model2.setOffset({0, 0, 3});
+    application.addModel(&scene);
     application.addModel(&model);
     application.addModel(&model2);
 
