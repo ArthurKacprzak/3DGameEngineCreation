@@ -15,7 +15,15 @@ vec3 Math::vec3(float x, float y, float z) {
 }
 
 mat3 Math::mat3(float nb) {
-    struct mat3 result = {vec3(nb), vec3(nb), vec3(nb)};
+    struct mat3 result = {vec3(0), vec3(0), vec3(0)};
+    for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < 3; x++) {
+            if (x == y)
+                result.vectors[y].pos[x] = nb;
+            else
+                result.vectors[y].pos[x] = 0;
+        }
+    }
     return result;
 }
 
@@ -35,7 +43,15 @@ vec4 Math::vec4(float x, float y, float z, float f) {
 }
 
 mat4 Math::mat4(float nb) {
-    struct mat4 result = {vec4(nb), vec4(nb), vec4(nb), vec4(nb)};
+    struct mat4 result = {vec4(0), vec4(0), vec4(0), vec4(0)};
+    for (int y = 0; y < 4; y++) {
+        for (int x = 0; x < 4; x++) {
+            if (x == y)
+                result.vectors[y].pos[x] = nb;
+            else
+                result.vectors[y].pos[x] = 0;
+        }
+    }
     return result;
 }
 
@@ -45,30 +61,24 @@ struct mat4 Math::mat4(struct vec4 a, struct vec4 b, struct vec4 c, struct vec4 
 }
 
 struct mat4 Math::scaleMat(struct mat4 a, struct vec3 b) {
-    for (int y = 0; y < 4; y++) {
-        for (int x = 0; x < 4; x++) {
-            if (x == y) {
-                if (x < 3)
-                    a.vectors[y].pos[x] *= b.pos[x];
-            } else
-                a.vectors[y].pos[x] = 0;
-        }
-    }
+    struct mat4 matScale = mat4(0);
 
-    return a;
+    matScale.vectors[0].pos[0] = b.pos[0];
+    matScale.vectors[1].pos[1] = b.pos[1];
+    matScale.vectors[2].pos[2] = b.pos[2];
+    matScale.vectors[3].pos[3] = 1;
+
+    return multiplyMat(a, matScale);
 }
 
 struct mat3 Math::scaleMat(struct mat3 a, struct vec3 b) {
-    for (int y = 0; y < 3; y++) {
-        for (int x = 0; x < 3; x++) {
-            if (x == y)
-                a.vectors[y].pos[x] *= b.pos[x];
-            else
-                a.vectors[y].pos[x] = 0;
-        }
-    }
+    struct mat3 matScale = mat3(0);
 
-    return a;
+    matScale.vectors[0].pos[0] = b.pos[0];
+    matScale.vectors[1].pos[1] = b.pos[1];
+    matScale.vectors[2].pos[2] = b.pos[2];
+
+    return multiplyMat(a, matScale);
 }
 
 struct mat4 Math::multiplyMat(struct mat4 a, struct mat4 b) {
@@ -77,7 +87,7 @@ struct mat4 Math::multiplyMat(struct mat4 a, struct mat4 b) {
     for (int y = 0; y < 4; y++) {
         for (int x = 0; x < 4; x++) {
             for (int count = 0; count < 4; count++) {
-                result.vectors[y].pos[x] += a.vectors[y].pos[count] * b.vectors[count].pos[x];
+                result.vectors[y].pos[x] += b.vectors[y].pos[count] * a.vectors[count].pos[x];
             }
         }
     }
@@ -97,4 +107,24 @@ struct mat3 Math::multiplyMat(struct mat3 a, struct mat3 b) {
     }
 
     return result;
+}
+
+struct mat4 Math::translateMat(struct mat4 a, struct vec3 b) {
+    struct mat4 matScale = mat4(1);
+
+    matScale.vectors[3].pos[0] = b.pos[0];
+    matScale.vectors[3].pos[1] = b.pos[1];
+    matScale.vectors[3].pos[2] = b.pos[2];
+
+    return multiplyMat(a, matScale);
+}
+
+struct mat3 Math::translateMat(struct mat3 a, struct vec3 b) {
+    struct mat3 matScale = mat3(1);
+
+    matScale.vectors[2].pos[0] = b.pos[0];
+    matScale.vectors[2].pos[1] = b.pos[1];
+    matScale.vectors[2].pos[2] = b.pos[2];
+
+    return multiplyMat(a, matScale);
 }

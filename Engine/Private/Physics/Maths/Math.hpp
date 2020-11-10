@@ -39,6 +39,9 @@ public:
 
     static struct mat4 multiplyMat(struct mat4 a, struct mat4 b);
     static struct mat3 multiplyMat(struct mat3 a, struct mat3 b);
+
+    static struct mat4 translateMat(struct mat4 a, struct vec3 b);
+    static struct mat3 translateMat(struct mat3 a, struct vec3 b);
 };
 
 

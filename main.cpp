@@ -54,15 +54,36 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     key.setValue('S');
     key.setFunction(s);
 
-    // Exemple de matrices
     /*
+     * Exemple de matrices
+     *
      * Matrice complété avec un nombre (float)
      * mat4 testmat4 = Math::mat4(5);
+     *
      * matrice complété avec des Vecteurs(float)
      * mat3 testmat3 = Math::mat3(Math::vec3(1), Math::vec3(1), Math::vec3(1, 2, 1));
+     *
      * Scale de la matrice testMath4 par le vecteur 2,2,2
      * mat4 testResult = Math::scaleMat(testmat4, Math::vec3(2));
     */
+
+    glm::vec4 const e(1, 2, 3, 2);
+    glm::mat4 const M(e, e, e, e);
+
+    glm::vec3 const V(2, 2, 1);
+
+    glm::mat4 const T = glm::translate(M, V);
+
+    std::cout << glm::to_string(T) << std::endl;
+
+    struct vec3 vecTest = Math::vec3(2, 2, 1);
+    struct mat4 matTest = Math::mat4(Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2));
+
+    struct mat4 result = Math::translateMat(matTest, vecTest);
+
+    for (int y = 0; y < 4; y++) {
+            std::cout << result.vectors[y].pos[0] << result.vectors[y].pos[1] << result.vectors[y].pos[2] << result.vectors[y].pos[3] << std::endl;
+    }
 
     application.addKey(&key);
     application.start(hInstance);
