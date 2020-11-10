@@ -62,11 +62,15 @@ std::vector<const char *> Instance::getRequiredExtensions()
 
 Instance::~Instance()
 {
-    vkDestroyInstance(this->instance, nullptr);
 }
 
 VkInstance Instance::getVkInstance()
 {
     return this->instance;
+}
+
+void Instance::release()
+{
+    vkDestroyInstance(instance, nullptr);
 }
 

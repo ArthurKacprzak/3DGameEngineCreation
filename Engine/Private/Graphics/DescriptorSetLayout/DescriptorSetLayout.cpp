@@ -35,3 +35,8 @@ VkDescriptorSetLayout &DescriptorSetLayout::getDescriptorSetLayout()
 {
     return this->descriptorSetLayout;
 }
+
+void DescriptorSetLayout::release(Device &device)
+{
+    vkDestroyDescriptorSetLayout(device.getDevice(), descriptorSetLayout, nullptr);
+}

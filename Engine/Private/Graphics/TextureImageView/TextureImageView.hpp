@@ -12,6 +12,8 @@ class TextureImageView
 public:
     TextureImageView(Device &device, TextureImage &textureImage);
 
+    void release(Device &device);
+
 public:
     static VkImageView createImageView(Device &device, VkImage &image, VkFormat format, VkImageAspectFlags aspectFlags);
 

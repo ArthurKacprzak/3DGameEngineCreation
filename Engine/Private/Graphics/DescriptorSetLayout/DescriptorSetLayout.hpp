@@ -16,6 +16,8 @@ public:
 
     VkDescriptorSetLayout &getDescriptorSetLayout();
 
+    void release(Device &device);
+
 private:
     VkDescriptorSetLayout descriptorSetLayout;
 };

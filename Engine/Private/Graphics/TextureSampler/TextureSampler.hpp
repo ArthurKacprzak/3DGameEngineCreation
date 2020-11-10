@@ -12,6 +12,8 @@ class TextureSampler
 public:
     TextureSampler(Device &device);
 
+    void release(Device &device);
+
 public:
     VkSampler &getTextureSampler();
 

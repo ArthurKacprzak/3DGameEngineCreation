@@ -17,6 +17,8 @@ public:
     Device(Instance &instance, Surface &surface);
     ~Device();
 
+    void release();
+
 public:
     VkPhysicalDevice &getPhysicalDevice();
     VkDevice &getDevice();

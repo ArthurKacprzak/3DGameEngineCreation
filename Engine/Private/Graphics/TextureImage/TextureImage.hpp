@@ -14,6 +14,8 @@ class TextureImage
 public:
     TextureImage(Device &device, CommandPool &commandPool);
 
+    void release(Device &device);
+
 public:
     VkImage &getTextureImage();
 

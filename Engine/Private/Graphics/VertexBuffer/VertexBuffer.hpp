@@ -39,6 +39,8 @@ public:
     VkBuffer &getVertexBuffer();
     VkBuffer &getIndexBuffer();
     VkDeviceMemory &getIndexBufferMemory();
+
+    void release(Device &device);
 };
 
 

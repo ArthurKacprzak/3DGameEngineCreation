@@ -110,7 +110,7 @@ void Window::init(HINSTANCE hinstance)
 
     this->graphics.camera = new Camera();
 
-    this->graphics.camera->type = Camera::CameraType::firstperson;
+    this->graphics.camera->type = Camera::CameraType::lookat;
     this->graphics.camera->setPosition(glm::vec3(0, 0, -1));
     this->graphics.camera->setRotation(glm::vec3(0, 0.0f, 90));
     this->graphics.camera->setPerspective(30.0f, this->graphics.imageViews->getSwapChainExtent().width / (float) this->graphics.imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
@@ -135,6 +135,7 @@ void Window::start()
 
     // Flush device to make sure all resources can be freed if application is about to close
     vkDeviceWaitIdle(this->device->getDevice());
+    this->cleanup();
 }
 
 void Window::drawFrame()
@@ -538,6 +539,39 @@ void Window::cleanupSwapChain()
     delete this->graphics.uniformBuffers;
     delete this->graphics.descriptorPool;
     delete this->graphics.descriptorSets;
+}
+
+void Window::cleanup()
+{
+    this->cleanupSwapChain();
+
+    this->graphics.textureSampler->release(*this->device);
+    this->graphics.textureImageView->release(*this->device);
+    this->graphics.textureImage->release(*this->device);
+    this->graphics.descriptorSetLayout->release(*this->device);
+    this->graphics.vertexBuffer->release(*this->device);
+    this->semaphore->release(*this->device);
+    this->commandPool->release(*this->device);
+    this->device->release();
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
+        this->debugMessenger->release(*this->instance, nullptr);
+    }
+    this->surface->release(*this->instance);
+    this->instance->release();
+
+    delete this->graphics.textureSampler;
+    delete this->graphics.textureImageView;
+    delete this->graphics.textureImage;
+    delete this->graphics.descriptorSetLayout;
+    delete this->graphics.vertexBuffer;
+    delete this->semaphore;
+    delete this->commandPool;
+    delete this->device;
+    if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
+        delete this->debugMessenger;
+    }
+    delete this->surface;
+    delete this->instance;
 }
 
 
