@@ -67,23 +67,19 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
      * mat4 testResult = Math::scaleMat(testmat4, Math::vec3(2));
     */
 
-    glm::vec4 const e(1, 2, 3, 2);
-    glm::mat4 const M(e, e, e, e);
+    glm::vec4 const A(1.0f, 0.0f, 0.0f, 1.0f);
 
-    glm::vec3 const V(2, 2, 1);
+    glm::mat4 const R = glm::rotate(glm::mat4(1.0f), glm::radians(120.f), glm::vec3(0, 0, 1));
+    glm::vec4 const B = R * A;
 
-    glm::mat4 const T = glm::translate(M, V);
-
-    std::cout << glm::to_string(T) << std::endl;
+    std::cout << glm::to_string(B) << std::endl;
 
     struct vec3 vecTest = Math::vec3(2, 2, 1);
     struct mat4 matTest = Math::mat4(Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2));
 
-    struct mat4 result = Math::translateMat(matTest, vecTest);
+    struct vec4 vecTest2 = Math::rotateMat(Math::mat4(1), Math::vec4(0, 0, 120.f, 0));
 
-    for (int y = 0; y < 4; y++) {
-            std::cout << result.vectors[y].pos[0] << result.vectors[y].pos[1] << result.vectors[y].pos[2] << result.vectors[y].pos[3] << std::endl;
-    }
+    std::cout << "x:" << vecTest2.pos[0] << " y:" << vecTest2.pos[1] << " z:" << vecTest2.pos[2]  << " w:"  << vecTest2.pos[3] << std::endl;
 
     application.addKey(&key);
     application.start(hInstance);

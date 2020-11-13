@@ -6,6 +6,7 @@
 #define INC_3DGAMEENGINECREATION_MATH_HPP
 
 #include <vector>
+#define pi 3.1415926535
 
 struct vec3 {
     float pos[3];
@@ -39,9 +40,13 @@ public:
 
     static struct mat4 multiplyMat(struct mat4 a, struct mat4 b);
     static struct mat3 multiplyMat(struct mat3 a, struct mat3 b);
+    static struct vec4 multiplyMat(struct mat4 a, struct vec4 b);
 
     static struct mat4 translateMat(struct mat4 a, struct vec3 b);
     static struct mat3 translateMat(struct mat3 a, struct vec3 b);
+
+    static struct mat3 rotateMat(struct mat3 a, struct vec3 b);
+    static struct vec4 rotateMat(struct mat4 a, struct vec4 b);
 };
 
 
