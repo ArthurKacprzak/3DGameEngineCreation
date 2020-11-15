@@ -59,8 +59,7 @@ void PublicModel::setTexture(Texture *texture_ptr)
     _texture = texture_ptr;
 }
 
-void PublicModel::move(glm::vec3 vector)
+void PublicModel::move(struct vec3 vector)
 {
     this->window->move(vector);
-    std::cout << "move\n";
 }

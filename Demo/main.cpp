@@ -58,7 +58,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     setKeys(model, application);
 
 
-    application.setCamera(Application::CameraType::firstperson);
+    application.setCamera(Application::CameraType::lookat);
     application.start(hInstance);
     return 0;
 }

@@ -250,7 +250,7 @@ void Window::updateUniformBuffer(uint32_t currentImage)
     ubo.view = this->graphics.camera->matrices.view;
     ubo.model = Math::scaleMat(Math::mat4(1.0f), Math::vec3(0.2f));
 
-    this->model->model = glm::translate(this->model->model, this->moveVector);
+    this->model->model = Math::translateMat(this->model->model, this->moveVector);
     ubo.model = this->model->model;
 
 
@@ -538,9 +538,7 @@ void Window::setCameraType(Camera::CameraType type)
     this->graphics.camera->type = type;
 }
 
-void Window::move(glm::vec3 vector)
+void Window::move(struct vec3 vector)
 {
     this->moveVector = vector;
 }
-
-

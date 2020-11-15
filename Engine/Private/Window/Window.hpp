@@ -106,7 +106,7 @@ public:
     void addKeyPress(int value, std::function<void()> &f);
     void addKeyRelease(int value, std::function<void()> &f);
 
-    void move(glm::vec3 vector);
+    void move(struct vec3 vector);
 
     HWND &getHwnd();
 
@@ -118,7 +118,7 @@ public:
     void handleKeyUp(uint32_t key);
 
 private:
-    glm::vec3 moveVector = glm::vec3(0);
+    struct vec3 moveVector = Math::vec3(0);
     std::unique_ptr<Framebuffers> framebuffers;
     std::unique_ptr<CommandPool> commandPool;
     std::unique_ptr<CommandBuffers> commandBuffers;

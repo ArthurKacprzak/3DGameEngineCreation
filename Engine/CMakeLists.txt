@@ -53,14 +53,14 @@ set(SRC Private/Window/Window.cpp
         Public/Texture/Texture.cpp
         Public/Key/Key.cpp
         Private/Graphics/Camera/Camera.cpp
-        Private/Tools/VkTools.cpp)
+        Private/Tools/VkTools.cpp
+        Private/Physics/Maths/Math.cpp)
 
 OPTION (BUILD_SHARED_LIBS "Build Shared Libraries" OFF)
 
 include_directories(./stb-master/stb-master)
 find_package(Vulkan REQUIRED)
-add_subdirectory(./glm)
-set(LIBS Vulkan::Vulkan glm)
+set(LIBS Vulkan::Vulkan)
 
 
 add_library(Engine STATIC ${SRC})
@@ -115,6 +115,7 @@ set(HEAD_FILE Private/Window
         Public/Texture
         Public/Key
         Private/Graphics/Camera
-        Private/Tools)
+        Private/Tools
+        Private/Physics/Maths)
 
 target_include_directories (Engine PUBLIC ${HEAD_FILE})

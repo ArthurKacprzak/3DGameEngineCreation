@@ -6,10 +6,10 @@
 #define INC_3DGAMEENGINECREATION_MODEL_HPP
 
 #include <string>
-#include "../Object/Object.hpp"
-#include "../Texture/Texture.hpp"
-#include "../../ourLibs/miniobjloader/loader.hpp"
-#include "../Engine/Private/Physics/Maths/Math.hpp"
+#include "Object.hpp"
+#include "Texture.hpp"
+#include "loader.hpp"
+#include "Math.hpp"
 
 class PublicModel : public Object
 {

@@ -6,7 +6,7 @@
 #define INC_3DGAMEENGINECREATION_CAMERA_HPP
 
 #include <cmath>
-#include "../Engine/Private/Physics/Maths/Math.hpp"
+#include "Math.hpp"
 
 #include <iostream>
 class Camera

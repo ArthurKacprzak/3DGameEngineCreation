@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include "Vertex.hpp"
+#include "Math.hpp"
 
 class Window;
 
@@ -18,7 +19,7 @@ public:
 
 public:
     static std::string getTexturePath();
-    glm::mat4 model;
+    struct mat4 model;
 
 private:
 
