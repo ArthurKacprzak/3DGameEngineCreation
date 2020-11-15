@@ -7,15 +7,15 @@
 
 #include <vulkan/vulkan.hpp>
 #include <vector>
-#include "../../Graphics/ImageViews/ImageViews.hpp"
-#include "../Device/Device.hpp"
-#include "../CommandPool/CommandPool.hpp"
-#include "../../Graphics/Framebuffers/Framebuffers.hpp"
-#include "../../Graphics/GraphicsPipeline/GraphicsPipeline.hpp"
-#include "../../Graphics/Vertex/Vertex.hpp"
-#include "../../Graphics/VertexBuffer/VertexBuffer.hpp"
-#include "../../Graphics/DescriptorSets/DescriptorSets.hpp"
-#include "../../Graphics/DescriptorSetLayout/DescriptorSetLayout.hpp"
+#include "ImageViews.hpp"
+#include "Device.hpp"
+#include "CommandPool.hpp"
+#include "Framebuffers.hpp"
+#include "GraphicsPipeline.hpp"
+#include "Vertex.hpp"
+#include "VertexBuffer.hpp"
+#include "DescriptorSets.hpp"
+#include "DescriptorSetLayout.hpp"
 
 class Window;
 class Model;

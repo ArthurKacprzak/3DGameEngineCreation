@@ -5,10 +5,10 @@
 #ifndef INC_3DGAMEENGINECREATION_FRAMEBUFFERS_HPP
 #define INC_3DGAMEENGINECREATION_FRAMEBUFFERS_HPP
 
-#include "../ImageViews/ImageViews.hpp"
-#include "../../Compute/Device/Device.hpp"
-#include "../GraphicsPipeline/GraphicsPipeline.hpp"
-#include "../DepthResources/DepthResources.hpp"
+#include "ImageViews.hpp"
+#include "Device.hpp"
+#include "GraphicsPipeline.hpp"
+#include "DepthResources.hpp"
 
 class Framebuffers
 {

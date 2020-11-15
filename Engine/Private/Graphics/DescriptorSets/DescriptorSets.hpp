@@ -5,12 +5,12 @@
 #ifndef INC_3DGAMEENGINECREATION_DESCRIPTORSETS_HPP
 #define INC_3DGAMEENGINECREATION_DESCRIPTORSETS_HPP
 
-#include "../DescriptorSetLayout/DescriptorSetLayout.hpp"
-#include "../ImageViews/ImageViews.hpp"
-#include "../UniformBuffers/UniformBuffers.hpp"
-#include "../DescriptorPool/DescriptorPool.hpp"
-#include "../TextureSampler/TextureSampler.hpp"
-#include "../TextureImageView/TextureImageView.hpp"
+#include "DescriptorSetLayout.hpp"
+#include "ImageViews.hpp"
+#include "UniformBuffers.hpp"
+#include "DescriptorPool.hpp"
+#include "TextureSampler.hpp"
+#include "TextureImageView.hpp"
 
 class Model;
 

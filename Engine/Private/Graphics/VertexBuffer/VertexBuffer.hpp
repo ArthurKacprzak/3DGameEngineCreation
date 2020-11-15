@@ -7,9 +7,9 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include "../../Compute/Device/Device.hpp"
-#include "../Vertex/Vertex.hpp"
-#include "../../Compute/CommandPool/CommandPool.hpp"
+#include "Device.hpp"
+#include "Vertex.hpp"
+#include "CommandPool.hpp"
 
 class Window;
 

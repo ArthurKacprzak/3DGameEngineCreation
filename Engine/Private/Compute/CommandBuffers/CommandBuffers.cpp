@@ -3,8 +3,8 @@
 //
 
 #include "CommandBuffers.hpp"
-#include "../../Window/Window.hpp"
-#include "../../Graphics/Model/Model.hpp"
+#include "Window.hpp"
+#include "Model.hpp"
 
 CommandBuffers::CommandBuffers(Window *window, ImageViews &imageViews, Device &device, CommandPool &commandPool,
                                Framebuffers &framebuffers, GraphicsPipeline &graphicsPipeline, VertexBuffer &vertexBuffer,

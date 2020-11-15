@@ -6,9 +6,9 @@
 #define INC_3DGAMEENGINECREATION_COMMANDPOOL_HPP
 
 #include <vulkan/vulkan.hpp>
-#include "../QueueFamily/QueueFamily.hpp"
-#include "../Device/Device.hpp"
-#include "../Surface/Surface.hpp"
+#include "QueueFamily.hpp"
+#include "Device.hpp"
+#include "Surface.hpp"
 
 class CommandPool
 {

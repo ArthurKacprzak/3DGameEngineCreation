@@ -6,8 +6,8 @@
 #define INC_3DGAMEENGINECREATION_SEMAPHORE_HPP
 
 #include <vulkan/vulkan.hpp>
-#include "../../Graphics/ImageViews/ImageViews.hpp"
-#include "../Device/Device.hpp"
+#include "ImageViews.hpp"
+#include "Device.hpp"
 
 class Semaphore
 {

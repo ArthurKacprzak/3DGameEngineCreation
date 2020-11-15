@@ -8,7 +8,7 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include "../../Compute/Device/Device.hpp"
+#include "Device.hpp"
 
 class ImageViews
 {

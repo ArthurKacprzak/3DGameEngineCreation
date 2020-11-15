@@ -7,7 +7,7 @@
 
 #include <string>
 #include <vector>
-#include "../Vertex/Vertex.hpp"
+#include "Vertex.hpp"
 
 class Window;
 

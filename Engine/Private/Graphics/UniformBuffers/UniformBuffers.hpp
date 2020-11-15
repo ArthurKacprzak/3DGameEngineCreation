@@ -8,8 +8,8 @@
 #include <vulkan/vulkan.hpp>
 #include <glm/glm.hpp>
 
-#include "../ImageViews/ImageViews.hpp"
-#include "../VertexBuffer/VertexBuffer.hpp"
+#include "ImageViews.hpp"
+#include "VertexBuffer.hpp"
 
 class UniformBuffers
 {

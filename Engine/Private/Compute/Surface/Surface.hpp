@@ -5,7 +5,7 @@
 #ifndef INC_3DGAMEENGINECREATION_SURFACE_HPP
 #define INC_3DGAMEENGINECREATION_SURFACE_HPP
 
-#include "../Instance/Instance.hpp"
+#include "Instance.hpp"
 
 #include <iostream>
 #include <vulkan/vulkan.h>

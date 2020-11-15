@@ -7,7 +7,6 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "../../Window/Window.hpp"
 #include <iostream>
-#include "../../../../ourLibs/miniobjloader/loader.hpp"
 
 Model::Model(Window *window)
 {

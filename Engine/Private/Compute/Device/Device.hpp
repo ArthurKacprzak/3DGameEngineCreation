@@ -5,7 +5,7 @@
 #ifndef INC_3DGAMEENGINECREATION_DEVICE_HPP
 #define INC_3DGAMEENGINECREATION_DEVICE_HPP
 
-#include "../Instance/Instance.hpp"
+#include "Instance.hpp"
 
 #include <set>
 #include <vector>

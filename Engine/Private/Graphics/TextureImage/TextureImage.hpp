@@ -5,9 +5,9 @@
 #ifndef INC_3DGAMEENGINECREATION_TEXTUREIMAGE_HPP
 #define INC_3DGAMEENGINECREATION_TEXTUREIMAGE_HPP
 
-#include "../../Compute/Device/Device.hpp"
-#include "../VertexBuffer/VertexBuffer.hpp"
-#include "../../Compute/CommandPool/CommandPool.hpp"
+#include "Device.hpp"
+#include "VertexBuffer.hpp"
+#include "CommandPool.hpp"
 
 class TextureImage
 {
