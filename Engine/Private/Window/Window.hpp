@@ -6,14 +6,9 @@
 #define INC_3DGAMEENGINECREATION_WINDOW_HPP
 
 #include <vulkan/vulkan.h>
-//#include <GLFW/glfw3.h>
 #include <windows.h>
 #include <stdexcept>
 #include <cstdlib>
-
-#define GLM_FORCE_RADIANS
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include <chrono>
 
@@ -40,6 +35,7 @@
 #include "../Graphics/DepthResources/DepthResources.hpp"
 
 #include "../Graphics/Camera/Camera.hpp"
+#include "../Engine/Private/Physics/Maths/Math.hpp"
 
 class Window
 {
@@ -59,7 +55,7 @@ public:
         bool middle = false;
     } mouseButtons;
 
-    glm::vec2 mousePos;
+    struct vec2 mousePos;
 
 private:
 

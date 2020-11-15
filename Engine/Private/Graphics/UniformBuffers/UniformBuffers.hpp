@@ -10,6 +10,7 @@
 
 #include "../ImageViews/ImageViews.hpp"
 #include "../VertexBuffer/VertexBuffer.hpp"
+#include "../../Physics/Maths/Math.hpp"
 
 class UniformBuffers
 {
@@ -20,11 +21,11 @@ public:
 
 public:
     struct UniformBufferObject {
-        glm::mat4 model;
-        glm::mat4 view;
-        glm::mat4 proj;
-        glm::vec4 lightPos = glm::vec4(0.0f, -2.0f, 0.0f, 1.0f);
-        glm::vec4 cameraPos;
+        struct mat4 model;
+        struct mat4 view;
+        struct mat4 proj;
+        struct vec4 lightPos = Math::vec4(0.0f, -2.0f, 0.0f, 1.0f);
+        struct vec4 cameraPos;
     };
 
 public:

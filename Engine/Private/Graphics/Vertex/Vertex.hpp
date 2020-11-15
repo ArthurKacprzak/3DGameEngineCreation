@@ -10,6 +10,7 @@
 #include <vector>
 #include <stddef.h>
 #include <glm/gtx/hash.hpp>
+#include "../Engine/Private/Physics/Maths/Math.hpp"
 
 struct Vertex
 {

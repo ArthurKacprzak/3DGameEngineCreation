@@ -101,7 +101,7 @@ set(SRC main.cpp
         Engine/Public/PublicModel/PublicModel.cpp
         Engine/Public/PublicModel/PublicModel.hpp
         Engine/Public/Texture/Texture.cpp
-        Engine/Public/Texture/Texture.hpp Engine/Public/Key/Key.cpp Engine/Public/Key/Key.hpp Engine/Private/Graphics/Camera/Camera.cpp Engine/Private/Graphics/Camera/Camera.hpp Engine/Private/Tools/VkTools.cpp Engine/Private/Tools/VkTools.hpp Engine/Private/Physics/Maths/TriPhysics.cpp Engine/Private/Physics/Maths/TriPhysics.hpp Engine/Private/Physics/Maths/Math.cpp Engine/Private/Physics/Maths/Math.hpp)
+        Engine/Public/Texture/Texture.hpp Engine/Public/Key/Key.cpp Engine/Public/Key/Key.hpp Engine/Private/Graphics/Camera/Camera.cpp Engine/Private/Graphics/Camera/Camera.hpp Engine/Private/Tools/VkTools.cpp Engine/Private/Tools/VkTools.hpp Engine/Private/Physics/Maths/Math.cpp Engine/Private/Physics/Maths/Math.hpp)
 
 
 add_executable(3DGameEngineCreation ${SRC})

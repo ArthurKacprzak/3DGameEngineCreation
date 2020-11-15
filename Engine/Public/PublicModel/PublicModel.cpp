@@ -26,9 +26,9 @@ void PublicModel::init(Window &window)
             Vertex vertex{};
 
             vertex.pos = {
-                    attribM.vertices[3 * index.vertex_index + 0] + offset.x,
-                    attribM.vertices[3 * index.vertex_index + 1] + offset.y,
-                    attribM.vertices[3 * index.vertex_index + 2] + offset.z
+                    attribM.vertices[3 * index.vertex_index + 0] + offset.pos[0],
+                    attribM.vertices[3 * index.vertex_index + 1] + offset.pos[1],
+                    attribM.vertices[3 * index.vertex_index + 2] + offset.pos[2]
             };
 
             vertex.texCoord = {
@@ -48,7 +48,7 @@ void PublicModel::init(Window &window)
     }
 }
 
-void PublicModel::setOffset(glm::vec3 pos)
+void PublicModel::setOffset(struct vec3 pos)
 {
     this->offset = pos;
 }

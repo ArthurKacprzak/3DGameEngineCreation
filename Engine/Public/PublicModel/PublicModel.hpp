@@ -9,6 +9,7 @@
 #include "../Object/Object.hpp"
 #include "../Texture/Texture.hpp"
 #include "../../ourLibs/miniobjloader/loader.hpp"
+#include "../Engine/Private/Physics/Maths/Math.hpp"
 
 class PublicModel : public Object
 {
@@ -18,11 +19,11 @@ public:
 public:
     void init(Window &window) override;
     void setTexture(Texture *texture_ptr);
-    void setOffset(glm::vec3 pos);
+    void setOffset(struct vec3 pos);
 
 private:
     std::string objPath;
-    glm::vec3 offset;
+    struct vec3 offset;
     Texture *_texture;
 
 //    std::unique_ptr<Model> model;

@@ -25,15 +25,15 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
 
         case WM_LBUTTONDOWN:
-            w->mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
+            w->mousePos = Math::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
             w->mouseButtons.left = true;
             break;
         case WM_RBUTTONDOWN:
-            w->mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
+            w->mousePos = Math::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
             w->mouseButtons.right = true;
             break;
         case WM_MBUTTONDOWN:
-            w->mousePos = glm::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
+            w->mousePos = Math::vec2((float)LOWORD(lParam), (float)HIWORD(lParam));
             w->mouseButtons.middle = true;
             break;
         case WM_LBUTTONUP:
@@ -111,8 +111,8 @@ void Window::init(HINSTANCE hinstance)
     this->graphics.camera = new Camera();
 
     this->graphics.camera->type = Camera::CameraType::lookat;
-    this->graphics.camera->setPosition(glm::vec3(0, 0, -1));
-    this->graphics.camera->setRotation(glm::vec3(0, 0.0f, 90));
+    this->graphics.camera->setPosition(Math::vec3(0, 0, -1));
+    this->graphics.camera->setRotation(Math::vec3(0, 0.0f, 90));
     this->graphics.camera->setPerspective(30.0f, this->graphics.imageViews->getSwapChainExtent().width / (float) this->graphics.imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
 }
 
@@ -220,22 +220,22 @@ void Window::drawFrame()
 
 void Window::handleMouseMove(int32_t x, int32_t y)
 {
-    int32_t dx = (int32_t)this->mousePos.x - x;
-    int32_t dy = (int32_t)this->mousePos.y - y;
+    int32_t dx = (int32_t)this->mousePos.pos[0] - x;
+    int32_t dy = (int32_t)this->mousePos.pos[1] - y;
 
 
     if (mouseButtons.left) {
-        this->graphics.camera->rotate(glm::vec3(dy * this->graphics.camera->rotationSpeed, 0.0f, -dx * this->graphics.camera->rotationSpeed));
+        this->graphics.camera->rotate(Math::vec3(dy * this->graphics.camera->rotationSpeed, 0.0f, -dx * this->graphics.camera->rotationSpeed));
     }
     if (mouseButtons.right) {
-        this->graphics.camera->translate(glm::vec3(-0.0f, 0.0f, dy * .005f));
+        this->graphics.camera->translate(Math::vec3(-0.0f, 0.0f, dy * .005f));
     }
     if (mouseButtons.middle) {
-        this->graphics.camera->translate(glm::vec3(-dy * 0.01f, dx * 0.01f, 0.0f));
+        this->graphics.camera->translate(Math::vec3(-dy * 0.01f, dx * 0.01f, 0.0f));
     }
 
 
-    this->mousePos = glm::vec2((float)x, (float)y);
+    this->mousePos = Math::vec2((float)x, (float)y);
 }
 
 void Window::updateUniformBuffer(uint32_t currentImage)
@@ -253,7 +253,7 @@ void Window::updateUniformBuffer(uint32_t currentImage)
 
     ubo.proj = this->graphics.camera->matrices.perspective;
     ubo.view = this->graphics.camera->matrices.view;
-    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
+    ubo.model = Math::scaleMat(Math::mat4(1.0f), Math::vec3(0.2f));
 
 
 //    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
@@ -261,7 +261,7 @@ void Window::updateUniformBuffer(uint32_t currentImage)
 
 //    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
 
-    ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
+    ubo.cameraPos = Math::multiplyMat(Math::vec4(this->graphics.camera->position.pos[0], this->graphics.camera->position.pos[1], this->graphics.camera->position.pos[2], -1.0f), -1.0f);
 
     void* data;
     vkMapMemory(this->device->getDevice(), this->graphics.uniformBuffers->getUniformBuffersMemory()[currentImage], 0, sizeof(ubo), 0, &data);
@@ -421,7 +421,7 @@ void Window::keyManagement()
 
 void Window::handleMouseWheel(short wheelDelta)
 {
-    this->graphics.camera->translate(glm::vec3(0.0f, 0.0f, (float)wheelDelta * 0.005f));
+    this->graphics.camera->translate(Math::vec3(0.0f, 0.0f, (float)wheelDelta * 0.005f));
 }
 
 void Window::handleKeyDown(uint32_t key)

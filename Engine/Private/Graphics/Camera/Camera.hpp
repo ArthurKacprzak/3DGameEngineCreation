@@ -5,10 +5,8 @@
 #ifndef INC_3DGAMEENGINECREATION_CAMERA_HPP
 #define INC_3DGAMEENGINECREATION_CAMERA_HPP
 
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <cmath>
+#include "../Engine/Private/Physics/Maths/Math.hpp"
 
 #include <iostream>
 class Camera
@@ -20,29 +18,25 @@ private:
 
     void updateViewMatrix()
     {
-        glm::mat4 rotM = glm::mat4(1.0f);
-        glm::mat4 transM;
+        struct mat4 rotM = Math::rotateMat(1, Math::vec4(rotation.pos[0] * (flipY ? -1.0f : 1.0f), rotation.pos[1], rotation.pos[2], 0));
 
-        rotM = glm::rotate(rotM, glm::radians(rotation.x * (flipY ? -1.0f : 1.0f)), glm::vec3(1.0f, 0.0f, 0.0f));
-        rotM = glm::rotate(rotM, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        rotM = glm::rotate(rotM, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-        glm::vec3 translation = position;
+        struct vec3 translation = position;
         if (flipY) {
-            translation.y *= -1.0f;
+            translation.pos[1] *= -1.0f;
         }
-        transM = glm::translate(glm::mat4(1.0f), translation);
+
+        struct mat4 transM = Math::translateMat(Math::mat4(1.0f), translation);
 
         if (type == CameraType::firstperson)
         {
-            matrices.view = rotM * transM;
+            matrices.view = Math::multiplyMat(rotM, transM);
         }
         else
         {
-            matrices.view = transM * rotM;
+            matrices.view = Math::multiplyMat(transM, rotM);
         }
 
-        viewPos = glm::vec4(position, 0.0f) * glm::vec4(-1.0f, 1.0f, -1.0f, 1.0f);
+        viewPos = Math::multiplyMat(Math::vec4(position.pos[0], position.pos[1], position.pos[2], 0.0f), Math::vec4(-1.0f, 1.0f, -1.0f, 1.0f));
 
         updated = true;
     };
@@ -50,9 +44,9 @@ public:
     enum CameraType { lookat, firstperson };
     CameraType type = CameraType::lookat;
 
-    glm::vec3 rotation = glm::vec3();
-    glm::vec3 position = glm::vec3();
-    glm::vec4 viewPos = glm::vec4();
+    struct vec3 rotation;
+    struct vec3 position;
+    struct vec4 viewPos;
 
     float rotationSpeed = 1.0f;
     float movementSpeed = 1.0f;
@@ -62,8 +56,8 @@ public:
 
     struct
     {
-        glm::mat4 perspective;
-        glm::mat4 view;
+        struct mat4 perspective;
+        struct mat4 view;
     } matrices;
 
     struct
@@ -92,47 +86,47 @@ public:
         this->fov = fov;
         this->znear = znear;
         this->zfar = zfar;
-        matrices.perspective = glm::perspective(glm::radians(fov), aspect, znear, zfar);
+        matrices.perspective = Math::perspectiveMat(fov, aspect, znear, zfar);
         if (flipY) {
-            matrices.perspective[1][1] *= -1.0f;
+            matrices.perspective.vectors[1].pos[1] *= -1.0f;
         }
     };
 
     void updateAspectRatio(float aspect)
     {
-        matrices.perspective = glm::perspective(glm::radians(fov), aspect, znear, zfar);
+        matrices.perspective = Math::perspectiveMat(fov, aspect, znear, zfar);
         if (flipY) {
-            matrices.perspective[1][1] *= -1.0f;
+            matrices.perspective.vectors[1].pos[1] *= -1.0f;
         }
     }
 
-    void setPosition(glm::vec3 position)
+    void setPosition(struct vec3 position)
     {
         this->position = position;
         updateViewMatrix();
     }
 
-    void setRotation(glm::vec3 rotation)
+    void setRotation(struct vec3 rotation)
     {
         this->rotation = rotation;
         updateViewMatrix();
     }
 
-    void rotate(glm::vec3 delta)
+    void rotate(struct vec3 delta)
     {
-        this->rotation += delta;
+        this->rotation = Math::addMat(this->rotation, delta);
         updateViewMatrix();
     }
 
-    void setTranslation(glm::vec3 translation)
+    void setTranslation(struct vec3 translation)
     {
         this->position = translation;
         updateViewMatrix();
     };
 
-    void translate(glm::vec3 delta)
+    void translate(struct vec3 delta)
     {
-        this->position += delta;
+        this->position = Math::addMat(this->position, delta);
         updateViewMatrix();
     }
 
@@ -153,22 +147,19 @@ public:
         {
             if (moving())
             {
-                glm::vec3 camFront;
-                camFront.x = -cos(glm::radians(rotation.x)) * sin(glm::radians(rotation.y));
-                camFront.y = sin(glm::radians(rotation.x));
-                camFront.z = cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
-                camFront = glm::normalize(camFront);
+                struct vec3 camFront = Math::vec3(float(-cos(double(rotation.pos[0])) * sin(double(rotation.pos[1]))), float(sin(double(rotation.pos[0]))), float(cos(double(rotation.pos[0])) * cos(double(rotation.pos[1]))));
+                camFront = Math::normalizeVec(camFront);
 
                 float moveSpeed = deltaTime * movementSpeed;
 
                 if (keys.up)
-                    position += camFront * moveSpeed;
+                    position = Math::addMat(position, Math::multiplyMat(camFront, moveSpeed));
                 if (keys.down)
-                    position -= camFront * moveSpeed;
+                    position = Math::substractMat(position, Math::multiplyMat(camFront, moveSpeed));
                 if (keys.left)
-                    position -= glm::normalize(glm::cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * moveSpeed;
+                    position = Math::substractMat(position, Math::normalizeVec(Math::crossVec(camFront, Math::multiplyMat(Math::vec3(0.0f, 1.0f, 0.0f), moveSpeed))));
                 if (keys.right)
-                    position += glm::normalize(glm::cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * moveSpeed;
+                    position = Math::addMat(position, Math::normalizeVec(Math::crossVec(camFront, Math::multiplyMat(Math::vec3(0.0f, 1.0f, 0.0f), moveSpeed))));
 
                 updateViewMatrix();
             }
@@ -177,7 +168,7 @@ public:
 
     // Update camera passing separate axis data (gamepad)
     // Returns true if view or position has been changed
-    bool updatePad(glm::vec2 axisLeft, glm::vec2 axisRight, float deltaTime)
+    bool updatePad(struct vec2 axisLeft, struct vec2 axisRight, float deltaTime)
     {
         bool retVal = false;
 
@@ -189,40 +180,37 @@ public:
             const float deadZone = 0.0015f;
             const float range = 1.0f - deadZone;
 
-            glm::vec3 camFront;
-            camFront.x = -cos(glm::radians(rotation.x)) * sin(glm::radians(rotation.y));
-            camFront.y = sin(glm::radians(rotation.x));
-            camFront.z = cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
-            camFront = glm::normalize(camFront);
+            struct vec3 camFront = Math::vec3(float(-cos(double(rotation.pos[0])) * sin(double(rotation.pos[1]))), float(sin(double(rotation.pos[0]))), float(cos(double(rotation.pos[0])) * cos(double(rotation.pos[1]))));
+            camFront = Math::normalizeVec(camFront);
 
             float moveSpeed = deltaTime * movementSpeed * 2.0f;
             float rotSpeed = deltaTime * rotationSpeed * 50.0f;
 
             // Move
-            if (fabsf(axisLeft.y) > deadZone)
+            if (fabsf(axisLeft.pos[1]) > deadZone)
             {
-                float pos = (fabsf(axisLeft.y) - deadZone) / range;
-                position -= camFront * pos * ((axisLeft.y < 0.0f) ? -1.0f : 1.0f) * moveSpeed;
+                float pos = (fabsf(axisLeft.pos[1]) - deadZone) / range;
+                Math::substractMat(position, Math::multiplyMat(camFront, pos * ((axisLeft.pos[1] < 0.0f) ? -1.0f : 1.0f) * moveSpeed));
                 retVal = true;
             }
-            if (fabsf(axisLeft.x) > deadZone)
+            if (fabsf(axisLeft.pos[0]) > deadZone)
             {
-                float pos = (fabsf(axisLeft.x) - deadZone) / range;
-                position += glm::normalize(glm::cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * pos * ((axisLeft.x < 0.0f) ? -1.0f : 1.0f) * moveSpeed;
+                float pos = (fabsf(axisLeft.pos[0]) - deadZone) / range;
+                position = Math::addMat(position, Math::multiplyMat(Math::normalizeVec(Math::crossVec(camFront, Math::vec3(0.0f, 1.0f, 0.0f))), pos * ((axisLeft.pos[0] < 0.0f) ? -1.0f : 1.0f) * moveSpeed));
                 retVal = true;
             }
 
             // Rotate
-            if (fabsf(axisRight.x) > deadZone)
+            if (fabsf(axisRight.pos[0]) > deadZone)
             {
-                float pos = (fabsf(axisRight.x) - deadZone) / range;
-                rotation.y += pos * ((axisRight.x < 0.0f) ? -1.0f : 1.0f) * rotSpeed;
+                float pos = (fabsf(axisRight.pos[0]) - deadZone) / range;
+                rotation.pos[1] += pos * ((axisRight.pos[0] < 0.0f) ? -1.0f : 1.0f) * rotSpeed;
                 retVal = true;
             }
-            if (fabsf(axisRight.y) > deadZone)
+            if (fabsf(axisRight.pos[1]) > deadZone)
             {
-                float pos = (fabsf(axisRight.y) - deadZone) / range;
-                rotation.x -= pos * ((axisRight.y < 0.0f) ? -1.0f : 1.0f) * rotSpeed;
+                float pos = (fabsf(axisRight.pos[1]) - deadZone) / range;
+                rotation.pos[0] -= pos * ((axisRight.pos[1] < 0.0f) ? -1.0f : 1.0f) * rotSpeed;
                 retVal = true;
             }
         }

@@ -69,17 +69,16 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
 
     glm::vec4 const A(1.0f, 0.0f, 0.0f, 1.0f);
 
-    glm::mat4 const R = glm::rotate(glm::mat4(1.0f), glm::radians(120.f), glm::vec3(0, 0, 1));
+    glm::mat4 const R = glm::perspective(glm::radians(250.0f), float(1600.0f / 900.0f), 50.0f, 60.0f);
     glm::vec4 const B = R * A;
 
-    std::cout << glm::to_string(B) << std::endl;
+    std::cout << glm::to_string(R) << std::endl;
 
     struct vec3 vecTest = Math::vec3(2, 2, 1);
-    struct mat4 matTest = Math::mat4(Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2), Math::vec4(1, 2, 3, 2));
+    struct mat4 matTest = Math::perspectiveMat(250.0f, float(1600.0f / 900.0f), 50.0f, 60.0f);
 
-    struct vec4 vecTest2 = Math::rotateMat(Math::mat4(1), Math::vec4(0, 0, 120.f, 0));
-
-    std::cout << "x:" << vecTest2.pos[0] << " y:" << vecTest2.pos[1] << " z:" << vecTest2.pos[2]  << " w:"  << vecTest2.pos[3] << std::endl;
+    for (int i = 0; i < 4; i++)
+        std::cout << "x:" << matTest.vectors[i].pos[0] << " y:" << matTest.vectors[i].pos[1] << " z:" << matTest.vectors[i].pos[2]  << " w:"  << matTest.vectors[i].pos[3] << std::endl;
 
     application.addKey(&key);
     application.start(hInstance);

@@ -3,8 +3,17 @@
 //
 
 #include <cmath>
-#include <iostream>
 #include "Math.hpp"
+
+struct vec2 Math::vec2(float nb) {
+    struct vec2 result = {nb, nb};
+    return result;
+}
+
+struct vec2 Math::vec2(float x, float y) {
+    struct vec2 result = {x, y};
+    return result;
+}
 
 vec3 Math::vec3(float nb) {
     struct vec3 result = {nb, nb, nb};
@@ -70,7 +79,7 @@ struct mat4 Math::scaleMat(struct mat4 a, struct vec3 b) {
     matScale.vectors[2].pos[2] = b.pos[2];
     matScale.vectors[3].pos[3] = 1;
 
-    return multiplyMat(a, matScale);
+    return matScale;
 }
 
 struct mat3 Math::scaleMat(struct mat3 a, struct vec3 b) {
@@ -123,6 +132,32 @@ struct vec4 Math::multiplyMat(struct mat4 a, struct vec4 b) {
     return result;
 }
 
+struct vec4 Math::multiplyMat(struct vec4 a, struct vec4 b) {
+    struct vec4 result = vec4(0);
+
+    for (int i = 0; i < 4; i++)
+        result.pos[i] += a.pos[i] * b.pos[i];
+    return result;
+}
+
+struct vec3 Math::multiplyMat(struct vec3 a, float b) {
+    struct vec3 result = vec3(0);
+
+    for (int i = 0; i < 3; i++)
+        result.pos[i] = a.pos[i] * b;
+    return result;
+}
+
+
+struct vec4 Math::multiplyMat(struct vec4 a, float b) {
+    struct vec4 result = vec4(0);
+
+    for (int i = 0; i < 4; i++)
+        result.pos[i] = a.pos[i] * b;
+    return result;
+}
+
+
 struct mat4 Math::translateMat(struct mat4 a, struct vec3 b) {
     struct mat4 matScale = mat4(1);
 
@@ -148,59 +183,67 @@ double round_up(double value, int decimal_places) {
     return std::floor(value * multiplier) / multiplier;
 }
 
-struct mat3 Math::rotateMat(struct mat3 a, struct vec3 b) {
-    struct mat3 rotateMatrixX = mat3(1);
-    struct mat3 rotateMatrixY = mat3(1);
-    struct mat3 rotateMatrixZ = mat3(1);
+struct mat4 Math::rotateMat(float a, struct vec4 b) {
+    float X = b.pos[0];
+    float Y = b.pos[1];
+    float Z = b.pos[2];
+    struct mat4 rotateMatrix = mat4(a);
 
-    rotateMatrixX.vectors[1].pos[1] = float(cos(double(b.pos[0])));
-    rotateMatrixX.vectors[1].pos[2] = -1 * float(sin(double(b.pos[0])));
-    rotateMatrixX.vectors[2].pos[1] = float(sin(double(b.pos[0])));
-    rotateMatrixX.vectors[2].pos[2] = float(cos(double(b.pos[0])));
+    rotateMatrix.vectors[0].pos[0] = float(round_up(cos(double(toRadian(Z))) * cos(double(toRadian(Y))), 6));
+    rotateMatrix.vectors[0].pos[1] = float(round_up((cos(double(toRadian(Z))) * sin(double(toRadian(Y))) * sin(double(toRadian(X)))) - (sin(double(toRadian(Z))) * cos(double(toRadian(X)))), 6));
+    rotateMatrix.vectors[0].pos[2] = float(round_up((cos(double(toRadian(Z))) * sin(double(toRadian(Y))) * cos(double(toRadian(X)))) + (sin(double(toRadian(Z))) * sin(double(toRadian(X)))), 6));
+    rotateMatrix.vectors[1].pos[0] = float(round_up(sin(double(toRadian(Z))) * cos(double(toRadian(Y))), 6));
+    rotateMatrix.vectors[1].pos[1] = float(round_up((sin(double(toRadian(Z))) * sin(double(toRadian(Y))) * sin(double(toRadian(X)))) + (cos(double(toRadian(Z))) * cos(double(toRadian(X)))), 6));
+    rotateMatrix.vectors[1].pos[2] = float(round_up((sin(double(toRadian(Z))) * sin(double(toRadian(Y))) * cos(double(toRadian(X)))) - (cos(double(toRadian(Z))) * sin(double(toRadian(X)))), 6));
+    rotateMatrix.vectors[2].pos[0] = float(round_up(- sin(double(toRadian(Y))), 6));
+    rotateMatrix.vectors[2].pos[1] = float(round_up(cos(double(toRadian(Y))) * sin(double(toRadian(X))), 6));
+    rotateMatrix.vectors[2].pos[2] = float(round_up(cos(double(toRadian(Y))) * cos(double(toRadian(X))), 6));
 
-    rotateMatrixY.vectors[0].pos[0] = float(cos(double(b.pos[1])));
-    rotateMatrixY.vectors[0].pos[2] = float(sin(double(b.pos[1])));
-    rotateMatrixY.vectors[2].pos[0] = -1 * float(sin(double(b.pos[1])));
-    rotateMatrixY.vectors[2].pos[2] = float(cos(double(b.pos[1])));
-
-    rotateMatrixZ.vectors[0].pos[0] = float(cos(double(b.pos[2])));
-    rotateMatrixZ.vectors[0].pos[1] = -1 * float(sin(double(b.pos[2])));
-    rotateMatrixZ.vectors[1].pos[0] = float(sin(double(b.pos[2])));
-    rotateMatrixZ.vectors[1].pos[1] = float(cos(double(b.pos[2])));
-
-    a = multiplyMat(a, rotateMatrixX);
-    a = multiplyMat(a, rotateMatrixY);
-    a = multiplyMat(a, rotateMatrixZ);
-    return a;
+    return rotateMatrix;
 }
 
-struct vec4 Math::rotateMat(struct mat4 a, struct vec4 b) {
-    struct mat4 rotateMatrixX = mat4(1);
-    struct mat4 rotateMatrixY = mat4(1);
-    struct mat4 rotateMatrixZ = mat4(1);
-    struct vec4 vecTest = vec4(1, 0, 0, 1);
+struct vec3 Math::substractMat(struct vec3 a, struct vec3 b) {
+    struct vec3 result = vec3(0);
 
-    rotateMatrixX.vectors[1].pos[1] = float(round_up(cos(double(b.pos[0] * pi / 180)), 6));
-    rotateMatrixX.vectors[1].pos[2] = -1 * float(round_up(sin(double(b.pos[0] * pi / 180)), 6));
-    rotateMatrixX.vectors[2].pos[1] = float(round_up(sin(double(b.pos[0] * pi / 180)), 6));
-    rotateMatrixX.vectors[2].pos[2] = float(round_up(cos(double(b.pos[0] * pi / 180)), 6));
+    for (int i = 0; i < 3; i++)
+        result.pos[i] += a.pos[i] - b.pos[i];
+    return result;
+}
 
-    rotateMatrixY.vectors[0].pos[0] = float(round_up(cos(double(b.pos[1] * pi / 180)), 6));
-    rotateMatrixY.vectors[0].pos[2] = float(round_up(sin(double(b.pos[1] * pi / 180)), 6));
-    rotateMatrixY.vectors[2].pos[0] = -1 * float(round_up(sin(double(b.pos[1] * pi / 180)), 6));
-    rotateMatrixY.vectors[2].pos[2] = float(round_up(cos(double(b.pos[1] * pi / 180)), 6));
+struct vec3 Math::normalizeVec(struct vec3 a) {
+    auto normal = float(sqrt(double((a.pos[0] * a.pos[0]) + (a.pos[1] * a.pos[1]) + (a.pos[2] * a.pos[2]))));
 
-    rotateMatrixZ.vectors[0].pos[0] = float(round_up(cos(double(b.pos[2] * pi / 180)), 6));
-    rotateMatrixZ.vectors[0].pos[1] = -1 * float(round_up(sin(double(b.pos[2] * pi / 180)), 6));
-    rotateMatrixZ.vectors[1].pos[0] = float(round_up(sin(double(b.pos[2] * pi / 180)), 6));
-    rotateMatrixZ.vectors[1].pos[1] = float(round_up(cos(double(b.pos[2] * pi / 180)), 6));
+    return vec3(a.pos[0] / normal, a.pos[1] / normal, a.pos[2] / normal);
+}
 
-    for (int y = 0; y < 4; y++) {
-        std::cout << " x: " << rotateMatrixZ.vectors[y].pos[0] << " y: " << rotateMatrixZ.vectors[y].pos[1] << " z: " << rotateMatrixZ.vectors[y].pos[2] << " w: " << rotateMatrixZ.vectors[y].pos[3] << std::endl;
-    }
+struct vec3 Math::crossVec(struct vec3 a, struct vec3 b) {
+    struct vec3 result = vec3(0);
 
-    vecTest = multiplyMat(rotateMatrixX, vecTest);
-    vecTest = multiplyMat(rotateMatrixY, vecTest);
-    vecTest = multiplyMat(rotateMatrixZ, vecTest);
-    return vecTest;
+    result.pos[0] = (a.pos[1] * b.pos[2]) - (a.pos[2] * b.pos[1]);
+    result.pos[1] = (a.pos[2] * b.pos[0]) - (a.pos[0] * b.pos[2]);
+    result.pos[2] = (a.pos[0] * b.pos[1]) - (a.pos[1] * b.pos[0]);
+
+    return result;
+}
+
+struct vec3 Math::addMat(struct vec3 a, struct vec3 b) {
+    return vec3(a.pos[0] + b.pos[0], a.pos[1] + b.pos[1],a.pos[2] + b.pos[2]);
+}
+
+float Math::toRadian(float a) {
+    return float(a * piMath / 180);
+}
+
+struct mat4 Math::perspectiveMat(float fov, float aspect, float znear, float zfar) {
+    struct mat4 result = mat4(0.0f);
+    float zrange = zfar - znear;
+    float tanHalfFOV = tanf(toRadian(float(fov / 2.f)));
+
+    result.vectors[0].pos[0] = 1.0f / (tanHalfFOV * aspect);
+    result.vectors[1].pos[1] = 1.0f / tanHalfFOV;
+    result.vectors[2].pos[2] = (-znear - zfar) / zrange;
+    result.vectors[2].pos[3] = -1;
+    result.vectors[3].pos[2] = -(2.0f * zfar * znear) / zrange;
+
+    return result;
 }
