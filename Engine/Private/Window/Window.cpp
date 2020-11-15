@@ -312,7 +312,6 @@ HWND Window::createWindow(HINSTANCE hinstance, WNDPROC wndproc)
 
     if (!RegisterClassEx(&wndClass))
     {
-        std::cout << "Could not register window class!\n";
         fflush(stdout);
         exit(1);
     }

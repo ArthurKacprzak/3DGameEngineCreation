@@ -35,7 +35,6 @@ void miniobj::loader::hadleLine(std::string line)
     }
     tokens = split(line, ' ');
     if (line[0] == 'o' && tokens.size() == 2) {
-        std::cout << "object: " << tokens[1] << std::endl;
         currentShape.name = std::string(tokens[1]);
     } else if (tokens[0] == "v" && tokens.size() == 4) {
         _attrib->vertices.emplace_back(std::stof(tokens[1]));
