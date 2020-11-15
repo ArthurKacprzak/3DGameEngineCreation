@@ -102,6 +102,7 @@ void Window::init(HINSTANCE hinstance)
     this->graphics.descriptorSets = std::make_unique<DescriptorSets>(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
                                               *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
 
+    this->model = std::make_unique<Model>();
     this->commandBuffers = std::make_unique<CommandBuffers>(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
                                               *this->graphics.graphicsPipeline, *this->graphics.vertexBuffer,
                                               *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
@@ -110,7 +111,6 @@ void Window::init(HINSTANCE hinstance)
 
     this->graphics.camera = std::make_unique<Camera>();
 
-    this->graphics.camera->type = Camera::CameraType::lookat;
     this->graphics.camera->setPosition(glm::vec3(0, 0, -1));
     this->graphics.camera->setRotation(glm::vec3(0, 0.0f, 90));
     this->graphics.camera->setPerspective(30.0f, this->graphics.imageViews->getSwapChainExtent().width / (float) this->graphics.imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
@@ -246,20 +246,14 @@ void Window::updateUniformBuffer(uint32_t currentImage)
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
     UniformBuffers::UniformBufferObject ubo{};
-/*    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-    ubo.view = glm::lookAt(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.proj = glm::perspective(glm::radians(30.0f), this->imageViews->getSwapChainExtent().width / (float) this->imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
-    ubo.proj[1][1] *= -1;*/
+
 
     ubo.proj = this->graphics.camera->matrices.perspective;
     ubo.view = this->graphics.camera->matrices.view;
-    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
+    std::cout << this->moveVector.x << "\n";
+    this->model->model = glm::translate(this->model->model, this->moveVector);
+    ubo.model = this->model->model;
 
-
-//    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
-//    ubo.lightPos.z = cos(glm::radians(timer * 360.0f)) * 1.5f;
-
-//    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
 
     ubo.cameraPos = glm::vec4(this->graphics.camera->position, -1.0f) * -1.0f;
 
@@ -405,18 +399,14 @@ HINSTANCE &Window::getWindowInstance()
     return this->graphics.windowInstance;
 }
 
-void Window::addKey(int value, std::function<void()> &f)
+void Window::addKeyPress(int value, std::function<void()> &f)
 {
-    this->keyVector.emplace_back(value, f);
+    this->keyVectorPress.emplace_back(value, f);
 }
 
-void Window::keyManagement()
+void Window::addKeyRelease(int value, std::function<void()> &f)
 {
-    for (auto &i : this->keyVector) {
-        if (GetKeyState(i.first) < 0) {
-            i.second();
-        }
-    }
+    this->keyVectorRelease.emplace_back(value, f);
 }
 
 void Window::handleMouseWheel(short wheelDelta)
@@ -436,45 +426,18 @@ void Window::handleKeyDown(uint32_t key)
     }
 
 //    std::cout << this->graphics.camera->type << " " << key << " " << (uint32_t)'z' << "\n";
-
-    if (this->graphics.camera->type == Camera::firstperson)
-    {
-        switch (key)
-        {
-            case 'z':
-                this->graphics.camera->keys.up = true;
-                break;
-            case 's':
-                this->graphics.camera->keys.down = true;
-                break;
-            case 'q':
-                this->graphics.camera->keys.left = true;
-                break;
-            case 'd':
-                this->graphics.camera->keys.right = true;
-                break;
+    for (auto &i : this->keyVectorPress) {
+        if (key == i.first) {
+            i.second();
         }
     }
 }
 
 void Window::handleKeyUp(uint32_t key)
 {
-    if (this->graphics.camera->type == Camera::firstperson)
-    {
-        switch (key)
-        {
-            case 'z':
-                this->graphics.camera->keys.up = false;
-                break;
-            case 's':
-                this->graphics.camera->keys.down = false;
-                break;
-            case 'q':
-                this->graphics.camera->keys.left = false;
-                break;
-            case 'd':
-                this->graphics.camera->keys.right = false;
-                break;
+    for (auto &i : this->keyVectorRelease) {
+        if (key == i.first) {
+            i.second();
         }
     }
 }
@@ -569,6 +532,16 @@ void Window::cleanup()
     }
     this->surface.release();
     this->instance.release();
+}
+
+void Window::setCameraType(Camera::CameraType type)
+{
+    this->graphics.camera->type = type;
+}
+
+void Window::move(glm::vec3 vector)
+{
+    this->moveVector = vector;
 }
 
 

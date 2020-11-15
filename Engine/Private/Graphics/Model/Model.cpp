@@ -8,8 +8,9 @@
 #include "../../Window/Window.hpp"
 #include <iostream>
 
-Model::Model(Window *window)
+Model::Model()
 {
+    this->model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
 }
 
 std::string Model::getTexturePath()

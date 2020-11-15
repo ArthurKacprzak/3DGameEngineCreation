@@ -15,6 +15,28 @@ void createRect(Application &application, float zPos, float size, std::vector<ui
     application.addObject(rect);
 }
 
+void setKeys(PublicModel *model, Application &application)
+{
+    std::function<void()> sPress = [model]() {
+        model->move({0.001, 0, 0});
+    };
+
+    std::function<void()> sRelease = [model]() {
+        model->move({0, 0, 0});
+    };
+
+    Key *keyP = new Key();
+    keyP->setValue('S');
+    keyP->setFunction(sPress);
+    Key *keyR = new Key();
+    keyR->setValue('S');
+    keyR->setFunction(sRelease);
+
+
+    application.addKeyPress(keyP);
+    application.addKeyRelease(keyR);
+}
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLine, int nCmdShow)
 {
     Application application;
@@ -33,17 +55,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR pCmdLin
     application.addModel(model);
     application.addModel(model2);
 
-
-    std::function<void()> s = []() {
-        std::cout << "s\n";
-    };
-
-    Key *key = new Key();
-    key->setValue('S');
-    key->setFunction(s);
+    setKeys(model, application);
 
 
-    application.addKey(key);
+    application.setCamera(Application::CameraType::firstperson);
     application.start(hInstance);
     return 0;
 }

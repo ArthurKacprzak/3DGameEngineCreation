@@ -19,11 +19,13 @@ public:
     void init(Window &window) override;
     void setTexture(Texture *texture_ptr);
     void setOffset(glm::vec3 pos);
+    void move(glm::vec3 vector);
 
 private:
     std::string objPath;
     glm::vec3 offset;
     Texture *_texture;
+    Window *window = nullptr;
 
 //    std::unique_ptr<Model> model;
 };

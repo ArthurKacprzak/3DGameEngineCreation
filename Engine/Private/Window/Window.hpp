@@ -45,6 +45,7 @@ class Window
 {
 public:
     static const int MAX_FRAMES_IN_FLIGHT = 2;
+
 public:
     Window();
     ~Window();
@@ -97,15 +98,19 @@ private:
     std::vector<Vertex> vertices;
 
 
-    std::vector<std::pair<int, std::function<void()>>> keyVector;
+    std::vector<std::pair<int, std::function<void()>>> keyVectorPress;
+    std::vector<std::pair<int, std::function<void()>>> keyVectorRelease;
 public:
+    void setCameraType(Camera::CameraType type);
     void addVertice(Vertex &data);
     std::vector<Vertex> &getVertices();
     void addIndex(uint32_t indice);
     std::vector<uint32_t> &getIndices();
 
-    void addKey(int value, std::function<void()> &f);
+    void addKeyPress(int value, std::function<void()> &f);
+    void addKeyRelease(int value, std::function<void()> &f);
 
+    void move(glm::vec3 vector);
 
     HWND &getHwnd();
 
@@ -117,10 +122,12 @@ public:
     void handleKeyUp(uint32_t key);
 
 private:
+    glm::vec3 moveVector = glm::vec3(0);
     std::unique_ptr<Framebuffers> framebuffers;
     std::unique_ptr<CommandPool> commandPool;
     std::unique_ptr<CommandBuffers> commandBuffers;
     std::unique_ptr<Semaphore> semaphore;
+    std::unique_ptr<Model> model;
     size_t currentFrame = 0;
     float frameTimer = 0;
 
@@ -139,7 +146,6 @@ private:
 private:
     void drawFrame();
     void updateUniformBuffer(uint32_t currentImage);
-    void keyManagement();
 
     void recreateSwapChain();
 
