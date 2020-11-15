@@ -5,7 +5,7 @@
 #ifndef INC_3DGAMEENGINECREATION_TEXTUREIMAGEVIEW_HPP
 #define INC_3DGAMEENGINECREATION_TEXTUREIMAGEVIEW_HPP
 
-#include "../TextureImage/TextureImage.hpp"
+#include "TextureImage.hpp"
 
 class TextureImageView
 {

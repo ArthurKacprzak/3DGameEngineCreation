@@ -7,8 +7,8 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include "../../Compute/Device/Device.hpp"
-#include "../ImageViews/ImageViews.hpp"
+#include "Device.hpp"
+#include "ImageViews.hpp"
 
 class Surface;
 class Window;

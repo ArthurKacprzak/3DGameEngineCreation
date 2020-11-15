@@ -7,17 +7,18 @@
 
 #include <string>
 #include <vector>
-#include "../Vertex/Vertex.hpp"
+#include "Vertex.hpp"
 
 class Window;
 
 class Model
 {
 public:
-    Model(Window *window);
+    Model();
 
 public:
     static std::string getTexturePath();
+    glm::mat4 model;
 
 private:
 

@@ -12,35 +12,36 @@
 
 #include <chrono>
 
-#include "../Compute/Surface/Surface.hpp"
-#include "../Compute/Device/Device.hpp"
-#include "../Compute/CommandPool/CommandPool.hpp"
-#include "../Compute/CommandBuffers/CommandBuffers.hpp"
-#include "../Compute/Semaphore/Semaphore.hpp"
-#include "../Compute/DebugMessenger/DebugMessenger.hpp"
+#include "Surface.hpp"
+#include "Device.hpp"
+#include "CommandPool.hpp"
+#include "CommandBuffers.hpp"
+#include "Semaphore.hpp"
+#include "DebugMessenger.hpp"
 
-#include "../Graphics/SwapChain/SwapChain.hpp"
-#include "../Graphics/ImageViews/ImageViews.hpp"
-#include "../Graphics/GraphicsPipeline/GraphicsPipeline.hpp"
-#include "../Graphics/DescriptorSetLayout/DescriptorSetLayout.hpp"
-#include "../Graphics/DescriptorSets/DescriptorSets.hpp"
-#include "../Graphics/Framebuffers/Framebuffers.hpp"
-#include "../Graphics/Vertex/Vertex.hpp"
-#include "../Graphics/VertexBuffer/VertexBuffer.hpp"
-#include "../Graphics/UniformBuffers/UniformBuffers.hpp"
-#include "../Graphics/DescriptorPool/DescriptorPool.hpp"
-#include "../Graphics/TextureImage/TextureImage.hpp"
-#include "../Graphics/TextureImageView/TextureImageView.hpp"
-#include "../Graphics/TextureSampler/TextureSampler.hpp"
-#include "../Graphics/DepthResources/DepthResources.hpp"
+#include "SwapChain.hpp"
+#include "ImageViews.hpp"
+#include "GraphicsPipeline.hpp"
+#include "DescriptorSetLayout.hpp"
+#include "DescriptorSets.hpp"
+#include "Framebuffers.hpp"
+#include "Vertex.hpp"
+#include "VertexBuffer.hpp"
+#include "UniformBuffers.hpp"
+#include "DescriptorPool.hpp"
+#include "TextureImage.hpp"
+#include "TextureImageView.hpp"
+#include "TextureSampler.hpp"
+#include "DepthResources.hpp"
 
-#include "../Graphics/Camera/Camera.hpp"
-#include "../Engine/Private/Physics/Maths/Math.hpp"
+#include "Camera.hpp"
+#include "Math.hpp"
 
 class Window
 {
 public:
     static const int MAX_FRAMES_IN_FLIGHT = 2;
+
 public:
     Window();
     ~Window();
@@ -67,41 +68,45 @@ private:
         HINSTANCE windowInstance;
         HWND hwnd;
 
-        Camera *camera;
+        std::unique_ptr<Camera> camera;
 
-        SwapChain *swapChain;
-        ImageViews *imageViews;
-        DescriptorSetLayout *descriptorSetLayout;
-        GraphicsPipeline *graphicsPipeline;
-        VertexBuffer *vertexBuffer;
-        UniformBuffers *uniformBuffers;
-        DescriptorPool *descriptorPool;
-        DescriptorSets *descriptorSets;
-        TextureImage *textureImage;
-        TextureImageView *textureImageView;
-        TextureSampler *textureSampler;
-        DepthResources *depthResources;
+        std::unique_ptr<SwapChain> swapChain;
+        std::unique_ptr<ImageViews> imageViews;
+        std::unique_ptr<DescriptorSetLayout> descriptorSetLayout;
+        std::unique_ptr<GraphicsPipeline> graphicsPipeline;
+        std::unique_ptr<VertexBuffer> vertexBuffer;
+        std::unique_ptr<UniformBuffers> uniformBuffers;
+        std::unique_ptr<DescriptorPool> descriptorPool;
+        std::unique_ptr<DescriptorSets> descriptorSets;
+        std::unique_ptr<TextureImage> textureImage;
+        std::unique_ptr<TextureImageView> textureImageView;
+        std::unique_ptr<TextureSampler> textureSampler;
+        std::unique_ptr<DepthResources> depthResources;
     } graphics;
 
 
 
-    Instance *instance;
-    DebugMessenger *debugMessenger;
-    Surface *surface;
-    Device *device;
+    std::unique_ptr<Instance> instance;
+    std::unique_ptr<DebugMessenger> debugMessenger;
+    std::unique_ptr<Surface> surface;
+    std::unique_ptr<Device> device;
 
     std::vector<Vertex> vertices;
 
 
-    std::vector<std::pair<int, std::function<void()>>> keyVector;
+    std::vector<std::pair<int, std::function<void()>>> keyVectorPress;
+    std::vector<std::pair<int, std::function<void()>>> keyVectorRelease;
 public:
+    void setCameraType(Camera::CameraType type);
     void addVertice(Vertex &data);
     std::vector<Vertex> &getVertices();
     void addIndex(uint32_t indice);
     std::vector<uint32_t> &getIndices();
 
-    void addKey(int value, std::function<void()> &f);
+    void addKeyPress(int value, std::function<void()> &f);
+    void addKeyRelease(int value, std::function<void()> &f);
 
+    void move(glm::vec3 vector);
 
     HWND &getHwnd();
 
@@ -113,10 +118,12 @@ public:
     void handleKeyUp(uint32_t key);
 
 private:
-    Framebuffers *framebuffers;
-    CommandPool *commandPool;
-    CommandBuffers *commandBuffers;
-    Semaphore *semaphore;
+    glm::vec3 moveVector = glm::vec3(0);
+    std::unique_ptr<Framebuffers> framebuffers;
+    std::unique_ptr<CommandPool> commandPool;
+    std::unique_ptr<CommandBuffers> commandBuffers;
+    std::unique_ptr<Semaphore> semaphore;
+    std::unique_ptr<Model> model;
     size_t currentFrame = 0;
     float frameTimer = 0;
 
@@ -135,7 +142,6 @@ private:
 private:
     void drawFrame();
     void updateUniformBuffer(uint32_t currentImage);
-    void keyManagement();
 
     void recreateSwapChain();
 

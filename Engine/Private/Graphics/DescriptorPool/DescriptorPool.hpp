@@ -5,8 +5,8 @@
 #ifndef INC_3DGAMEENGINECREATION_DESCRIPTORPOOL_HPP
 #define INC_3DGAMEENGINECREATION_DESCRIPTORPOOL_HPP
 
-#include "../../Compute/Device/Device.hpp"
-#include "../ImageViews/ImageViews.hpp"
+#include "Device.hpp"
+#include "ImageViews.hpp"
 
 class DescriptorPool
 {

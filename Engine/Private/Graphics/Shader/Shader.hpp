@@ -7,7 +7,7 @@
 
 #include <vulkan/vulkan.hpp>
 #include <vector>
-#include "../../Compute/Device/Device.hpp"
+#include "Device.hpp"
 
 class Shader
 {

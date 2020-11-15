@@ -9,10 +9,10 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "../../Compute/Device/Device.hpp"
-#include "../ImageViews/ImageViews.hpp"
-#include "../TextureImage/TextureImage.hpp"
-#include "../TextureImageView/TextureImageView.hpp"
+#include "Device.hpp"
+#include "ImageViews.hpp"
+#include "TextureImage.hpp"
+#include "TextureImageView.hpp"
 
 class DepthResources
 {

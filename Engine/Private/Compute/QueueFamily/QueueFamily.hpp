@@ -8,7 +8,7 @@
 #include <optional>
 #include <vulkan/vulkan.h>
 #include <vector>
-#include "../Surface/Surface.hpp"
+#include "Surface.hpp"
 
 class QueueFamily
 {

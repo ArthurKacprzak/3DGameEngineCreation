@@ -14,6 +14,7 @@ PublicModel::PublicModel(std::string objPath)
 
 void PublicModel::init(Window &window)
 {
+    this->window = &window;
     miniobj::loader loader;
     miniobj::attrib_t attribM;
     std::vector<miniobj::shape_t> shapesM;
@@ -56,4 +57,10 @@ void PublicModel::setOffset(struct vec3 pos)
 void PublicModel::setTexture(Texture *texture_ptr)
 {
     _texture = texture_ptr;
+}
+
+void PublicModel::move(glm::vec3 vector)
+{
+    this->window->move(vector);
+    std::cout << "move\n";
 }

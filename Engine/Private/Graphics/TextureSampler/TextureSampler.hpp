@@ -5,7 +5,7 @@
 #ifndef INC_3DGAMEENGINECREATION_TEXTURESAMPLER_HPP
 #define INC_3DGAMEENGINECREATION_TEXTURESAMPLER_HPP
 
-#include "../../Compute/Device/Device.hpp"
+#include "Device.hpp"
 
 class TextureSampler
 {

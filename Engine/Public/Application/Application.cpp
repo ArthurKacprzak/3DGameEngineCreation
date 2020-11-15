@@ -13,6 +13,11 @@ void Application::start(HINSTANCE hInstance)
     this->initObject();
     this->initKey();
     this->window.init(hInstance);
+    if (this->cameraType == Application::CameraType::lookat) {
+        this->window.setCameraType(Camera::CameraType::lookat);
+    } else {
+        this->window.setCameraType(Camera::CameraType::firstperson);
+    }
     this->window.start();
 }
 
@@ -26,9 +31,14 @@ void Application::addModel(PublicModel *model)
     this->modelVector.push_back(std::unique_ptr<PublicModel>(model));
 }
 
-void Application::addKey(Key *key)
+void Application::addKeyPress(Key *key)
 {
-    this->keyVector.push_back(std::unique_ptr<Key>(key));
+    this->keyVectorPress.push_back(std::unique_ptr<Key>(key));
+}
+
+void Application::addKeyRelease(Key *key)
+{
+    this->keyVectorRelease.push_back(std::unique_ptr<Key>(key));
 }
 
 void Application::initObject()
@@ -43,13 +53,21 @@ void Application::initObject()
 
 void Application::initKey()
 {
-    for (auto &i : this->keyVector) {
-        this->window.addKey(i->value, i->function);
+    for (auto &i : this->keyVectorPress) {
+        this->window.addKeyPress(i->value, i->function);
+    }
+    for (auto &i : this->keyVectorRelease) {
+        this->window.addKeyRelease(i->value, i->function);
     }
 }
 
 Application::~Application()
 {
+}
+
+void Application::setCamera(Application::CameraType type)
+{
+    this->cameraType = type;
 }
 
 

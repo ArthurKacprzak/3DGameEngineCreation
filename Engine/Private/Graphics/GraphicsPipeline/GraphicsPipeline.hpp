@@ -5,9 +5,9 @@
 #ifndef INC_3DGAMEENGINECREATION_GRAPHICSPIPELINE_HPP
 #define INC_3DGAMEENGINECREATION_GRAPHICSPIPELINE_HPP
 
-#include "../../Compute/Device/Device.hpp"
-#include "../ImageViews/ImageViews.hpp"
-#include "../DescriptorSetLayout/DescriptorSetLayout.hpp"
+#include "Device.hpp"
+#include "ImageViews.hpp"
+#include "DescriptorSetLayout.hpp"
 
 class GraphicsPipeline
 {

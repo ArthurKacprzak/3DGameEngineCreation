@@ -20,10 +20,15 @@ public:
     ~Application();
 
 public:
+    enum CameraType { lookat, firstperson };
+
+public:
     void start(HINSTANCE hInstance);
     void addObject(Object *object);
-    void addKey(Key *key);
+    void addKeyPress(Key *key);
+    void addKeyRelease(Key *key);
     void addModel(PublicModel *model);
+    void setCamera(CameraType type);
 
 private:
     void initObject();
@@ -33,7 +38,9 @@ private:
     Window window;
     std::vector<std::unique_ptr<Object>> objectVector;
     std::vector<std::unique_ptr<PublicModel>> modelVector;
-    std::vector<std::unique_ptr<Key>> keyVector;
+    std::vector<std::unique_ptr<Key>> keyVectorPress;
+    std::vector<std::unique_ptr<Key>> keyVectorRelease;
+    Application::CameraType cameraType;
 };
 
 

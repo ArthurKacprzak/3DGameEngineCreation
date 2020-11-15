@@ -7,7 +7,7 @@
 
 #include <vulkan/vulkan.hpp>
 
-#include "../Instance/Instance.hpp"
+#include "Instance.hpp"
 
 class DebugMessenger
 {

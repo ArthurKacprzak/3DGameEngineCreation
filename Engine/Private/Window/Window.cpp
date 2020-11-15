@@ -5,7 +5,7 @@
 #include "Window.hpp"
 #include <exception>
 
-#include "../Graphics/Model/Model.hpp"
+#include "Model.hpp"
 
 Window *w;
 
@@ -75,42 +75,42 @@ void Window::init(HINSTANCE hinstance)
     w = this;
     this->createWindow(hinstance, WndProc);
 
-    this->instance = new Instance();
-    this->debugMessenger = new DebugMessenger(*this->instance);
-    this->surface = new Surface(*this, *this->instance);
-    this->device = new Device(*this->instance, *this->surface);
-    this->graphics.imageViews = new ImageViews();
-    this->graphics.swapChain = new SwapChain(*this, *this->device, *this->surface, *this->graphics.imageViews);
+    this->instance = std::make_unique<Instance>();
+    this->debugMessenger = std::make_unique<DebugMessenger>(*this->instance);
+    this->surface = std::make_unique<Surface>(*this, *this->instance);
+    this->device = std::make_unique<Device>(*this->instance, *this->surface);
+    this->graphics.imageViews = std::make_unique<ImageViews>();
+    this->graphics.swapChain = std::make_unique<SwapChain>(*this, *this->device, *this->surface, *this->graphics.imageViews);
     this->graphics.imageViews->init(*this->device);
 
-    this->graphics.descriptorSetLayout = new DescriptorSetLayout(*this->device); //
-    this->graphics.graphicsPipeline = new GraphicsPipeline(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout);
+    this->graphics.descriptorSetLayout = std::make_unique<DescriptorSetLayout>(*this->device); //
+    this->graphics.graphicsPipeline = std::make_unique<GraphicsPipeline>(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout);
 
 
-    this->commandPool = new CommandPool(*this->device, *this->surface);
-    this->graphics.depthResources = new DepthResources(*this->device, *this->graphics.imageViews);
-    this->framebuffers = new Framebuffers(*this->graphics.imageViews, *this->device, *this->graphics.graphicsPipeline, *this->graphics.depthResources);
-    this->graphics.textureImage = new TextureImage(*this->device, *this->commandPool);
-    this->graphics.textureImageView = new TextureImageView(*this->device, *this->graphics.textureImage);
-    this->graphics.textureSampler = new TextureSampler(*this->device);
+    this->commandPool = std::make_unique<CommandPool>(*this->device, *this->surface);
+    this->graphics.depthResources = std::make_unique<DepthResources>(*this->device, *this->graphics.imageViews);
+    this->framebuffers = std::make_unique<Framebuffers>(*this->graphics.imageViews, *this->device, *this->graphics.graphicsPipeline, *this->graphics.depthResources);
+    this->graphics.textureImage = std::make_unique<TextureImage>(*this->device, *this->commandPool);
+    this->graphics.textureImageView = std::make_unique<TextureImageView>(*this->device, *this->graphics.textureImage);
+    this->graphics.textureSampler = std::make_unique<TextureSampler>(*this->device);
 
-    this->graphics.vertexBuffer = new VertexBuffer(*this->device, *this->commandPool, this->vertices, this->indices);
+    this->graphics.vertexBuffer = std::make_unique<VertexBuffer>(*this->device, *this->commandPool, this->vertices, this->indices);
 
-    this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
+    this->graphics.uniformBuffers = std::make_unique<UniformBuffers>(*this->device, *this->graphics.imageViews);
 
-    this->graphics.descriptorPool = new DescriptorPool(*this->device, *this->graphics.imageViews);
-    this->graphics.descriptorSets = new DescriptorSets(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
+    this->graphics.descriptorPool = std::make_unique<DescriptorPool>(*this->device, *this->graphics.imageViews);
+    this->graphics.descriptorSets = std::make_unique<DescriptorSets>(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
                                               *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
 
-    this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
+    this->model = std::make_unique<Model>();
+    this->commandBuffers = std::make_unique<CommandBuffers>(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
                                               *this->graphics.graphicsPipeline, *this->graphics.vertexBuffer,
                                               *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
 
-    this->semaphore = new Semaphore(*this->graphics.imageViews, *this->device);
+    this->semaphore = std::make_unique<Semaphore>(*this->graphics.imageViews, *this->device);
 
-    this->graphics.camera = new Camera();
+    this->graphics.camera = std::make_unique<Camera>();
 
-    this->graphics.camera->type = Camera::CameraType::lookat;
     this->graphics.camera->setPosition(Math::vec3(0, 0, -1));
     this->graphics.camera->setRotation(Math::vec3(0, 0.0f, 90));
     this->graphics.camera->setPerspective(30.0f, this->graphics.imageViews->getSwapChainExtent().width / (float) this->graphics.imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
@@ -128,8 +128,6 @@ void Window::start()
                 quit = true;
             }
         }
-        this->keyManagement();
-
         this->drawFrame();
     }
 
@@ -246,20 +244,15 @@ void Window::updateUniformBuffer(uint32_t currentImage)
     float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
 
     UniformBuffers::UniformBufferObject ubo{};
-/*    ubo.model = glm::scale(glm::mat4(1.0f), glm::vec3(0.2f));
-    ubo.view = glm::lookAt(glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    ubo.proj = glm::perspective(glm::radians(30.0f), this->imageViews->getSwapChainExtent().width / (float) this->imageViews->getSwapChainExtent().height, 0.1f, 10.0f);
-    ubo.proj[1][1] *= -1;*/
+
 
     ubo.proj = this->graphics.camera->matrices.perspective;
     ubo.view = this->graphics.camera->matrices.view;
     ubo.model = Math::scaleMat(Math::mat4(1.0f), Math::vec3(0.2f));
 
+    this->model->model = glm::translate(this->model->model, this->moveVector);
+    ubo.model = this->model->model;
 
-//    ubo.lightPos.x = sin(glm::radians(timer * 360.0f)) * 1.5f;
-//    ubo.lightPos.z = cos(glm::radians(timer * 360.0f)) * 1.5f;
-
-//    std::cout << this->graphics.camera->position.x <<" < x " <<  this->graphics.camera->position.y << " < y " << this->graphics.camera->position.z <<"\n";
 
     ubo.cameraPos = Math::multiplyMat(Math::vec4(this->graphics.camera->position.pos[0], this->graphics.camera->position.pos[1], this->graphics.camera->position.pos[2], -1.0f), -1.0f);
 
@@ -405,18 +398,14 @@ HINSTANCE &Window::getWindowInstance()
     return this->graphics.windowInstance;
 }
 
-void Window::addKey(int value, std::function<void()> &f)
+void Window::addKeyPress(int value, std::function<void()> &f)
 {
-    this->keyVector.emplace_back(value, f);
+    this->keyVectorPress.emplace_back(value, f);
 }
 
-void Window::keyManagement()
+void Window::addKeyRelease(int value, std::function<void()> &f)
 {
-    for (auto &i : this->keyVector) {
-        if (GetKeyState(i.first) < 0) {
-            i.second();
-        }
-    }
+    this->keyVectorRelease.emplace_back(value, f);
 }
 
 void Window::handleMouseWheel(short wheelDelta)
@@ -436,54 +425,24 @@ void Window::handleKeyDown(uint32_t key)
     }
 
 //    std::cout << this->graphics.camera->type << " " << key << " " << (uint32_t)'z' << "\n";
-
-    if (this->graphics.camera->type == Camera::firstperson)
-    {
-        switch (key)
-        {
-            case 'z':
-                this->graphics.camera->keys.up = true;
-                break;
-            case 's':
-                this->graphics.camera->keys.down = true;
-                break;
-            case 'q':
-                this->graphics.camera->keys.left = true;
-                break;
-            case 'd':
-                this->graphics.camera->keys.right = true;
-                break;
+    for (auto &i : this->keyVectorPress) {
+        if (key == i.first) {
+            i.second();
         }
     }
 }
 
 void Window::handleKeyUp(uint32_t key)
 {
-    if (this->graphics.camera->type == Camera::firstperson)
-    {
-        switch (key)
-        {
-            case 'z':
-                this->graphics.camera->keys.up = false;
-                break;
-            case 's':
-                this->graphics.camera->keys.down = false;
-                break;
-            case 'q':
-                this->graphics.camera->keys.left = false;
-                break;
-            case 'd':
-                this->graphics.camera->keys.right = false;
-                break;
+    for (auto &i : this->keyVectorRelease) {
+        if (key == i.first) {
+            i.second();
         }
     }
 }
 
 Window::~Window()
 {
-    this->surface->release(*this->instance);
-    delete this->instance;
-    delete this->device;
 }
 
 void Window::recreateSwapChain()
@@ -496,25 +455,25 @@ void Window::recreateSwapChain()
 
 
 
-    this->graphics.imageViews = new ImageViews();
-    this->graphics.swapChain = new SwapChain(*this, *this->device, *this->surface, *this->graphics.imageViews);
+    this->graphics.imageViews = std::make_unique<ImageViews>();
+    this->graphics.swapChain = std::make_unique<SwapChain>(*this, *this->device, *this->surface, *this->graphics.imageViews);
     this->graphics.imageViews->init(*this->device);
 
-    this->graphics.graphicsPipeline = new GraphicsPipeline(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout);
+    this->graphics.graphicsPipeline = std::make_unique<GraphicsPipeline>(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout);
 
-    this->graphics.depthResources = new DepthResources(*this->device, *this->graphics.imageViews);
-    this->framebuffers = new Framebuffers(*this->graphics.imageViews, *this->device, *this->graphics.graphicsPipeline, *this->graphics.depthResources);
-
-
+    this->graphics.depthResources = std::make_unique<DepthResources>(*this->device, *this->graphics.imageViews);
+    this->framebuffers = std::make_unique<Framebuffers>(*this->graphics.imageViews, *this->device, *this->graphics.graphicsPipeline, *this->graphics.depthResources);
 
 
 
 
-    this->graphics.uniformBuffers = new UniformBuffers(*this->device, *this->graphics.imageViews);
-    this->graphics.descriptorPool = new DescriptorPool(*this->device, *this->graphics.imageViews);
-    this->graphics.descriptorSets = new DescriptorSets(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
+
+
+    this->graphics.uniformBuffers = std::make_unique<UniformBuffers>(*this->device, *this->graphics.imageViews);
+    this->graphics.descriptorPool = std::make_unique<DescriptorPool>(*this->device, *this->graphics.imageViews);
+    this->graphics.descriptorSets = std::make_unique<DescriptorSets>(*this->device, *this->graphics.imageViews, *this->graphics.descriptorSetLayout,
                                                        *this->graphics.uniformBuffers, *this->graphics.descriptorPool, *this->graphics.textureImageView, *this->graphics.textureSampler);
-    this->commandBuffers = new CommandBuffers(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
+    this->commandBuffers = std::make_unique<CommandBuffers>(this, *this->graphics.imageViews, *this->device, *this->commandPool, *this->framebuffers,
                                               *this->graphics.graphicsPipeline, *this->graphics.vertexBuffer,
                                               *this->graphics.descriptorSets, *this->graphics.descriptorSetLayout);
 }
@@ -530,15 +489,15 @@ void Window::cleanupSwapChain()
     this->graphics.uniformBuffers->release(*this->device, *this->graphics.imageViews);
     this->graphics.descriptorPool->release(*this->device);
 
-    delete this->graphics.depthResources;
-    delete this->framebuffers;
-    delete this->commandBuffers;
-    delete this->graphics.graphicsPipeline;
-    delete this->graphics.imageViews;
-    delete this->graphics.swapChain;
-    delete this->graphics.uniformBuffers;
-    delete this->graphics.descriptorPool;
-    delete this->graphics.descriptorSets;
+    this->graphics.depthResources.release();
+    this->framebuffers.release();
+    this->commandBuffers.release();
+    this->graphics.graphicsPipeline.release();
+    this->graphics.imageViews.release();
+    this->graphics.swapChain.release();
+    this->graphics.uniformBuffers.release();
+    this->graphics.descriptorPool.release();
+    this->graphics.descriptorSets.release();
 }
 
 void Window::cleanup()
@@ -559,19 +518,29 @@ void Window::cleanup()
     this->surface->release(*this->instance);
     this->instance->release();
 
-    delete this->graphics.textureSampler;
-    delete this->graphics.textureImageView;
-    delete this->graphics.textureImage;
-    delete this->graphics.descriptorSetLayout;
-    delete this->graphics.vertexBuffer;
-    delete this->semaphore;
-    delete this->commandPool;
-    delete this->device;
+    this->graphics.textureSampler.release();
+    this->graphics.textureImageView.release();
+    this->graphics.textureImage.release();
+    this->graphics.descriptorSetLayout.release();
+    this->graphics.vertexBuffer.release();
+    this->semaphore.release();
+    this->commandPool.release();
+    this->device.release();
     if (DebugMessenger::ENABLEVALIDATIONLAYERS) {
-        delete this->debugMessenger;
+        this->debugMessenger.release();
     }
-    delete this->surface;
-    delete this->instance;
+    this->surface.release();
+    this->instance.release();
+}
+
+void Window::setCameraType(Camera::CameraType type)
+{
+    this->graphics.camera->type = type;
+}
+
+void Window::move(glm::vec3 vector)
+{
+    this->moveVector = vector;
 }
 
 

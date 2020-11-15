@@ -20,11 +20,13 @@ public:
     void init(Window &window) override;
     void setTexture(Texture *texture_ptr);
     void setOffset(struct vec3 pos);
+    void move(struct vec3 vector);
 
 private:
     std::string objPath;
     struct vec3 offset;
     Texture *_texture;
+    Window *window = nullptr;
 
 //    std::unique_ptr<Model> model;
 };
