@@ -20,6 +20,26 @@ ARtsPlayerController::ARtsPlayerController() : Super()
 
 }
 
+void ARtsPlayerController::Forward(float value) 
+{
+	ARtsSpectatorPawn* spectatorPawn = Cast<ARtsSpectatorPawn>(GetPawn());
+
+	if (spectatorPawn)
+	{
+		spectatorPawn->CameraComponent->MoveForward(value*20);
+	}
+}
+
+void ARtsPlayerController::Right(float value)
+{
+	ARtsSpectatorPawn* spectatorPawn = Cast<ARtsSpectatorPawn>(GetPawn());
+
+	if (spectatorPawn)
+	{
+		spectatorPawn->CameraComponent->MoveRight(value * 20);
+	}
+}
+
 void ARtsPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -30,13 +50,15 @@ void ARtsPlayerController::SetupInputComponent()
 	InputComponent->BindAction("MouseLeftClick", EInputEvent::IE_Pressed, this, &ARtsPlayerController::LeftClick);
 	InputComponent->BindAction("MouseLeftClick", EInputEvent::IE_Released, this, &ARtsPlayerController::LeftClickReleased);
 	InputComponent->BindAction("MouseRightClick", EInputEvent::IE_Pressed, this, &ARtsPlayerController::RightClick);
+	InputComponent->BindAxis("Forward", this, &ARtsPlayerController::Forward);
+	InputComponent->BindAxis("Right", this, &ARtsPlayerController::Right);
 }
 
 void ARtsPlayerController::ProcessPlayerInput(const float deltaTime, const bool bGamePaused)
 {
 	Super::ProcessPlayerInput(deltaTime, bGamePaused);
 
-	{
+	/*{
 		const ULocalPlayer* localPlayer = Cast<ULocalPlayer>(Player);
 		ARtsSpectatorPawn *spectatorPawn = Cast<ARtsSpectatorPawn>(GetPawn());
 
@@ -47,7 +69,7 @@ void ARtsPlayerController::ProcessPlayerInput(const float deltaTime, const bool 
 				spectatorPawn->CameraComponent->UpdateCameraMovement(this);
 			}
 		}
-	}
+	}*/
 }
 
 void ARtsPlayerController::ZoomIn()

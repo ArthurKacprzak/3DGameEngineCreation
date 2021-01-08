@@ -23,7 +23,7 @@ public:
 
 	void OnZoomIn();
 	void OnZoomOut();
-	void UpdateCameraMovement(const APlayerController* playerController) const;
+	//void UpdateCameraMovement(const APlayerController* playerController) const;
 	void MoveForward(float value) const;
 	void MoveRight(float value) const;
 	void SetZoomLevel(float level);

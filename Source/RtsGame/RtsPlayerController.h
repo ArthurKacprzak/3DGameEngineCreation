@@ -34,6 +34,8 @@ protected:
 
 	void ZoomIn();
 	void ZoomOut();
+	void Forward(float value);
+	void Right(float value);
 
 
 public:

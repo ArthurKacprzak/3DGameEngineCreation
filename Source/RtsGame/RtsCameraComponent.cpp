@@ -47,62 +47,62 @@ void URtsCameraComponent::OnZoomOut()
 	SetZoomLevel(zoomAlpha_ + 0.1f);
 }
 
-void URtsCameraComponent::UpdateCameraMovement(const APlayerController* playerController) const
-{
-	ULocalPlayer* localPlayer = Cast<ULocalPlayer>(playerController->Player);
-
-	if (localPlayer && localPlayer->ViewportClient && localPlayer->ViewportClient->Viewport) {
-		FVector2D mousePosition;
-		if (!localPlayer->ViewportClient->GetMousePosition(mousePosition)) {
-			return;
-		}
-
-		FViewport* viewport = localPlayer->ViewportClient->Viewport;
-		const float scrollSpeed = 100.f;
-		FIntPoint viewportSize = viewport->GetSizeXY();
-
-		uint32 viewLeft = FMath::TruncToInt(localPlayer->Origin.X * viewportSize.X);
-		uint32 viewRight = viewLeft + FMath::TruncToInt(localPlayer->Size.X * viewportSize.X);
-		uint32 viewTop = FMath::TruncToInt(localPlayer->Origin.Y * viewportSize.Y);
-		uint32 viewBottom = viewTop + FMath::TruncToInt(localPlayer->Size.Y * viewportSize.Y);
-
-		const float maxSpeed = cameraScrollSpeed_ * FMath::Clamp(zoomAlpha_, minZoomLevel_, maxZoomLevel_);
-
-		const uint32 mouseX = mousePosition.X;
-		const uint32 mouseY = mousePosition.Y;
-		float spectatorCameraSpeed = maxSpeed;
-		ARtsSpectatorPawn *spectatorPawn = nullptr;
-
-		if (true) //!bNoScrollZone_
-		{
-			if (mouseX >= viewLeft && mouseX <= (viewLeft + cameraActiveBorder_))
-			{
-				const float delta = 1.0f - float(mouseX - viewLeft) / cameraActiveBorder_;
-				spectatorCameraSpeed = delta * maxSpeed;
-				MoveRight(-scrollSpeed * delta);
-			}
-			else if (mouseX >= (viewRight - cameraActiveBorder_) && mouseX <= viewRight)
-			{
-				const float delta = float(mouseX - viewRight + cameraActiveBorder_) / cameraActiveBorder_;
-				spectatorCameraSpeed = delta * maxSpeed;
-				MoveRight(scrollSpeed * delta);
-			}
-
-			if (mouseY >= viewTop && mouseY <= (viewTop + cameraActiveBorder_))
-			{
-				const float delta = 1.0f - float(mouseY - viewTop) / cameraActiveBorder_;
-				spectatorCameraSpeed = delta * maxSpeed;
-				MoveForward(scrollSpeed * delta);
-			}
-			else if (mouseY >= (viewBottom - cameraActiveBorder_) && mouseY <= viewBottom)
-			{
-				const float delta = float(mouseY - (viewBottom - cameraActiveBorder_)) / cameraActiveBorder_;
-				spectatorCameraSpeed = delta * maxSpeed;
-				MoveForward(-scrollSpeed * delta);
-			}
-		}
-	}
-}
+//void URtsCameraComponent::UpdateCameraMovement(const APlayerController* playerController) const
+//{
+//	ULocalPlayer* localPlayer = Cast<ULocalPlayer>(playerController->Player);
+//
+//	if (localPlayer && localPlayer->ViewportClient && localPlayer->ViewportClient->Viewport) {
+//		FVector2D mousePosition;
+//		if (!localPlayer->ViewportClient->GetMousePosition(mousePosition)) {
+//			return;
+//		}
+//
+//		FViewport* viewport = localPlayer->ViewportClient->Viewport;
+//		const float scrollSpeed = 100.f;
+//		FIntPoint viewportSize = viewport->GetSizeXY();
+//
+//		uint32 viewLeft = FMath::TruncToInt(localPlayer->Origin.X * viewportSize.X);
+//		uint32 viewRight = viewLeft + FMath::TruncToInt(localPlayer->Size.X * viewportSize.X);
+//		uint32 viewTop = FMath::TruncToInt(localPlayer->Origin.Y * viewportSize.Y);
+//		uint32 viewBottom = viewTop + FMath::TruncToInt(localPlayer->Size.Y * viewportSize.Y);
+//
+//		const float maxSpeed = cameraScrollSpeed_ * FMath::Clamp(zoomAlpha_, minZoomLevel_, maxZoomLevel_);
+//
+//		const uint32 mouseX = mousePosition.X;
+//		const uint32 mouseY = mousePosition.Y;
+//		float spectatorCameraSpeed = maxSpeed;
+//		ARtsSpectatorPawn *spectatorPawn = nullptr;
+//
+//		if (true) //!bNoScrollZone_
+//		{
+//			if (mouseX >= viewLeft && mouseX <= (viewLeft + cameraActiveBorder_))
+//			{
+//				const float delta = 1.0f - float(mouseX - viewLeft) / cameraActiveBorder_;
+//				spectatorCameraSpeed = delta * maxSpeed;
+//				MoveRight(-scrollSpeed * delta);
+//			}
+//			else if (mouseX >= (viewRight - cameraActiveBorder_) && mouseX <= viewRight)
+//			{
+//				const float delta = float(mouseX - viewRight + cameraActiveBorder_) / cameraActiveBorder_;
+//				spectatorCameraSpeed = delta * maxSpeed;
+//				MoveRight(scrollSpeed * delta);
+//			}
+//
+//			if (mouseY >= viewTop && mouseY <= (viewTop + cameraActiveBorder_))
+//			{
+//				const float delta = 1.0f - float(mouseY - viewTop) / cameraActiveBorder_;
+//				spectatorCameraSpeed = delta * maxSpeed;
+//				MoveForward(scrollSpeed * delta);
+//			}
+//			else if (mouseY >= (viewBottom - cameraActiveBorder_) && mouseY <= viewBottom)
+//			{
+//				const float delta = float(mouseY - (viewBottom - cameraActiveBorder_)) / cameraActiveBorder_;
+//				spectatorCameraSpeed = delta * maxSpeed;
+//				MoveForward(-scrollSpeed * delta);
+//			}
+//		}
+//	}
+//}
 
 void URtsCameraComponent::MoveForward(const float value) const
 {

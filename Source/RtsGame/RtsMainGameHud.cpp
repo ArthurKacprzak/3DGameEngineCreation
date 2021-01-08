@@ -272,6 +272,9 @@ void AMainGameHud::DrawBatimentHud(ESlateVisibility slateVisibility)
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentThree")->SetVisibility(slateVisibility);
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentFour")->SetVisibility(slateVisibility);
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentFive")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentNext")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentBack")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentPadding")->SetVisibility(slateVisibility);
 
 }
 
