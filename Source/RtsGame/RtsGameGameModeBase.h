@@ -20,7 +20,6 @@ class RTSGAME_API ARtsGameGameModeBase : public AGameMode
 	ARtsGameGameModeBase()
 	{
 //		this->DefaultPawnClass = AMain::StaticClass();
-		this->PlayerControllerClass = ARtsPlayerController::StaticClass();
 		this->HUDClass = AMainGameHud::StaticClass();
 		this->DefaultPawnClass = ARtsSpectatorPawn::StaticClass();
 	}
