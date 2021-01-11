@@ -60,8 +60,10 @@ public:
 	bool Build(float Speed);
 
 	bool IsCamp();
+	bool CanUpgrade();
 
 	void SetBatimentType(BatimentType BatimentToBuildType);
+	void Upgrade();
 
 	BatimentType GetType();
 
@@ -85,7 +87,11 @@ private:
 		ConstructorHelpers::FObjectFinder<UStaticMesh>* StateOne;
 		ConstructorHelpers::FObjectFinder<UStaticMesh>* StateTwo;
 		ConstructorHelpers::FObjectFinder<UStaticMesh>* StateThree;
+		ConstructorHelpers::FObjectFinder<UStaticMesh>* UpgradeOne;
+		ConstructorHelpers::FObjectFinder<UStaticMesh>* UpgradeTwo;
 	};
+
+	int UpgradeLevel = 0;
 
 	TSubclassOf<class AActor> CharacterBlueprint;
 
@@ -95,7 +101,7 @@ private:
 	BatimentType Type;
 	int TypeIndex = 0;
 
-	void CreateBatiment(const TCHAR* StateOne, const TCHAR* StateTwo, const TCHAR* StateThree);
+	void CreateBatiment(const TCHAR* StateOne, const TCHAR* StateTwo, const TCHAR* StateThree, const TCHAR* UpgradeOne = nullptr, const TCHAR* UpgradeTwo = nullptr);
 
 	void CreateImageAssets(const TCHAR* Path);
 

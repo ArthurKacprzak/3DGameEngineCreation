@@ -24,7 +24,9 @@ ARtsBuildingBatiment::ARtsBuildingBatiment() : Super()
 	this->CreateBatiment(
 		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/Construction/SM_TownHall_0.SM_TownHall_0'"),
 		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/Construction/SM_TownHall_1.SM_TownHall_1'"),
-		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_TownHall.SM_TownHall'"));
+		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_TownHall.SM_TownHall'"),
+		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_Keep.SM_Keep'"),
+		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_Castle.SM_Castle'"));
 
 	this->CreateBatiment(
 		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/Construction/SM_Barracks_0.SM_Barracks_0'"),
@@ -45,7 +47,9 @@ ARtsBuildingBatiment::ARtsBuildingBatiment() : Super()
 		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/Construction/SM_Tower_A_0.SM_Tower_A_0'"),
 
 		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/Construction/SM_Tower_A_1.SM_Tower_A_1'"),
-		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_Tower_A.SM_Tower_A'"));
+		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_Tower_A.SM_Tower_A'"),
+		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_Tower_B.SM_Tower_B'"),
+		TEXT("StaticMesh'/Game/Toony_Tiny_RTS_Set/Meshes/Buildings/SM_Tower_C.SM_Tower_C'"));
 	
 
 	
@@ -71,6 +75,19 @@ ARtsBuildingBatiment::ARtsBuildingBatiment() : Super()
 
 }
 
+
+
+void ARtsBuildingBatiment::Upgrade()
+{
+	if (UpgradeLevel == 0) {
+		this->Mesh->SetStaticMesh(this->BatimentsMesh[this->TypeIndex]->UpgradeOne->Object);
+	}
+	if (UpgradeLevel == 1) {
+		this->Mesh->SetStaticMesh(this->BatimentsMesh[this->TypeIndex]->UpgradeTwo->Object);
+	}
+	this->UpgradeLevel++;
+}
+
 void ARtsBuildingBatiment::CreateImageAssets(const TCHAR* Path)
 {
 	ConstructorHelpers::FObjectFinder <UTexture2D> ImageFinder(Path);
@@ -85,15 +102,31 @@ void ARtsBuildingBatiment::CreateImageUnityAssets(const TCHAR* Path)
 	ImageAssetsUnity.Add(ImageFinder.Object);
 }
 
-void ARtsBuildingBatiment::CreateBatiment(const TCHAR *StateOne, const TCHAR* StateTwo, const TCHAR* StateThree)
+void ARtsBuildingBatiment::CreateBatiment(const TCHAR *StateOne, const TCHAR* StateTwo, const TCHAR* StateThree, const TCHAR *UpgradeOne, const TCHAR *UpgradeTwo)
 {
 	BatimentConstructionStates* BatimentTmp = new BatimentConstructionStates();
 
 	BatimentTmp->StateOne = new ConstructorHelpers::FObjectFinder<UStaticMesh>(StateOne);
 	BatimentTmp->StateTwo = new ConstructorHelpers::FObjectFinder<UStaticMesh>(StateTwo);
 	BatimentTmp->StateThree = new ConstructorHelpers::FObjectFinder<UStaticMesh>(StateThree);
+	if (UpgradeOne != nullptr && UpgradeTwo != nullptr) {
+		BatimentTmp->UpgradeOne = new ConstructorHelpers::FObjectFinder<UStaticMesh>(UpgradeOne);
+		BatimentTmp->UpgradeTwo = new ConstructorHelpers::FObjectFinder<UStaticMesh>(UpgradeTwo);
+	}
+	else {
+		BatimentTmp->UpgradeOne = nullptr;
+		BatimentTmp->UpgradeTwo = nullptr;
+	}
 
 	this->BatimentsMesh.Add(BatimentTmp);
+}
+
+bool ARtsBuildingBatiment::CanUpgrade()
+{
+	if (this->BatimentsMesh[this->TypeIndex]->UpgradeOne != nullptr && this->UpgradeLevel < 2) {
+		return true;
+	}
+	return false;
 }
 
 // Called when the game starts or when spawned

@@ -44,6 +44,7 @@ public:
 public:
 	void OnMouseScrollUp();
 	void OnMouseScrollDown();
+	void UpgradeBatiment();
 
 public:
 	URtsCameraComponent* CameraComponent;

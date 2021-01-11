@@ -28,6 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Select")
 	void SelectUnity(int Number);
 
+	UFUNCTION(BlueprintCallable, Category = "Select")
+	void UpgradeBatiment();
+
 protected:
 	virtual void SetupInputComponent() override;
 	virtual void ProcessPlayerInput(const float deltaTime, const bool bGamePaused) override;

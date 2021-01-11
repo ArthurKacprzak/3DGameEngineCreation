@@ -40,6 +40,7 @@ void AMainGameHud::BeginPlay()
 			this->DrawCampHud(ESlateVisibility::Hidden);
 			this->DrawSelectionHud(ESlateVisibility::Hidden);
 			this->DrawUnityStatsHud(ESlateVisibility::Hidden);
+			this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentUpgrade")->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 }
@@ -247,6 +248,12 @@ void AMainGameHud::DrawCampHud(ARtsBuildingBatiment* Batiment)
 	TArray<ARtsBuildingBatiment::UnityCreation*> CreationList = Batiment->GetUnityCreateImages();
 	int tmp = 1;
 
+	if (Batiment->CanUpgrade()) {
+		this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentUpgrade")->SetVisibility(ESlateVisibility::Visible);
+	}
+	else {
+		this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentUpgrade")->SetVisibility(ESlateVisibility::Hidden);
+	}
 	this->DrawCampHud(ESlateVisibility::Hidden);
 	for (auto Creation : CreationList) {
 		FString base = "ImageAction_";
@@ -287,7 +294,6 @@ void AMainGameHud::DrawSelectionHud(ESlateVisibility slateVisibility)
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonUnityFIleList3")->SetVisibility(slateVisibility);
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonUnityFIleList4")->SetVisibility(slateVisibility);
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonUnityFIleList5")->SetVisibility(slateVisibility);
-	this->WidgetBP.Widget->GetWidgetFromName("ButtonUnityFIleList6")->SetVisibility(slateVisibility);
 }
 
 void AMainGameHud::DrawUnityStatsHud(ESlateVisibility slateVisibility, ARtsUnity* Unity)

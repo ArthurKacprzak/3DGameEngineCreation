@@ -30,6 +30,16 @@ void ARtsPlayerController::Forward(float value)
 	}
 }
 
+void ARtsPlayerController::UpgradeBatiment()
+{
+	ARtsSpectatorPawn* spectatorPawn = Cast<ARtsSpectatorPawn>(GetPawn());
+
+	if (spectatorPawn)
+	{
+		spectatorPawn->UpgradeBatiment();
+	}
+}
+
 void ARtsPlayerController::Right(float value)
 {
 	ARtsSpectatorPawn* spectatorPawn = Cast<ARtsSpectatorPawn>(GetPawn());

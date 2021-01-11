@@ -38,6 +38,13 @@ ARtsSpectatorPawn::ARtsSpectatorPawn(const FObjectInitializer& ObjectInitializer
 	this->CameraComponent->SetupAttachment(this->RootComponent);
 }
 
+void ARtsSpectatorPawn::UpgradeBatiment()
+{
+	for (auto batiment : this->BatimentSelected) {
+		batiment->Upgrade();
+	}
+}
+
 void ARtsSpectatorPawn::BeginPlay()
 {
 	Super::BeginPlay();
