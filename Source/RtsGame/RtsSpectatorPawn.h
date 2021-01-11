@@ -25,18 +25,6 @@ class RTSGAME_API ARtsSpectatorPawn : public ASpectatorPawn
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere)
-	TArray<ARtsUnity*> UnitySelected;
-
-	UPROPERTY(VisibleAnywhere)
-	TArray<ARtsUnity*> AllUnity;
-
-	UPROPERTY(VisibleAnywhere)
-	FVector PressPosition;
-
-	
-	
-public:
 	ARtsSpectatorPawn(const FObjectInitializer& ObjectInitializer);
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
@@ -44,29 +32,7 @@ public:
 public:
 	void OnMouseScrollUp();
 	void OnMouseScrollDown();
-	void UpgradeBatiment();
 
 public:
 	URtsCameraComponent* CameraComponent;
-
-public:
-
-	void LeftClick();
-
-	void SelectBatiment(BatimentType batimentType = BatimentType::CAMP);
-
-	void LeftClickReleased();
-
-	void RightClick();
-
-	void StartUnityConstruction(int Number);
-
-private:
-	void UnselectAll();
-
-	bool CheckSelectionBox(float UnityPosX, float one, float two);
-
-private:
-	ARtsBuildingTmp* TmpBuilding = nullptr;
-	TArray<ARtsBuildingBatiment*> BatimentSelected;
 };

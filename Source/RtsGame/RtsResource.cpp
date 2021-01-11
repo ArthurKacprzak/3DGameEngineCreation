@@ -16,7 +16,13 @@ ARtsResource::ARtsResource()
 
 	this->CreateMesh(
 		TEXT("StaticMesh'/Game/AdvancedVillagePack/Meshes/SM_Tree_Var01.SM_Tree_Var01'"));
+
+	this->CreateMesh(
+		TEXT("StaticMesh'/Game/AdvancedVillagePack/Meshes/SM_Stone_Big_Var01.SM_Stone_Big_Var01'"));
+
 	this->SetRootComponent(this->Mesh);
+
+	this->Mesh->SetStaticMesh(this->ResourceMesh[0]);
 }
 
 void ARtsResource::CreateMesh(const TCHAR* MeshPath)
@@ -45,6 +51,9 @@ void ARtsResource::SetRessourceType()
 	case RessourceType::THREE:
 		this->Mesh->SetStaticMesh(this->ResourceMesh[0]);
 		break;
+	case RessourceType::STONE:
+		this->Mesh->SetStaticMesh(this->ResourceMesh[1]);
+		break;
 	}
 }
 
@@ -57,6 +66,7 @@ void ARtsResource::Tick(float DeltaTime)
 
 float ARtsResource::Colect(float Value)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(this->RessouceColectable));
 	if (this->RessouceColectable - Value <= 0) {
 		float tmp =  this->RessouceColectable;
 		this->RessouceColectable = 0;

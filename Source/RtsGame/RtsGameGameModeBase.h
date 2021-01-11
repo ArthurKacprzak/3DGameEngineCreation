@@ -24,4 +24,5 @@ class RTSGAME_API ARtsGameGameModeBase : public AGameMode
 		this->HUDClass = AMainGameHud::StaticClass();
 		this->DefaultPawnClass = ARtsSpectatorPawn::StaticClass();
 	}
+	
 };

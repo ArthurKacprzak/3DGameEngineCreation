@@ -9,6 +9,6 @@ public class RtsGameEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.AddRange( new string[] { "RtsGame", "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "NavigationSystem" } );
+		ExtraModuleNames.AddRange( new string[] { "RtsGame", "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "NavigationSystem", "UnrealEd", "UMGEditor", "UMG", "OnlineSubsystemSteam" } );
 	}
 }

@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "RtsSpectatorPawn.h"
+#include "Engine/ActorChannel.h"
 #include "RtsUnity.h"
+#include "Net/UnrealNetwork.h"
 #include "RtsBatimentType.h"
 #include "RtsPlayerController.generated.h"
 
@@ -50,6 +52,7 @@ public:
 		return isSelectionActive_;
 	}
 
+	UFUNCTION(BlueprintCallable, Category = "Select")
 	void StartSelection()
 	{
 		FHitResult hit;
@@ -72,14 +75,55 @@ public:
 
 public:
 
-	void LeftClick();
 
-	void LeftClickReleased();
+	UFUNCTION(BlueprintCallable, Category = "Select")
+	virtual void RightClickServer(FHitResult Hit, TArray<ARtsUnity*> Unities);
 
-	void RightClick();
 
+	UFUNCTION(BlueprintCallable, Category = "Select")
+	virtual void LeftClickReleasedServer(FHitResult Hit);
+
+	UFUNCTION(BlueprintCallable, Category = "Select")
+	virtual ARtsBuildingBatiment* LeftClickServer(FHitResult Hit, TArray<FString> UnitiesName, BatimentType BatimentToBuildType);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UnitySelected")
+	TArray<ARtsUnity*> UnitySelected;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UnitySelected")
+	FVector PressPosition;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<ARtsUnity*> AllUnity;
+
+	UFUNCTION(BlueprintCallable, Category = "Select")
+		void ResetBuildingTmp();
+
+	virtual void SelectBatimentServer(BatimentType batimentType);
+
+	virtual void StartUnityConstructionServer(int Number);
+
+	void UpdateWood(int w);
+	void UpdateStone(int w);
+	void UpdatePopulation(int w);
+	void UpdatePopulationMax(int w);
+
+	void UpdateHudRessources();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UnitySelected")
+		ARtsBuildingTmp* TmpBuilding = nullptr;
 private:
 	bool isSelectionActive_ = false;
 	FVector selectionStartPosition_;
 	FVector selectionEndPosition_;
+	bool CheckSelectionBox(float UnityPosX, float one, float two);
+	void UnselectAll();
+
+	int Wood = 100;
+	int Stone = 100;
+	int Population = 3;
+	int PopulationMax = 3;
+
+	
+	TArray<ARtsBuildingBatiment*> BatimentSelected;
 };

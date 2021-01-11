@@ -42,7 +42,23 @@ public:
 		return this->BasicStats.MaxHealth;
 	}
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UnitySelected")
+		bool IsMain = true;
 
+	UFUNCTION(BlueprintCallable, Category = "Select")
+		void InitIsMain(bool Main);
+	
+	int StonePriceUpgrade = 300;
+	int GetStonePriceUpgrade()
+	{
+		return StonePriceUpgrade;
+	}
+
+	int WoodPriceUpgrade = 300;
+	int GetWoodPriceUpgrade()
+	{
+		return WoodPriceUpgrade;
+	}
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -62,6 +78,7 @@ public:
 	bool IsCamp();
 	bool CanUpgrade();
 
+	UFUNCTION(BlueprintCallable, Category = "Select")
 	void SetBatimentType(BatimentType BatimentToBuildType);
 	void Upgrade();
 
@@ -78,6 +95,8 @@ public:
 	struct UnityCreation {
 		UTexture2D* Texture;
 		UnityType Type;
+		int StonePrice = 10;
+		int WoodPrice = 20;
 	};
 
 	TArray<UnityCreation*> GetUnityCreateImages();
@@ -125,4 +144,7 @@ private:
 	float UnityCreationPercent = 0.f;
 
 	bool Selected = false;
+
+	private:
+		UMaterialInterface* MaterialRedPlayer;
 };

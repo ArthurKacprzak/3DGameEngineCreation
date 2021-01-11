@@ -66,7 +66,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Build(ARtsBuildingBatiment* Batiment);
+	UFUNCTION(BlueprintCallable, Category = "Select")
+	void Build(ARtsBuildingBatiment * Batiment);
 
 	void Recolte(ARtsResource* Resource);
 

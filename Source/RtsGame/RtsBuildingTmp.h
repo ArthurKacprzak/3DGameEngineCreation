@@ -31,6 +31,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Select")
 	BatimentType GetBatimentToBuildType();
 
 private:

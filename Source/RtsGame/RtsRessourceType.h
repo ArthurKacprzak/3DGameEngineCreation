@@ -7,5 +7,7 @@
 UENUM(BlueprintType)
 enum RessourceType
 {
-	THREE		UMETA(DisplayName = "THREE")
+	THREE		UMETA(DisplayName = "THREE"),
+	STONE		UMETA(DisplayName = "STONE")
+
 };

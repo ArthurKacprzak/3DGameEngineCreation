@@ -22,7 +22,7 @@ public:
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Initialisation")
-		TEnumAsByte <RessourceType> Type = RessourceType::THREE;
+		TEnumAsByte <RessourceType> Type;
 
 
 	float Colect(float Value);

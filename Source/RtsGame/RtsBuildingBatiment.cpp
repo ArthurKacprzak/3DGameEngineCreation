@@ -59,7 +59,7 @@ ARtsBuildingBatiment::ARtsBuildingBatiment() : Super()
 	this->SetReplicates(true);
 	this->Mesh->SetWorldScale3D(FVector(2.f, 2.f, 2.f));
 	this->Mesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
-	this->Mesh->SetCollisionProfileName(TEXT("Pawn"));
+	this->Mesh->SetCollisionProfileName(TEXT("BlockAll"));
 
 	this->CreateImageAssets(TEXT("Texture2D'/Game/RtsGame/Map/Hud/Textures/buildCamp.buildCamp'"));
 	this->CreateImageAssets(TEXT("Texture2D'/Game/RtsGame/Map/Hud/Textures/Caserne.Caserne'"));
@@ -73,6 +73,9 @@ ARtsBuildingBatiment::ARtsBuildingBatiment() : Super()
 	this->CreateImageUnityAssets(TEXT("Texture2D'/Game/RtsGame/Map/Hud/Textures/Cavalry.Cavalry'"));
 	this->CreateImageUnityAssets(TEXT("Texture2D'/Game/RtsGame/Map/Hud/Textures/Orc.Orc'"));
 
+
+	static ConstructorHelpers::FObjectFinder <UMaterialInterface> MaterialRedPlayerObject(TEXT("MaterialInstanceConstant'/Game/Toony_Tiny_RTS_Set/Materials/Buildings/MI_Buildings_Red.MI_Buildings_Red'"));
+	this->MaterialRedPlayer = MaterialRedPlayerObject.Object;
 }
 
 
@@ -186,6 +189,14 @@ void ARtsBuildingBatiment::RepeatingFunction()
 		else {
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("ERROR"));
 		}
+		NewUnity->MainPlayer = !this->IsMain;
+		if (this->IsMain) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MAIN"));
+		}
+		else {
+
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("MAIN"));
+		}
 		Hud->UpdateCreationUnities(this->CreationList);
 
 		this->UnityCreationPercent = 0;
@@ -232,6 +243,15 @@ bool ARtsBuildingBatiment::IsCamp()
 	return Camp;
 }
 
+void ARtsBuildingBatiment::InitIsMain(bool Main)
+{
+	this->IsMain = Main;
+
+	if (!this->IsMain) {
+		this->Mesh->SetMaterial(0, this->MaterialRedPlayer);
+	}
+}
+
 void ARtsBuildingBatiment::SetBatimentType(BatimentType BatimentToBuildType)
 {
 	this->Mesh->SetStaticMesh(this->BatimentsMesh[0]->StateOne->Object);
@@ -247,6 +267,8 @@ void ARtsBuildingBatiment::SetBatimentType(BatimentType BatimentToBuildType)
 
 		UnityCanCreate->Texture = ImageAssetsUnity[0];
 		UnityCanCreate->Type = UnityType::PEASANT;
+		UnityCanCreate->WoodPrice = 20;
+		UnityCanCreate->StonePrice = 10;
 		this->CreationUnityTime.Add(10);
 		this->UnityCreateImages.Add(UnityCanCreate);
 
@@ -255,6 +277,12 @@ void ARtsBuildingBatiment::SetBatimentType(BatimentType BatimentToBuildType)
 		Orc->Type = UnityType::ORC;
 		this->CreationUnityTime.Add(50);
 		this->UnityCreateImages.Add(Orc);
+		UnityCanCreate->WoodPrice = 500;
+		UnityCanCreate->StonePrice = 400;
+
+		this->StonePriceUpgrade = 300;
+		this->WoodPriceUpgrade = 500;
+
 		break;
 	case BatimentType::CASERNE:
 		this->Mesh->SetStaticMesh(this->BatimentsMesh[CASERNE_INDEX]->StateOne->Object);
@@ -262,6 +290,9 @@ void ARtsBuildingBatiment::SetBatimentType(BatimentType BatimentToBuildType)
 
 		UnityCanCreate->Texture = ImageAssetsUnity[1];
 		UnityCanCreate->Type = UnityType::INFANTRY;
+		UnityCanCreate->WoodPrice = 50;
+		UnityCanCreate->StonePrice = 50;
+
 		this->CreationUnityTime.Add(20);
 		this->UnityCreateImages.Add(UnityCanCreate);
 
@@ -272,6 +303,9 @@ void ARtsBuildingBatiment::SetBatimentType(BatimentType BatimentToBuildType)
 
 		UnityCanCreate->Texture = ImageAssetsUnity[2];
 		UnityCanCreate->Type = UnityType::ARCHER;
+		UnityCanCreate->WoodPrice = 70;
+		UnityCanCreate->StonePrice = 30;
+
 		this->CreationUnityTime.Add(20);
 		this->UnityCreateImages.Add(UnityCanCreate);
 		break;
@@ -281,12 +315,19 @@ void ARtsBuildingBatiment::SetBatimentType(BatimentType BatimentToBuildType)
 
 		UnityCanCreate->Texture = ImageAssetsUnity[3];
 		UnityCanCreate->Type = UnityType::CAVALRY;
+		UnityCanCreate->WoodPrice = 100;
+		UnityCanCreate->StonePrice = 100;
+
 		this->CreationUnityTime.Add(30);
 		this->UnityCreateImages.Add(UnityCanCreate);
 		break;
 	case BatimentType::TOWER:
 		this->Mesh->SetStaticMesh(this->BatimentsMesh[TOWER_INDEX]->StateOne->Object);
 		this->TypeIndex = TOWER_INDEX;
+
+
+		this->StonePriceUpgrade = 200;
+		this->WoodPriceUpgrade = 300;
 		break;
 	default:
 		break;

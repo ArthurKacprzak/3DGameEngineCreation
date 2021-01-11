@@ -119,9 +119,9 @@ void ARtsUnity::MoveTo()
 void ARtsUnity::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	FVector Location = GetActorLocation();
 	if (this->BatimentToBuild) {
-		FVector Location = GetActorLocation();
 		FVector BatimentLocation = this->BatimentToBuild->GetActorLocation();
 
 		if ((Location - BatimentLocation).Size() <= 1200) {
@@ -135,18 +135,11 @@ void ARtsUnity::Tick(float DeltaTime)
 		}
 	}
 
-	
 }
 
 bool ARtsUnity::GoTo(FVector Position)
 {
-	if (this->GetRemoteRole() != ROLE_Authority && !this->MainPlayer) {
-		return false;
-	}
-	else if (this->GetRemoteRole() == ROLE_Authority && this->MainPlayer) {
-		return false;
-	}
-	FVector Location = GetActorLocation();
+	FVector Location = this->GetActorLocation();
 	UNavigationSystemV1* navSys = UNavigationSystemV1::GetCurrent(GetWorld());
 	UNavigationPath* path = navSys->FindPathToLocationSynchronously(GetWorld(), Location, Position, this);
 
@@ -154,8 +147,6 @@ bool ARtsUnity::GoTo(FVector Position)
 		this->PointToGoList = path->PathPoints;
 
 		ZAnimation = 50.f;
-		GetWorldTimerManager().ClearTimer(MemberTimerHandleColect);
-		GetWorldTimerManager().ClearTimer(MemberTimerHandleAttack);
 		GetWorldTimerManager().SetTimer(this->MemberTimerHandleMove, this, &ARtsUnity::MoveTo, .02f, true);
 		return true;
 	}
@@ -265,7 +256,6 @@ void ARtsUnity::Recolte(ARtsResource* Resource)
 		return;
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(this->RessourceColected));
 	if (this->GoTo(Resource->GetActorLocation())) {
 		this->ResourceToColect = Resource;
 		GetWorldTimerManager().SetTimer(this->MemberTimerHandleColect, this, &ARtsUnity::ColectRepeatingFunction, .5f, true);
@@ -282,7 +272,7 @@ void ARtsUnity::ColectRepeatingFunction()
 			ZAnimation = 75.f;
 			this->StopMove();
 			float Value = 0.f;
-			if ((Value = this->ResourceToColect->Colect(this->BasicStats.ColectSpeed)) == 0) {
+			if ((Value = this->ResourceToColect->Colect(this->BasicStats.ColectSpeed)) == 0.f) {
 				this->ResourceToColect->ConditionalBeginDestroy();
 				this->ResourceToColect = nullptr;
 				ZAnimation = 50.f;
@@ -290,9 +280,12 @@ void ARtsUnity::ColectRepeatingFunction()
 			}
 			else {
 				this->RessourceColected += Value;
-				if (this->IsSelected) {
-					AMainGameHud* Hud = Cast<AMainGameHud>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD());
-					Hud->UpdateStateByName(this->RessourceColected, "TextStateMine");
+				ARtsPlayerController * PC = Cast<ARtsPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+				if (this->ResourceToColect->Type == RessourceType::THREE) {
+					PC->UpdateWood(Value);
+				}
+				else {
+					PC->UpdateStone(Value);
 				}
 			}
 		}

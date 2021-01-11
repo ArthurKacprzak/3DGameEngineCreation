@@ -41,6 +41,10 @@ void AMainGameHud::BeginPlay()
 			this->DrawSelectionHud(ESlateVisibility::Hidden);
 			this->DrawUnityStatsHud(ESlateVisibility::Hidden);
 			this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentUpgrade")->SetVisibility(ESlateVisibility::Hidden);
+			this->WidgetBP.Widget->GetWidgetFromName("TextStonePrice")->SetVisibility(ESlateVisibility::Hidden);
+			this->WidgetBP.Widget->GetWidgetFromName("TextWoodPrice")->SetVisibility(ESlateVisibility::Hidden);
+			this->WidgetBP.Widget->GetWidgetFromName("ImageStone")->SetVisibility(ESlateVisibility::Hidden);
+			this->WidgetBP.Widget->GetWidgetFromName("ImageWood")->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 }
@@ -241,6 +245,20 @@ void AMainGameHud::DrawCampHud(ESlateVisibility slateVisibility)
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonAction_2")->SetVisibility(slateVisibility);
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonAction_3")->SetVisibility(slateVisibility);
 	this->WidgetBP.Widget->GetWidgetFromName("ButtonAction_4")->SetVisibility(slateVisibility);
+
+	this->WidgetBP.Widget->GetWidgetFromName("ImageStone_1")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ImageStone_2")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ImageStone_3")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ImageWood_1")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ImageWood_2")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("ImageWood_3")->SetVisibility(slateVisibility);
+
+	this->WidgetBP.Widget->GetWidgetFromName("TextStonePrice_Action_1")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("TextStonePrice_Action_2")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("TextStonePrice_Action_3")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("TextWoodPrice_Action_1")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("TextWoodPrice_Action_2")->SetVisibility(slateVisibility);
+	this->WidgetBP.Widget->GetWidgetFromName("TextWoodPrice_Action_3")->SetVisibility(slateVisibility);
 }
 
 void AMainGameHud::DrawCampHud(ARtsBuildingBatiment* Batiment)
@@ -250,10 +268,24 @@ void AMainGameHud::DrawCampHud(ARtsBuildingBatiment* Batiment)
 
 	if (Batiment->CanUpgrade()) {
 		this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentUpgrade")->SetVisibility(ESlateVisibility::Visible);
+		this->WidgetBP.Widget->GetWidgetFromName("TextStonePrice")->SetVisibility(ESlateVisibility::Visible);
+		this->WidgetBP.Widget->GetWidgetFromName("TextWoodPrice")->SetVisibility(ESlateVisibility::Visible);
+		this->WidgetBP.Widget->GetWidgetFromName("ImageStone")->SetVisibility(ESlateVisibility::Visible);
+		this->WidgetBP.Widget->GetWidgetFromName("ImageWood")->SetVisibility(ESlateVisibility::Visible);
+
+		this->UpdateStateByName(Batiment->GetStonePriceUpgrade(), "TextStonePrice");
+		this->UpdateStateByName(Batiment->GetWoodPriceUpgrade(), "TextWoodPrice");
+
 	}
 	else {
 		this->WidgetBP.Widget->GetWidgetFromName("ButtonBatimentUpgrade")->SetVisibility(ESlateVisibility::Hidden);
+		this->WidgetBP.Widget->GetWidgetFromName("TextStonePrice")->SetVisibility(ESlateVisibility::Hidden);
+		this->WidgetBP.Widget->GetWidgetFromName("TextWoodPrice")->SetVisibility(ESlateVisibility::Hidden);
+		this->WidgetBP.Widget->GetWidgetFromName("ImageStone")->SetVisibility(ESlateVisibility::Hidden);
+		this->WidgetBP.Widget->GetWidgetFromName("ImageWood")->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+
 	this->DrawCampHud(ESlateVisibility::Hidden);
 	for (auto Creation : CreationList) {
 		FString base = "ImageAction_";
@@ -264,9 +296,29 @@ void AMainGameHud::DrawCampHud(ARtsBuildingBatiment* Batiment)
 
 			FString baseButton = "ButtonAction_";
 			baseButton += FString::FromInt(tmp);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, baseButton);
+
 			this->WidgetBP.Widget->GetWidgetFromName(*baseButton)->SetVisibility(ESlateVisibility::Visible);
 			Image->SetBrushFromTexture(Creation->Texture);
+
+
+			FString WoodButton = "ImageWood_";
+			FString StoneButton = "ImageStone_";
+
+			WoodButton += FString::FromInt(tmp);
+			StoneButton += FString::FromInt(tmp);
+			this->WidgetBP.Widget->GetWidgetFromName(*WoodButton)->SetVisibility(ESlateVisibility::Visible);
+			this->WidgetBP.Widget->GetWidgetFromName(*StoneButton)->SetVisibility(ESlateVisibility::Visible);
+
+			FString StoneText = "TextStonePrice_Action_";
+			FString WoodText = "TextWoodPrice_Action_";
+
+			WoodText += FString::FromInt(tmp);
+			StoneText += FString::FromInt(tmp);
+
+			this->WidgetBP.Widget->GetWidgetFromName(*WoodText)->SetVisibility(ESlateVisibility::Visible);
+			this->WidgetBP.Widget->GetWidgetFromName(*StoneText)->SetVisibility(ESlateVisibility::Visible);
+			this->UpdateStateByName(Creation->StonePrice, *StoneText);
+			this->UpdateStateByName(Creation->WoodPrice, *WoodText);
 		}
 		tmp++;
 	}
